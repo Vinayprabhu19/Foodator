@@ -8,4 +8,6 @@
     <color name="black">#000</color>
     <color name="grey">#bfbfbf</color>
     <color name="dyellow">#FFFBD2</color>
+    <color name="violet">#675682</color>
+    <color name="transparent">#FFFFFFFF</color>
 </resources>

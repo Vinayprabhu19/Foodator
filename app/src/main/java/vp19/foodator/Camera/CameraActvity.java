@@ -1,4 +1,4 @@
-package vp19.foodator;
+package vp19.foodator.Camera;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
@@ -8,15 +8,17 @@ import android.view.MenuItem;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import vp19.foodator.R;
 import vp19.foodator.utils.BottomNavigationViewHelper;
 
-public class ProfileActivity extends AppCompatActivity {
-    private Context mContext=ProfileActivity.this;
-    private int ACTIVITY_NUM=2;
+public class CameraActvity extends AppCompatActivity {
+    private static final String TAG = "CameraActvity";
+    private int ACTIVITY_NUM=1;
+    private Context mContext=CameraActvity.this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_camera);
         setupBottomNavigationView();
     }
     private void setupBottomNavigationView(){

@@ -11,9 +11,9 @@ import android.view.Window;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-import vp19.foodator.CameraActvity;
-import vp19.foodator.MainActivity;
-import vp19.foodator.ProfileActivity;
+import vp19.foodator.Camera.CameraActvity;
+import vp19.foodator.Home.HomeActivity;
+import vp19.foodator.Profile.ProfileActivity;
 import vp19.foodator.R;
 
 /**
@@ -40,7 +40,7 @@ public class BottomNavigationViewHelper {
                 {
                     case R.id.ic_home:
                         Log.d(TAG, "onNavigationItemSelected: Home");
-                        Intent intent1=new Intent(context, MainActivity.class); // NUM = 0
+                        Intent intent1=new Intent(context, HomeActivity.class); // NUM = 0
                         intent1.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         context.startActivity(intent1);
                         break;

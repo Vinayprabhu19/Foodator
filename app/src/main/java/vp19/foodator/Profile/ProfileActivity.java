@@ -1,4 +1,4 @@
-package vp19.foodator;
+package vp19.foodator.Profile;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
@@ -7,19 +7,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
+import vp19.foodator.R;
 import vp19.foodator.utils.BottomNavigationViewHelper;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
-    private Context mContext=MainActivity.this;
-    private int ACTIVITY_NUM=0;
+public class ProfileActivity extends AppCompatActivity {
+    private Context mContext=ProfileActivity.this;
+    private int ACTIVITY_NUM=2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_profile);
         setupBottomNavigationView();
     }
-
     private void setupBottomNavigationView(){
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx)findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx,this.getWindow());
