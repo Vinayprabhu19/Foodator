@@ -1,4 +1,4 @@
-package vp19.foodator.Home;
+package vp19.foodator.utils;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

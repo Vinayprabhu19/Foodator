@@ -11,10 +11,17 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
+        <!-- Top toolbar -->
+        <include layout="@layout/layout_center_profile"/>
         <!-- Bottom navigation -->
         <include layout="@layout/layout_bottom_navigation_view"/>
+        
+        <ProgressBar
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/profileProgressBar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"/>
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

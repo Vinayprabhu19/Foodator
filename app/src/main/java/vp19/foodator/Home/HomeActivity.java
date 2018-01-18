@@ -9,13 +9,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import vp19.foodator.utils.SectionPagerAdapter;
 import vp19.foodator.R;
 import vp19.foodator.utils.BottomNavigationViewHelper;
 
