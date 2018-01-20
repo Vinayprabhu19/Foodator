@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -30,6 +31,15 @@ public class BottomNavigationViewHelper {
         bottomNavigationViewEx.setIconVisibility(true);
         bottomNavigationViewEx.setIconSize(30,30);
         hide(window);
+    }
+    public static void setIcon(MenuItem item,int id){
+        switch (id){
+            case 0:item.setIcon(R.drawable.ic_home_active);
+                break;
+            case 1:item.setIcon(R.drawable.ic_camera_active);
+                break;
+            case 2:item.setIcon(R.drawable.ic_profile_active);
+        }
     }
     public static void enableNavgation(final Context context, BottomNavigationViewEx view)
     {

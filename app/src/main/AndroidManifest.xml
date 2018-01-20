@@ -16,7 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Profile.ProfileActivity" />
+        <activity android:name=".Login.LoginActivity" android:noHistory="true"/>
+        <activity android:name=".Login.RegisterActivity" android:noHistory="true"/>
+        <activity android:name=".Profile.ProfileActivity" android:screenOrientation="portrait"/>
         <activity android:name=".Camera.CameraActvity" />
         <activity android:name=".Profile.AccountSettingsActivity"/>
     </application>

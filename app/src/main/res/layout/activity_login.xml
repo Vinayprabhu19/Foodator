@@ -50,8 +50,8 @@
              android:layout_height="wrap_content"
              android:layout_margin="25dp"
              android:text="Log In"
-             android:textColor="@color/violet"
-             android:background="@drawable/white_rounded_button"
+             android:textColor="@color/white"
+             android:background="@drawable/violet_rounded_button"
              android:textSize="20sp"
              android:id="@+id/btn_login"
              />

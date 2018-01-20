@@ -3,7 +3,7 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/white_grey_border_bottom">
+        android:background="@color/dark_violet">
 
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                     android:layout_centerVertical="true"
                     android:text="Edit profile"
                     android:textSize="20sp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:layout_marginStart="10dp"
                     android:id="@+id/profileName"/>
 

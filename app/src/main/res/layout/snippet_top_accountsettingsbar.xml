@@ -3,7 +3,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:background="@drawable/white_grey_border_bottom">
+        android:background="@color/dark_violet">
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -17,7 +17,7 @@
                     android:layout_centerVertical="true"
                     android:text="Options"
                     android:textSize="20sp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:layout_marginLeft="60dp"
                     android:id="@+id/SettingsText" />
                 <ImageView

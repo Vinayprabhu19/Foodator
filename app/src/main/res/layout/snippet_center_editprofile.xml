@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_below="@+id/changeProfilePhoto"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/white_grey_border_bottom"
                 android:id="@+id/relLayout1">
 
@@ -48,7 +48,8 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/ic_user_name"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true"
+                    android:tint="@color/dark_violet"/>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -58,7 +59,7 @@
                     android:layout_marginStart="40dp"
                     android:background="@null"
                     android:inputType="textNoSuggestions"
-                    android:hint="username"/>
+                    android:hint="Username"/>
 
             </RelativeLayout>
 
@@ -76,7 +77,8 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/ic_display_name"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true"
+                    android:tint="@color/dark_violet"/>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -86,7 +88,7 @@
                     android:layout_marginStart="40dp"
                     android:background="@null"
                     android:inputType="textNoSuggestions"
-                    android:hint="display name"/>
+                    android:hint="Display name"/>
 
             </RelativeLayout>
 
@@ -104,7 +106,8 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/ic_web"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true"
+                    android:tint="@color/dark_violet"/>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -132,7 +135,8 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/ic_description"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true"
+                    android:tint="@color/dark_violet"/>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -154,7 +158,7 @@
                 android:text="PRIVATE INFORMATION"
                 android:layout_below="@id/relLayout4"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="25dp"
                 android:textColor="@color/black"
                 android:id="@+id/textPrivateInfo"/>
 
@@ -172,7 +176,8 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/ic_email"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true"
+                    android:tint="@color/dark_violet"/>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -199,7 +204,8 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/ic_phone"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true"
+                    android:tint="@color/dark_violet"/>
 
                 <EditText
                     android:layout_width="match_parent"
