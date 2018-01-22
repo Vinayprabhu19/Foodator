@@ -67,16 +67,14 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: Attempting to login");
-
                 String email = mEmail.getText().toString();
                 String password = mPassword.getText().toString();
-
                 if(isStringNull(email) && isStringNull(password)) {
                     Toast.makeText(mContext, "Please type your email and password", Toast.LENGTH_SHORT).show();
                 }else {
                     mProgressBar.setVisibility(View.VISIBLE);
                     mAuth.signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                            .addOnCompleteListener(LoginActivity.this,new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());

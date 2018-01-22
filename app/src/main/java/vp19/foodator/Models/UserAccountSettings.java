@@ -5,7 +5,6 @@ package vp19.foodator.Models;
  */
 
 public class UserAccountSettings {
-    private String description;
     private String display_name;
     private long followers;
     private long following;
@@ -13,8 +12,7 @@ public class UserAccountSettings {
     private String profile_photo;
     private String username;
 
-    public UserAccountSettings(String description, String display_name, long followers, long following, long posts, String profile_photo, String username) {
-        this.description = description;
+    public UserAccountSettings(String display_name, long followers, long following, long posts, String profile_photo, String username) {
         this.display_name = display_name;
         this.followers = followers;
         this.following = following;
@@ -26,8 +24,7 @@ public class UserAccountSettings {
     @Override
     public String toString() {
         return "UserAccountSettings{" +
-                "description='" + description + '\'' +
-                ", display_name='" + display_name + '\'' +
+                "display_name='" + display_name + '\'' +
                 ", followers=" + followers +
                 ", following=" + following +
                 ", posts=" + posts +
@@ -36,13 +33,6 @@ public class UserAccountSettings {
                 '}';
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public String getDisplay_name() {
         return display_name;

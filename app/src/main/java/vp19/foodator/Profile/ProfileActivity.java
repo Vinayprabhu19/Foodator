@@ -2,6 +2,7 @@ package vp19.foodator.Profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,12 +14,16 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
+import vp19.foodator.Login.LoginActivity;
 import vp19.foodator.R;
 import vp19.foodator.utils.BottomNavigationViewHelper;
 import vp19.foodator.utils.GridImageAdapter;
@@ -29,6 +34,12 @@ public class ProfileActivity extends AppCompatActivity {
     private Context mContext=ProfileActivity.this;
     private ProgressBar mProgressbar;
     private ImageView mProfilePhoto;
+    // Attributes
+    private TextView mPosts,mFollowers,mFollowing,mDisplayName;
+    GridView gridView;
+    //Firebase
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
     private int ACTIVITY_NUM=2;
     private int NUM_GRID_COLUMNS=3;
     @Override
@@ -37,6 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         setupActivityWidgets();
         initImageLoader();
+        setupFirebaseAuth();
         setProfileImage();
         setupBottomNavigationView();
         setupToolbar();
@@ -120,5 +132,30 @@ public class ProfileActivity extends AppCompatActivity {
         MenuItem menuItem=menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
         BottomNavigationViewHelper.setIcon(menuItem,ACTIVITY_NUM);
+    }
+    /**
+     * Setting up Firebase Authentication
+     */
+
+    private void setupFirebaseAuth(){
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+            }
+        };
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 }

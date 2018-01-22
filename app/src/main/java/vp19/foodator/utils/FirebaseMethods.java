@@ -94,14 +94,14 @@ public class FirebaseMethods {
                 });
     }
 
-    public void addNewUser(String email,String username,String Description,String Website,String profile_photo)
+    public void addNewUser(String email,String username,String profile_photo,String displayName)
     {
         User user=new User(userID,StringManipulation.condenseUsername(username),email,1);
         myRef.child(mContext.getString(R.string.dbname_users))
                 .child(userID)
                 .setValue(user);
         UserAccountSettings settings=new UserAccountSettings(
-                Description,username,0,0,0,profile_photo,username);
+                displayName,0,0,0,profile_photo,username);
         myRef.child(mContext.getString(R.string.dbname_user_account_settings))
                 .child(userID)
                 .setValue(settings);

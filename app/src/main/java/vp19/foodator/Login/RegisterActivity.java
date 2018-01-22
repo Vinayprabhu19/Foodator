@@ -128,6 +128,7 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             //Check if username is not already in use
+                            String displayName=username;
                             if(firebaseMethods.checkIfUsernameExists(username,dataSnapshot)){
                                 append=myRef.push().getKey().substring(3,10);
                                 Log.d(TAG, "onDataChange: User Name already exists");
@@ -136,7 +137,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             //Add user to database
                             //Add user settings to database
-                            firebaseMethods.addNewUser(email,username,"","","");
+                            firebaseMethods.addNewUser(email,username,"",displayName);
                             firebaseMethods.sendVerification();
                             Toast.makeText(mContext,"Signup Successfull. Verify Email",Toast.LENGTH_SHORT).show();
                             mAuth.signOut();
