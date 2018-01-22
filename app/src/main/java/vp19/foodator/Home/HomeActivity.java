@@ -38,7 +38,6 @@ public class HomeActivity extends AppCompatActivity {
         setupFirebaseAuth();
         setupBottomNavigationView();
         setupViewPager();
-
     }
     /**
      * Responsible for adding 3 tabs : Logo_text , Likes , Search

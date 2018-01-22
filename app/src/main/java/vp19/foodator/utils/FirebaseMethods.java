@@ -94,6 +94,13 @@ public class FirebaseMethods {
                 });
     }
 
+    /**
+     * Adds new user to the database after the user successfully registers
+     * @param email
+     * @param username
+     * @param profile_photo
+     * @param displayName
+     */
     public void addNewUser(String email,String username,String profile_photo,String displayName)
     {
         User user=new User(userID,StringManipulation.condenseUsername(username),email,1);
@@ -101,9 +108,48 @@ public class FirebaseMethods {
                 .child(userID)
                 .setValue(user);
         UserAccountSettings settings=new UserAccountSettings(
-                displayName,0,0,0,profile_photo,username);
+                displayName,0,0,0,profile_photo,StringManipulation.condenseUsername(username));
         myRef.child(mContext.getString(R.string.dbname_user_account_settings))
                 .child(userID)
                 .setValue(settings);
+    }
+
+    /**
+     * Retrieves the User account settings to be displayed in the profile
+     * @param dataSnapshot
+     * @return
+     */
+    public UserAccountSettings getUserAccountSettings(DataSnapshot dataSnapshot){
+        UserAccountSettings settings=new UserAccountSettings();
+        DataSnapshot ds= dataSnapshot.child(mContext.getString(R.string.dbname_user_account_settings)).child(userID);
+        try{
+        settings.setDisplay_name(
+                ds.getValue(UserAccountSettings.class)
+                .getDisplay_name()
+            );
+        settings.setFollowers(
+                ds.getValue(UserAccountSettings.class)
+                        .getFollowers()
+        );
+        settings.setFollowing(
+                ds.getValue(UserAccountSettings.class)
+                        .getFollowing()
+        );
+        settings.setPosts(
+                ds.getValue(UserAccountSettings.class)
+                        .getPosts()
+        );
+        settings.setProfile_photo(
+                ds.getValue(UserAccountSettings.class)
+                        .getProfile_photo()
+        );
+        settings.setUsername(
+                ds.getValue(UserAccountSettings.class)
+                        .getUsername()
+        );}
+        catch (NullPointerException e){
+            Log.d(TAG, "getUserAccountSettings: Exception"+e.getMessage());
+        }
+        return settings;
     }
 }

@@ -16,7 +16,8 @@
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="0dp"
-            tools:layout_editor_absoluteX="0dp" />
+            android:layout_marginLeft="0dp"
+            app:layout_constraintLeft_toLeftOf="parent" />
 
         <TextView
             android:id="@+id/textPosts"

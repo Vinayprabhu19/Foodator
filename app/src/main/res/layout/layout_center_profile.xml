@@ -40,7 +40,7 @@
                 android:id="@+id/display_name"
                 android:textColor="@color/dark_violet"
                 android:textStyle="bold"
-                android:text="Vinay Prabhu"
+                android:text="Display Name"
                 android:layout_margin="5dp"
                 android:textAllCaps="true"
                 android:textSize="15sp"

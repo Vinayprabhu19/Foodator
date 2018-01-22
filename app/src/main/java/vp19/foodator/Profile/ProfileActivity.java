@@ -18,14 +18,21 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
 import vp19.foodator.Login.LoginActivity;
+import vp19.foodator.Models.UserAccountSettings;
 import vp19.foodator.R;
 import vp19.foodator.utils.BottomNavigationViewHelper;
+import vp19.foodator.utils.FirebaseMethods;
 import vp19.foodator.utils.GridImageAdapter;
 import vp19.foodator.utils.UniversalImageLoader;
 
@@ -35,11 +42,14 @@ public class ProfileActivity extends AppCompatActivity {
     private ProgressBar mProgressbar;
     private ImageView mProfilePhoto;
     // Attributes
-    private TextView mPosts,mFollowers,mFollowing,mDisplayName;
+    private TextView mPosts,mFollowers,mFollowing,mDisplayName,mProfileName;
     GridView gridView;
     //Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference myRef;
+    private FirebaseDatabase mFirebaseDatabase;
+    FirebaseMethods firebaseMethods;
     private int ACTIVITY_NUM=2;
     private int NUM_GRID_COLUMNS=3;
     @Override
@@ -139,12 +149,29 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setupFirebaseAuth(){
         mAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase=FirebaseDatabase.getInstance();
+        myRef=mFirebaseDatabase.getReference();
+        firebaseMethods=new FirebaseMethods(mContext);
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
             }
         };
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Retrieve User Information
+                UserAccountSettings settings=firebaseMethods.getUserAccountSettings(dataSnapshot);
+                setupLayoutWidgets(settings);
+                //Retrieve images for the grid
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
     @Override
     public void onStart() {
@@ -157,5 +184,19 @@ public class ProfileActivity extends AppCompatActivity {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    //
+    void setupLayoutWidgets(UserAccountSettings settings){
+        mDisplayName=findViewById(R.id.display_name);
+        mProfileName=findViewById(R.id.profileName);
+        mPosts=findViewById(R.id.tvPosts);
+        mFollowers=findViewById(R.id.tvFollowers);
+        mFollowing=findViewById(R.id.tvFollowing);
+        mDisplayName.setText(settings.getDisplay_name());
+        mProfileName.setText(settings.getUsername());
+        mPosts.setText(Long.toString(settings.getPosts()));
+        mFollowers.setText(Long.toString(settings.getFollowers()));
+        mFollowing.setText(Long.toString(settings.getFollowing()));
     }
 }
