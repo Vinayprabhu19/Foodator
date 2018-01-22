@@ -63,6 +63,15 @@ public class ProfileActivity extends AppCompatActivity {
         setupBottomNavigationView();
         setupToolbar();
         tempGridSetup();
+        TextView editProfile=findViewById(R.id.textEditProfile);
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(mContext,AccountSettingsActivity.class);
+                intent.putExtra(getString(R.string.calling_activity),getString(R.string.profile_activity));
+                startActivity(intent);
+            }
+        });
     }
     private void tempGridSetup() {
         ArrayList<String> imgURLs = new ArrayList<>();

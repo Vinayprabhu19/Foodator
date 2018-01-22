@@ -39,8 +39,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accountsettings);
         setupBottomNavigationView();
-        mViewPager=(ViewPager)findViewById(R.id.container);
-        mRelativeLayout=(RelativeLayout)findViewById(R.id.relLayout1);
+        transferControl();
+        mViewPager=findViewById(R.id.container);
+        mRelativeLayout=findViewById(R.id.relLayout1);
         setupSettingsList();
         setupFragments();
         //Setup Backarrow
@@ -52,9 +53,22 @@ public class AccountSettingsActivity extends AppCompatActivity {
             }
         });
     }
+    private void transferControl(){
+        Intent intent=getIntent();
+        Log.d(TAG, "transferControl: Inside Transfer Control");
+        if(intent.hasExtra(getString(R.string.calling_activity))){
+            try {
+                setViewPager(pagerAdapter.getFragmentNumber(getString(R.string.edit_profile)));
+            }
+            catch (NullPointerException e)
+            {
+                Log.d(TAG, "transferControl:Error Setting Viewpager "+e.getMessage());
+            }
+        }
+    }
     private void setupFragments(){
         pagerAdapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragment(new EditProfileFragment(), getString(R.string.edit_profile)); //fragment 0
+        pagerAdapter.addFragment(new EditProfileFragment(),getString(R.string.edit_profile)); //fragment 0
         pagerAdapter.addFragment(new SignOutFragment(), getString(R.string.sign_out)); //fragment 1
     }
 

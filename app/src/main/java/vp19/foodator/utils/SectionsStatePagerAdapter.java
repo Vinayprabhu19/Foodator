@@ -2,6 +2,7 @@ package vp19.foodator.utils;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.List;
  */
 
 public class SectionsStatePagerAdapter extends FragmentStatePagerAdapter{
-
+    private static final String TAG = "SectionsStatePager";
     private final List<Fragment> mFragmentlist = new ArrayList<>();
     private final HashMap<Fragment, Integer> mFragments = new HashMap<>();
     private final HashMap<String, Integer> mFragmentNumbers = new HashMap<>();
@@ -46,8 +47,10 @@ public class SectionsStatePagerAdapter extends FragmentStatePagerAdapter{
      */
     public Integer getFragmentNumber(String fragmentName) {
         if(mFragmentNumbers.containsKey(fragmentName)) {
+            Log.d(TAG, "getFragmentNumber: Found Fragment");
             return mFragmentNumbers.get(fragmentName);
         }else {
+            Log.d(TAG, "getFragmentNumber: Couldn't find fragment");
             return null;
         }
     }
