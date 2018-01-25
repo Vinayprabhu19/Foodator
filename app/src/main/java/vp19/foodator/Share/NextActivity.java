@@ -56,7 +56,6 @@ public class NextActivity extends AppCompatActivity{
     private FirebaseMethods mFirebaseMethods;
     private FirebaseMethods firebaseMethods;
     private StorageReference mStorageRef;
-    DataSnapshot dataSnapshotCopy;
     private int image_count=0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,7 +83,7 @@ public class NextActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 //Upload Image
-                 mFirebaseMethods.uploadImage(dataSnapshotCopy,getString(R.string.new_photo),description.getText().toString(),image_count,SelectedImage,mFitStatus);
+                 mFirebaseMethods.uploadImage(getString(R.string.new_photo),description.getText().toString(),image_count,SelectedImage,mFitStatus);
                 Intent intent=new Intent(mContext, HomeActivity.class);
                 mContext.startActivity(intent);
             }
@@ -140,7 +139,6 @@ public class NextActivity extends AppCompatActivity{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 image_count=mFirebaseMethods.getImageCount(dataSnapshot);
                 Log.d(TAG, "onDataChange: Image Count "+image_count);
-                dataSnapshotCopy=dataSnapshot;
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

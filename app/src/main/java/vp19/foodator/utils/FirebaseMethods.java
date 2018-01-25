@@ -15,8 +15,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -177,9 +179,11 @@ public class FirebaseMethods {
         count=(int)ds.getChildrenCount();
         return count;
     }
-    public void setPostsCount(int image_count,DataSnapshot dataSnapshot){
+    public void setPostsCount(DataSnapshot dataSnapshot){
         UserAccountSettings settings=new UserAccountSettings();
         DataSnapshot ds= dataSnapshot.child(mContext.getString(R.string.dbname_user_account_settings)).child(userID);
+        int image_count=getImageCount(dataSnapshot);
+        Log.d(TAG, "setPostsCount: Image count is "+image_count);
         try{
             settings.setDisplay_name(
                     ds.getValue(UserAccountSettings.class)
@@ -194,7 +198,7 @@ public class FirebaseMethods {
                             .getFollowing()
             );
             settings.setPosts(
-                    image_count
+                    image_count 
             );
             settings.setProfile_photo(
                     ds.getValue(UserAccountSettings.class)
@@ -212,7 +216,7 @@ public class FirebaseMethods {
                 .setValue(settings);
     }
 
-    public void uploadImage(final DataSnapshot ds,String photoType, final String description, final int image_count, String imgURL, final boolean mFitStatus){
+    public void uploadImage(String photoType, final String description, final int image_count, String imgURL, final boolean mFitStatus){
         if(photoType.equals(mContext.getString(R.string.new_photo))){
             StorageReference storageReference=mStorageRef
                     .child(FIREBASE_IMG_STORAGE +"/"+userID+"/photo"+(image_count+1));
@@ -226,11 +230,20 @@ public class FirebaseMethods {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Uri ImageUri=taskSnapshot.getDownloadUrl();
                     Toast.makeText(mContext,"Photo upload Success !",Toast.LENGTH_SHORT).show();
-
                     //Add photo to photos and user_photos
                     addPhotoToDatabase(description,ImageUri.toString(),mFitStatus);
-                    //setPostsCount(image_count,ds);
+                    myRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Log.d(TAG, "onDataChange: Called Value listener");
+                            setPostsCount(dataSnapshot);
+                        }
 
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
