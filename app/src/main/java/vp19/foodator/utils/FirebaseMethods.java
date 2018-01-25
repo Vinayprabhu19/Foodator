@@ -33,6 +33,8 @@ import vp19.foodator.Home.HomeActivity;
 import vp19.foodator.Models.Photo;
 import vp19.foodator.Models.User;
 import vp19.foodator.Models.UserAccountSettings;
+import vp19.foodator.Profile.AccountSettingsActivity;
+import vp19.foodator.Profile.ProfileActivity;
 import vp19.foodator.R;
 
 public class FirebaseMethods {
@@ -198,7 +200,7 @@ public class FirebaseMethods {
                             .getFollowing()
             );
             settings.setPosts(
-                    image_count 
+                    image_count
             );
             settings.setProfile_photo(
                     ds.getValue(UserAccountSettings.class)
@@ -216,7 +218,8 @@ public class FirebaseMethods {
                 .setValue(settings);
     }
 
-    public void uploadImage(String photoType, final String description, final int image_count, String imgURL, final boolean mFitStatus){
+    public void uploadImage(String photoType, final String description, final int image_count, final String imgURL, final boolean mFitStatus){
+        //From share Activity
         if(photoType.equals(mContext.getString(R.string.new_photo))){
             StorageReference storageReference=mStorageRef
                     .child(FIREBASE_IMG_STORAGE +"/"+userID+"/photo"+(image_count+1));
@@ -259,8 +262,43 @@ public class FirebaseMethods {
             });
         }
         else{
+            ((AccountSettingsActivity)mContext).setViewPager(0);
+            StorageReference storageReference=mStorageRef
+                    .child(FIREBASE_IMG_STORAGE +"/"+userID+"/profile_photo");
+            //convert image to bitmap
+            Bitmap bm=ImageManager.getBitmap(imgURL);
+            UploadTask uploadTask=null;
+            byte[] bytes=ImageManager.getBytesFromBitmap(bm,100);
+            uploadTask=storageReference.putBytes(bytes);
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Uri ImageUri=taskSnapshot.getDownloadUrl();
+                    Toast.makeText(mContext,"Photo upload Success !",Toast.LENGTH_SHORT).show();
+                    //Insert into user account settings
+                    addProfilePic(ImageUri.toString());
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(mContext,"Photo upload failed !",Toast.LENGTH_SHORT).show();
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress=(100*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
+                    Toast.makeText(mContext,"Photo upload progress "+String.format("%.0f",progress),Toast.LENGTH_SHORT).show();
+                }
+            });
 
         }
+    }
+    private void addProfilePic(String imageUrl){
+        UserAccountSettings settings=new UserAccountSettings();
+        myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                .child(userID)
+                .child(mContext.getString(R.string.attr_profile_pic))
+                .setValue(imageUrl);
     }
     private String getTime(){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-DD'T'HH-mm-ss'Z'", Locale.UK);

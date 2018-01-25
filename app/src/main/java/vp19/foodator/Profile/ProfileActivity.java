@@ -44,11 +44,12 @@ public class ProfileActivity extends AppCompatActivity {
     // Attributes
     private TextView mPosts,mFollowers,mFollowing,mDisplayName,mProfileName;
     GridView gridView;
-    //Firebase
+    //firebase authentication
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private DatabaseReference myRef;
     private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference myRef;
+    private FirebaseUser user;
     FirebaseMethods firebaseMethods;
     private int ACTIVITY_NUM=2;
     private int NUM_GRID_COLUMNS=3;
@@ -59,7 +60,6 @@ public class ProfileActivity extends AppCompatActivity {
         setupActivityWidgets();
         initImageLoader();
         setupFirebaseAuth();
-        setProfileImage();
         setupBottomNavigationView();
         setupToolbar();
         tempGridSetup();
@@ -118,12 +118,6 @@ public class ProfileActivity extends AppCompatActivity {
         UniversalImageLoader imageLoader=new UniversalImageLoader(mContext);
         ImageLoader.getInstance().init(imageLoader.getConfig());
     }
-    private void setProfileImage() {
-        Log.d(TAG, "setProfileImage: Loading profile image...");
-        String imgURL = "avatarfiles.alphacoders.com/838/83876.jpg";
-        UniversalImageLoader.setImage(imgURL, mProfilePhoto, mProgressbar, "https://");
-    }
-
     private void setupActivityWidgets() {
         mProgressbar =  findViewById(R.id.profileProgressBar);
         mProgressbar.setVisibility(View.GONE);
@@ -152,6 +146,14 @@ public class ProfileActivity extends AppCompatActivity {
         menuItem.setChecked(true);
         BottomNavigationViewHelper.setIcon(menuItem,ACTIVITY_NUM);
     }
+    private void setProfileImage(DataSnapshot dataSnapshot) {
+        UserAccountSettings settings = new UserAccountSettings();
+        settings=dataSnapshot.child(getString(R.string.dbname_user_account_settings))
+                .child(user.getUid())
+                .getValue(UserAccountSettings.class);
+        String imgURL=settings.getProfile_photo();
+        UniversalImageLoader.setImage(imgURL, mProfilePhoto, null, "");
+    }
     /**
      * Setting up Firebase Authentication
      */
@@ -164,16 +166,23 @@ public class ProfileActivity extends AppCompatActivity {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                user = firebaseAuth.getCurrentUser();
             }
         };
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //Retrieve User Information
-                UserAccountSettings settings=firebaseMethods.getUserAccountSettings(dataSnapshot);
-                setupLayoutWidgets(settings);
-                //Retrieve images for the grid
+                try {
+                    user=mAuth.getCurrentUser();
+                    //Retrieve User Information
+                    UserAccountSettings settings = firebaseMethods.getUserAccountSettings(dataSnapshot);
+                    setupLayoutWidgets(settings);
+                    setProfileImage(dataSnapshot);
+                    //Retrieve images for the grid
+                }
+                catch (NullPointerException e){
+                    Log.d(TAG, "onDataChange: Null pointer Exception "+e.getMessage());
+                }
             }
 
             @Override

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import vp19.foodator.R;
 import vp19.foodator.utils.BottomNavigationViewHelper;
+import vp19.foodator.utils.FirebaseMethods;
 import vp19.foodator.utils.SectionsStatePagerAdapter;
 
 /**
@@ -31,21 +32,21 @@ import vp19.foodator.utils.SectionsStatePagerAdapter;
 public class AccountSettingsActivity extends AppCompatActivity {
     private static final String TAG = "AccountSettingsActivity";
     Context mContext=AccountSettingsActivity.this;
-    private SectionsStatePagerAdapter pagerAdapter;
-    private ViewPager mViewPager;
-    private RelativeLayout mRelativeLayout;
+    public SectionsStatePagerAdapter pagerAdapter;
+    public ViewPager mViewPager;
+    public RelativeLayout mRelativeLayout;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accountsettings);
-        setupBottomNavigationView();
-        transferControl();
         mViewPager=findViewById(R.id.container);
         mRelativeLayout=findViewById(R.id.relLayout1);
-        setupSettingsList();
         setupFragments();
+        setupBottomNavigationView();
+        transferControl();
+        setupSettingsList();
         //Setup Backarrow
-        ImageView backarrow=(ImageView)findViewById(R.id.backArrow);
+        ImageView backarrow=findViewById(R.id.backArrow);
         backarrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,21 +58,27 @@ public class AccountSettingsActivity extends AppCompatActivity {
         Intent intent=getIntent();
         if(intent.hasExtra(getString(R.string.calling_activity))){
             try {
-                setViewPager(pagerAdapter.getFragmentNumber(getString(R.string.edit_profile)));
+                setViewPager(0);
             }
             catch (NullPointerException e)
             {
                 Log.d(TAG, "transferControl:Error Setting Viewpager "+e.getMessage());
             }
         }
+       else if(
+            intent.hasExtra(getString(R.string.return_to_fragment))){
+            FirebaseMethods firebaseMethods=new FirebaseMethods(mContext);
+            String imgUrl=intent.getStringExtra(getString(R.string.selected_image));
+            firebaseMethods.uploadImage("Profile Pic","",0,imgUrl,false);
+        }
     }
-    private void setupFragments(){
+    public void setupFragments(){
         pagerAdapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(new EditProfileFragment(),getString(R.string.edit_profile)); //fragment 0
-        pagerAdapter.addFragment(new SignOutFragment(), getString(R.string.sign_out)); //fragment 1
+        pagerAdapter.addFragment(new SignOutFragment(),getString(R.string.sign_out)); //fragment 1
     }
 
-    private void setViewPager(int fragmentNumber){
+    public void setViewPager(int fragmentNumber){
         mRelativeLayout.setVisibility(View.GONE);
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setCurrentItem(fragmentNumber);

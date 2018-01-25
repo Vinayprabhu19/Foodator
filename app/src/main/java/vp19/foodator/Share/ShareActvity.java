@@ -37,6 +37,9 @@ public class ShareActvity extends AppCompatActivity {
             verifyPermissions(Permissions.PERMISSIONS);
         }
     }
+    public int getTask(){
+        return getIntent().getFlags();
+    }
     public int getCurrentItemNumber(){
         return mViewPager.getCurrentItem();
     }

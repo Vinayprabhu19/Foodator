@@ -28,6 +28,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.ArrayList;
 
+import vp19.foodator.Profile.AccountSettingsActivity;
 import vp19.foodator.R;
 import vp19.foodator.utils.FileSearch;
 import vp19.foodator.utils.GridImageAdapter;
@@ -79,15 +80,29 @@ public class GalleryFragment extends Fragment {
         nextScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getActivity(),NextActivity.class);
-                Bundle extras=new Bundle();
-                extras.putString(getString(R.string.selected_image),mSelectedImage);
-                extras.putBoolean(getString(R.string.fit_status),mFitStatus);
-                intent.putExtras(extras);
-                startActivity(intent);
+                if(isRootTask()){
+                    Intent intent=new Intent(getActivity(),NextActivity.class);
+                    Bundle extras=new Bundle();
+                    extras.putString(getString(R.string.selected_image),mSelectedImage);
+                    extras.putBoolean(getString(R.string.fit_status),mFitStatus);
+                    intent.putExtras(extras);
+                    startActivity(intent);
+                }
+                else{
+                    Intent intent=new Intent(getActivity(),AccountSettingsActivity.class);
+                    intent.putExtra(getString(R.string.selected_image),mSelectedImage);
+                    intent.putExtra(getString(R.string.return_to_fragment),getString(R.string.edit_profile));
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
+                }
             }
         });
         return view;
+    }
+    private boolean isRootTask(){
+        if(((ShareActvity)getActivity()).getTask() == 0)
+            return true;
+        return false;
     }
     private void initMfit(){
         mFit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

@@ -21,5 +21,8 @@
     <string name="description">Description</string>
     <string name="dbname_photos">photos</string>
     <string name="dbname_user_photos">user_photos</string>
+    <string name="attr_profile_photo">profile_photo</string>
     <string name="new_photo">New Photo</string>
+    <string name="attr_profile_pic">profile_photo</string>
+    <string name="return_to_fragment">return_to_fragment</string>
 </resources>
