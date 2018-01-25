@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@id/relLayout1"
+        android:layout_alignParentTop="true">
+        <!-- Top Bar -->
+        <include layout="@layout/snippet_gallery_toolbar"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="100"
+        android:layout_below="@id/relLayout1"
+        android:orientation="vertical"
+        android:layout_marginBottom="50dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="60">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/galleryImage"
+                android:background="@color/darkgrey"
+                android:scaleType="centerCrop"/>
+            <ProgressBar
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/progressBar"
+                android:layout_centerHorizontal="true"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:background="@color/transparent">
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="Fit"
+                    android:background="@drawable/button_selector_background"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="35dp"
+                    android:padding="5dp"
+                    android:id="@+id/swtich_fit"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="30dp"
+                    android:text="Swipe For Camera"
+                    android:textColor="@color/white"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="40"
+            android:numColumns="3"
+            android:id="@+id/gridView"
+            android:verticalSpacing="1dp"
+            android:horizontalSpacing="1dp"
+            android:stretchMode="none"
+            android:gravity="center">
+
+        </GridView>
+    </LinearLayout>
+</RelativeLayout>

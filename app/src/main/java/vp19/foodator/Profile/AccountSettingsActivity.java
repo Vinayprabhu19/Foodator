@@ -55,7 +55,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
     }
     private void transferControl(){
         Intent intent=getIntent();
-        Log.d(TAG, "transferControl: Inside Transfer Control");
         if(intent.hasExtra(getString(R.string.calling_activity))){
             try {
                 setViewPager(pagerAdapter.getFragmentNumber(getString(R.string.edit_profile)));

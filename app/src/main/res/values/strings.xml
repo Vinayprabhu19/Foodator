@@ -8,4 +8,18 @@
     <string name="dbname_user_account_settings">user_account_settings</string>
     <string name="calling_activity">Calling Activity</string>
     <string name="profile_activity">Profile Activity</string>
+    <string name="galley">GALLERY</string>
+    <string name="photo">PHOTO</string>
+    <string name="open_camera">Open Camera</string>
+    <string name="next">Next</string>
+    <string name="gallery">Gallery</string>
+    <string name="profile_name">Profile Name</string>
+    <string name="display_name">Display Name</string>
+    <string name="selected_image">Selected Image</string>
+    <string name="fit_status">Fit Status</string>
+    <string name="post">Post</string>
+    <string name="description">Description</string>
+    <string name="dbname_photos">photos</string>
+    <string name="dbname_user_photos">user_photos</string>
+    <string name="new_photo">New Photo</string>
 </resources>

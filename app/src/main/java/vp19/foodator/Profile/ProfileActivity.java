@@ -208,4 +208,9 @@ public class ProfileActivity extends AppCompatActivity {
         mFollowers.setText(Long.toString(settings.getFollowers()));
         mFollowing.setText(Long.toString(settings.getFollowing()));
     }
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        setupBottomNavigationView();
+    }
 }

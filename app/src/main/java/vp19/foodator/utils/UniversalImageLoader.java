@@ -43,7 +43,7 @@ public class UniversalImageLoader {
         ImageLoaderConfiguration config=new ImageLoaderConfiguration.Builder(mContext)
                 .defaultDisplayImageOptions(defaultOptions)
                 .memoryCache(new WeakMemoryCache())
-                .diskCacheSize(100 * 1024 *1024).build();
+                .diskCacheSize(1024 * 1024 *1024).build();
         return config;
     }
     public static void setImage(String ImgURL, ImageView image, final ProgressBar mProgressbar,String append){

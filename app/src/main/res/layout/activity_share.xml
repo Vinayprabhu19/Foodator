@@ -5,16 +5,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="vp19.foodator.Home.HomeActivity">
-
-
+    tools:context="vp19.foodator.Share.ShareActvity">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/relLayout1">
+        <include layout="@layout/layout_center_viewpager"/>
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
+        <!-- Bottom navigation -->
+        <include layout="@layout/layout_bottom_tabs"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <!-- Bottom navigation -->
         <include layout="@layout/layout_bottom_navigation_view"/>
     </RelativeLayout>
-
 </android.support.design.widget.CoordinatorLayout>

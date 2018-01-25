@@ -32,13 +32,17 @@ public class GridImageAdapter extends ArrayAdapter<String>{
 
     public GridImageAdapter(Context context,int layoutResource, String append, ArrayList<String> imgURLs) {
         super(context, layoutResource, imgURLs);
+        initImageLoader();
         mInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         mContext = context;
         this.layoutResource = layoutResource;
         mAppend = append;
         this.imgURLs = imgURLs;
     }
-
+    private void initImageLoader(){
+        UniversalImageLoader imageLoader=new UniversalImageLoader(getContext());
+        ImageLoader.getInstance().init(imageLoader.getConfig());
+    }
     //creates widgets
     private static class ViewHolder{
         SquareImageView image;

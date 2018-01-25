@@ -5,14 +5,13 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-import vp19.foodator.Camera.CameraActvity;
+import vp19.foodator.Share.ShareActvity;
 import vp19.foodator.Home.HomeActivity;
 import vp19.foodator.Profile.ProfileActivity;
 import vp19.foodator.R;
@@ -56,7 +55,7 @@ public class BottomNavigationViewHelper {
                         break;
                     case R.id.ic_camera:
                         Log.d(TAG, "onNavigationItemSelected: Camera");
-                        Intent intent2=new Intent(context, CameraActvity.class); // NUM = 1
+                        Intent intent2=new Intent(context, ShareActvity.class); // NUM = 1
                         intent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         context.startActivity(intent2);
                         break;

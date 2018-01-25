@@ -2,13 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="vp19.foodator">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity android:name=".Home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,8 +22,9 @@
         <activity android:name=".Login.LoginActivity" android:noHistory="true"/>
         <activity android:name=".Login.RegisterActivity" android:noHistory="true"/>
         <activity android:name=".Profile.ProfileActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".Camera.CameraActvity" />
+        <activity android:name=".Share.ShareActvity" />
         <activity android:name=".Profile.AccountSettingsActivity"/>
+        <activity android:name=".Share.NextActivity"/>
     </application>
 
 </manifest>

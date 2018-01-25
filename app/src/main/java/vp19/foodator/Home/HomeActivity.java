@@ -113,4 +113,9 @@ public class HomeActivity extends AppCompatActivity {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        setupBottomNavigationView();
+    }
 }
