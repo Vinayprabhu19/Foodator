@@ -1,8 +1,11 @@
-package vp19.foodator.Profile;
-
 /**
- * Created by Vinay Prabhu on 17-Jan-18.
+ *  Name : EditProfileFragment
+ *  Type : Fragment
+ *  ContentView : fragment_editprofile
+ *  Authentication : Signed In users
+ *  Purpose : To provide interface for users to change credentials and profile photo
  */
+package vp19.foodator.Profile;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,6 +40,7 @@ import vp19.foodator.utils.UniversalImageLoader;
 
 public class EditProfileFragment extends Fragment {
     private static final String TAG = "EditProfileFragment";
+    //Widgets
     private TextView changeProfilePic;
     private ImageView mProfilePhoto;
     private ImageView saveChanges;
@@ -46,7 +50,6 @@ public class EditProfileFragment extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private FirebaseUser user;
-    private DataSnapshot dataSnapshotCopy;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,14 +67,16 @@ public class EditProfileFragment extends Fragment {
                 getActivity().finish();
             }
         });
+        //Change profile picture
         changeProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getActivity(), ShareActvity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(getString(R.string.edit_profile),"Edit profile");
                 getActivity().startActivity(intent);
             }
         });
+        //Save Changes
         saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,6 +93,11 @@ public class EditProfileFragment extends Fragment {
         UniversalImageLoader imageLoader=new UniversalImageLoader(getActivity());
         ImageLoader.getInstance().init(imageLoader.getConfig());
     }
+
+    /**
+     * Setup profile picture url to the database user_account_settings
+     * @param dataSnapshot : Current snapshot of the database
+     */
     private void setProfileImage(DataSnapshot dataSnapshot) {
         UserAccountSettings settings = new UserAccountSettings();
         settings=dataSnapshot.child(getString(R.string.dbname_user_account_settings))
@@ -99,7 +109,6 @@ public class EditProfileFragment extends Fragment {
     /**
      * Setting up Firebase Authentication
      */
-
     private void setupFirebaseAuth(){
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase=FirebaseDatabase.getInstance();
@@ -116,7 +125,6 @@ public class EditProfileFragment extends Fragment {
                 try {
                     user=mAuth.getCurrentUser();
                     setProfileImage(dataSnapshot);
-                    dataSnapshotCopy=dataSnapshot;
                 }
                 catch (NullPointerException e){
                     Log.d(TAG, "onDataChange: Null pointer Exception "+e.getMessage());

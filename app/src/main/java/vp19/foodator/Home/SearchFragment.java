@@ -1,6 +1,11 @@
+/**
+ *  Name : SearchFragment
+ *  Type : Fragment
+ *  ContentView : fragment_search
+ *  Authentication : Signed In users
+ *  Purpose : To search for users,tags,posts
+ */
 package vp19.foodator.Home;
-
-
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,11 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import vp19.foodator.R;
-
-/**
- * Created by Vinay Prabhu on 16-Jan-18.
- */
-
 public class SearchFragment extends Fragment {
     private static final String TAG = "SearchFragment";
     @Nullable

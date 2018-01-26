@@ -1,6 +1,14 @@
+/**
+ *  Name : GalleryFragment
+ *  Type : Fragment
+ *  ContentView : fragment_gallery
+ *  Authentication : Signed In users
+ *  Purpose : To share image in the storage
+ */
 package vp19.foodator.Share;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -32,11 +40,6 @@ import vp19.foodator.Profile.AccountSettingsActivity;
 import vp19.foodator.R;
 import vp19.foodator.utils.FileSearch;
 import vp19.foodator.utils.GridImageAdapter;
-
-/**
- * Created by Vinay Prabhu on 16-Jan-18.
- */
-
 public class GalleryFragment extends Fragment {
     private static final String TAG = "GalleryFragment";
     private static final int NUM_GRID_COLS=3;
@@ -80,7 +83,8 @@ public class GalleryFragment extends Fragment {
         nextScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isRootTask()){
+                boolean isShareActivity=((ShareActvity)getActivity()).getTask();
+                if(isShareActivity){
                     Intent intent=new Intent(getActivity(),NextActivity.class);
                     Bundle extras=new Bundle();
                     extras.putString(getString(R.string.selected_image),mSelectedImage);
@@ -99,11 +103,6 @@ public class GalleryFragment extends Fragment {
         });
         return view;
     }
-    private boolean isRootTask(){
-        if(((ShareActvity)getActivity()).getTask() == 0)
-            return true;
-        return false;
-    }
     private void initMfit(){
         mFit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -119,10 +118,8 @@ public class GalleryFragment extends Fragment {
     private void init(){
         ROOT_DIR= Environment.getExternalStorageDirectory().getPath();
         CAMERA_DIR="DCIM";
-        searchHelper=new FileSearch();
-        if(searchHelper.getDirectoryPaths(ROOT_DIR) != null){
-            directories=searchHelper.getDirectoryPaths(ROOT_DIR);
-        }
+        searchHelper=new FileSearch(ROOT_DIR);
+        directories=searchHelper.pathArray;
         directories.add(0,CAMERA_DIR);
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,directories);

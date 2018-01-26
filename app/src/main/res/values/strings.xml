@@ -1,28 +1,39 @@
 <resources>
+    <!--App basic strings -->
     <string name="app_name">Foodator</string>
+
+    <!-- Account Settings fragments -->
     <string name="edit_profile">Edit Profile</string>
     <string name="sign_out">Sign Out</string>
+
+    <!--Firebase-->
     <string name="auth_failed">Authentication Failed</string>
     <string name="auth_success">Authentication Success</string>
     <string name="dbname_users">users</string>
     <string name="dbname_user_account_settings">user_account_settings</string>
+    <string name="dbname_photos">photos</string>
+    <string name="dbname_user_photos">user_photos</string>
+    <string name="attr_profile_pic">profile_photo</string>
+    <string name="attr_profile_photo">profile_photo</string>
+
+    <!-- Activities -->
     <string name="calling_activity">Calling Activity</string>
     <string name="profile_activity">Profile Activity</string>
-    <string name="galley">GALLERY</string>
+    <string name="return_to_fragment">return_to_fragment</string>
+
+    <!-- Share Activity strings -->
     <string name="photo">PHOTO</string>
     <string name="open_camera">Open Camera</string>
     <string name="next">Next</string>
     <string name="gallery">Gallery</string>
-    <string name="profile_name">Profile Name</string>
-    <string name="display_name">Display Name</string>
-    <string name="selected_image">Selected Image</string>
     <string name="fit_status">Fit Status</string>
     <string name="post">Post</string>
     <string name="description">Description</string>
-    <string name="dbname_photos">photos</string>
-    <string name="dbname_user_photos">user_photos</string>
-    <string name="attr_profile_photo">profile_photo</string>
     <string name="new_photo">New Photo</string>
-    <string name="attr_profile_pic">profile_photo</string>
-    <string name="return_to_fragment">return_to_fragment</string>
+
+    <!--Profile activity strings -->
+    <string name="profile_name">Profile Name</string>
+    <string name="display_name">Display Name</string>
+    <string name="selected_image">Selected Image</string>
+
 </resources>

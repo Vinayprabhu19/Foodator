@@ -1,3 +1,10 @@
+/**
+ *  Name : PhotoFragment
+ *  Type : Fragment
+ *  ContentView : fragment_photo
+ *  Authentication : Signed In users
+ *  Purpose : To capture photo on camera
+ */
 package vp19.foodator.Share;
 
 
@@ -17,10 +24,6 @@ import android.widget.Toast;
 
 import vp19.foodator.R;
 
-/**
- * Created by Vinay Prabhu on 16-Jan-18.
- */
-
 public class PhotoFragment extends Fragment {
     private static final String TAG = "PhotoFragment";
     private static final int PHOTO_FRAGMENT=1;
@@ -33,6 +36,7 @@ public class PhotoFragment extends Fragment {
         launch_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Check if the camera permission are available
                 if(((ShareActvity)getActivity()).checkPermission(Manifest.permission.CAMERA)){
                     Log.d(TAG, "onClick: Camera available");
                     Intent cameraIntent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

@@ -1,3 +1,10 @@
+/**
+ *  Name : FirebaseMethods
+ *  Type : Utility java class
+ *  ContentView : None
+ *  Authentication : None
+ *  Purpose : To handle firebase related methods
+ */
 package vp19.foodator.utils;
 import android.content.Context;
 import android.content.Intent;
@@ -61,6 +68,13 @@ public class FirebaseMethods {
             userID = mAuth.getCurrentUser().getUid();
         }
     }
+
+    /**
+     *  Check if the username already exists while registering new user
+     * @param username : Username entered in registration
+     * @param dataSnapshot : Current snapshot of the database
+     * @return true if it exists else false
+     */
     public boolean checkIfUsernameExists(String username, DataSnapshot dataSnapshot){
         User user=new User();
         for(DataSnapshot ds:dataSnapshot.child(userID).getChildren())
@@ -74,6 +88,10 @@ public class FirebaseMethods {
         }
         return false;
     }
+
+    /**
+     * Send email verification for the registered user
+     */
     public void sendVerification(){
         FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
         if(user != null){
@@ -81,7 +99,6 @@ public class FirebaseMethods {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
-
                     }
                     else
                         Toast.makeText(mContext,"Couldn't send mail verification",Toast.LENGTH_SHORT);
@@ -91,9 +108,9 @@ public class FirebaseMethods {
     }
     /**
      * Register new email and password to Firebase Authentication
-     * @param email
-     * @param password
-     * @param username
+     * @param email : Email
+     * @param password : Password
+     * @param username : username
      */
     public void registerNewEmail(final String email,String password, final String username) {
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -119,10 +136,10 @@ public class FirebaseMethods {
 
     /**
      * Adds new user to the database after the user successfully registers
-     * @param email
-     * @param username
-     * @param profile_photo
-     * @param displayName
+     * @param email : Email
+     * @param username : username
+     * @param profile_photo : Url for the Profile Photo
+     * @param displayName : Name to displayed for the user
      */
     public void addNewUser(String email,String username,String profile_photo,String displayName)
     {
@@ -139,8 +156,8 @@ public class FirebaseMethods {
 
     /**
      * Retrieves the User account settings to be displayed in the profile
-     * @param dataSnapshot
-     * @return
+     * @param dataSnapshot : current snapshot of the database
+     * @return USerAccountSettings for the logged in user
      */
     public UserAccountSettings getUserAccountSettings(DataSnapshot dataSnapshot){
         UserAccountSettings settings=new UserAccountSettings();
@@ -175,12 +192,23 @@ public class FirebaseMethods {
         }
         return settings;
     }
+
+    /**
+     *  Get the count of the images uploaded by the user
+     * @param dataSnapshot : Current snapshots of the user
+     * @return :  Count of the images uploaded by the user
+     */
     public int getImageCount(DataSnapshot dataSnapshot){
         int count=0;
         DataSnapshot ds=dataSnapshot.child(mContext.getString(R.string.dbname_user_photos)).child(userID);
         count=(int)ds.getChildrenCount();
         return count;
     }
+
+    /**
+     * Set the posts counts for the user
+     * @param dataSnapshot : Current snapshots of the user
+     */
     public void setPostsCount(DataSnapshot dataSnapshot){
         UserAccountSettings settings=new UserAccountSettings();
         DataSnapshot ds= dataSnapshot.child(mContext.getString(R.string.dbname_user_account_settings)).child(userID);
@@ -218,7 +246,16 @@ public class FirebaseMethods {
                 .setValue(settings);
     }
 
-    public void uploadImage(String photoType, final String description, final int image_count, final String imgURL, final boolean mFitStatus){
+    /**
+     * Upload image to firebase storage
+     * @param photoType : Type of the photo : New Photo or Profile Photo
+     * @param description : Description provided for new photo
+     * @param image_count : Image count of the user
+     * @param imgURL : URL of the image to be uploaded
+     * @param mFitStatus : (Scale Type) true -> Center Inside , False -> Center Crop
+     * @throws NullPointerException
+     */
+    public void uploadImage(String photoType, final String description, final int image_count, final String imgURL, final boolean mFitStatus) throws NullPointerException{
         //From share Activity
         if(photoType.equals(mContext.getString(R.string.new_photo))){
             StorageReference storageReference=mStorageRef
@@ -293,6 +330,11 @@ public class FirebaseMethods {
 
         }
     }
+
+    /**
+     * Add profile Picture to the user database
+     * @param imageUrl : URL of the image uploaded to the storage
+     */
     private void addProfilePic(String imageUrl){
         UserAccountSettings settings=new UserAccountSettings();
         myRef.child(mContext.getString(R.string.dbname_user_account_settings))
@@ -300,11 +342,23 @@ public class FirebaseMethods {
                 .child(mContext.getString(R.string.attr_profile_pic))
                 .setValue(imageUrl);
     }
+
+    /**
+     * Utility function to get the current time
+     * @return Simple Date Format time
+     */
     private String getTime(){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-DD'T'HH-mm-ss'Z'", Locale.UK);
         sdf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
         return sdf.format(new Date());
     }
+
+    /**
+     * Add the photo to the database
+     * @param description : Description of the photo
+     * @param ImaUri : Image Uri from the storage
+     * @param mFitStatus : (Scale Type) true -> Center Inside , False -> Center Crop
+     */
     private void addPhotoToDatabase(String description,String ImaUri,boolean mFitStatus){
         String newPhotoKey=myRef.child(mContext.getString(R.string.dbname_photos)).push().getKey();
         String tags=StringManipulation.getTags(description);

@@ -1,3 +1,10 @@
+/**
+ *  Name : RegisterActivity
+ *  Type : Activity
+ *  ContentView : activity_register
+ *  Authentication : Signed Out users
+ *  Purpose : To help users register new account
+ */
 package vp19.foodator.Login;
 
 import android.content.Context;
@@ -25,21 +32,20 @@ import vp19.foodator.utils.FirebaseMethods;
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
-
     //firebase authentication
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseMethods firebaseMethods;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
-
-    private Context mContext;
-    private String email, username, password;
+    //Widgets
     private EditText mEmail, mPassword, mUsername;
     private Button btnRegister;
     private ProgressBar mProgressBar;
+    //Other variables
+    private Context mContext;
+    private String email, username, password;
     private String append;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +58,10 @@ public class RegisterActivity extends AppCompatActivity {
         init();
     }
 
+    /**
+     * To perform various checks on the fields entered during the registration.
+     * If the fields are vald then register the user on Firebase authentication
+     */
     private void init() {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +85,13 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Checks the fields if any of them is null
+     * @param email
+     * @param username
+     * @param pwd
+     * @return
+     */
     private boolean checkInputsForNull(String email,String username, String pwd) {
         if(email.equals("") || username.equals("") || pwd.equals("")) {
             Toast.makeText(mContext, "All fields are mandatory!", Toast.LENGTH_SHORT).show();
@@ -82,7 +99,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
         return true;
     }
-
     /**
      * Initialise all activity widgets
      */
@@ -95,17 +111,6 @@ public class RegisterActivity extends AppCompatActivity {
         mContext = RegisterActivity.this;
         mProgressBar.setVisibility(View.GONE);
     }
-
-    private boolean isStringNull(String str) {
-        Log.d(TAG, "isStringNull: checking if string is null");
-
-        if(str.equals("")) {
-            return true;
-        }
-        return false;
-    }
-
-
     /**
      * ---------------------------------------firebase stuff------------------------------------------
      */
@@ -142,10 +147,8 @@ public class RegisterActivity extends AppCompatActivity {
                             Toast.makeText(mContext,"Signup Successfull. Verify Email",Toast.LENGTH_SHORT).show();
                             mAuth.signOut();
                         }
-
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-
                         }
                     });
                     finish();
@@ -153,7 +156,6 @@ public class RegisterActivity extends AppCompatActivity {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
     }

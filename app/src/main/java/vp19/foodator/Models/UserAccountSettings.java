@@ -1,9 +1,7 @@
-package vp19.foodator.Models;
-
 /**
- * Created by Vinay Prabhu on 19-Jan-18.
+ *  Model for User_account_Settings table
  */
-
+package vp19.foodator.Models;
 public class UserAccountSettings {
     private String display_name;
     private long followers;

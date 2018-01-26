@@ -1,5 +1,11 @@
+/**
+ *  Name : SignOutFragment
+ *  Type : Fragment
+ *  ContentView : fragment_signout
+ *  Authentication : Signed In users
+ *  Purpose : To sign out from the app to the login screen
+ */
 package vp19.foodator.Profile;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,19 +24,19 @@ import com.google.firebase.auth.FirebaseUser;
 
 import vp19.foodator.Login.LoginActivity;
 import vp19.foodator.R;
-
-
 public class SignOutFragment extends Fragment{
     private static final String TAG = "SignOutFragment";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-
+    //Widgets
+    private Button signout;
+    private Button goBack;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signout, container, false);
-        Button signout=(Button)view.findViewById(R.id.yes);
-        Button goBack=(Button)view.findViewById(R.id.no);
+        signout=(Button)view.findViewById(R.id.yes);
+        goBack=(Button)view.findViewById(R.id.no);
         setupFirebaseAuth();
         signout.setOnClickListener(new View.OnClickListener() {
             @Override

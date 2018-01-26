@@ -1,3 +1,10 @@
+/**
+ *  Name : BottomNavigationViewHelper
+ *  Type : Utility java class
+ *  ContentView : None
+ *  Authentication : None
+ *  Purpose : To setup navigation bar and hide the navigation controls of the mobile
+ */
 package vp19.foodator.utils;
 
 import android.content.Context;
@@ -15,10 +22,6 @@ import vp19.foodator.Share.ShareActvity;
 import vp19.foodator.Home.HomeActivity;
 import vp19.foodator.Profile.ProfileActivity;
 import vp19.foodator.R;
-
-/**
- * Created by Vinay Prabhu on 15-Jan-18.
- */
 
 public class BottomNavigationViewHelper {
     private static final String TAG = "BottomNavigationViewHel";

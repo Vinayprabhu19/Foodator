@@ -1,3 +1,10 @@
+/**
+ *  Name : AccountSettingsActivity
+ *  Type : Activity
+ *  ContentView : activity_accountsettings
+ *  Authentication : Signed In users
+ *  Purpose : To Control various fragments : Edit Profile , Sign Out
+ */
 package vp19.foodator.Profile;
 
 import android.content.Context;
@@ -24,11 +31,6 @@ import vp19.foodator.R;
 import vp19.foodator.utils.BottomNavigationViewHelper;
 import vp19.foodator.utils.FirebaseMethods;
 import vp19.foodator.utils.SectionsStatePagerAdapter;
-
-/**
- * Created by Vinay Prabhu on 16-Jan-18.
- */
-
 public class AccountSettingsActivity extends AppCompatActivity {
     private static final String TAG = "AccountSettingsActivity";
     Context mContext=AccountSettingsActivity.this;
@@ -54,8 +56,12 @@ public class AccountSettingsActivity extends AppCompatActivity {
             }
         });
     }
+    /**
+     *  Checks if the intent has arrived from Edit Profile button or through the settings
+     */
     private void transferControl(){
         Intent intent=getIntent();
+        //If the call is from ProfileActivity
         if(intent.hasExtra(getString(R.string.calling_activity))){
             try {
                 setViewPager(0);
@@ -65,6 +71,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 Log.d(TAG, "transferControl:Error Setting Viewpager "+e.getMessage());
             }
         }
+        //If the call is from Account Settings
        else if(
             intent.hasExtra(getString(R.string.return_to_fragment))){
             FirebaseMethods firebaseMethods=new FirebaseMethods(mContext);
@@ -72,17 +79,30 @@ public class AccountSettingsActivity extends AppCompatActivity {
             firebaseMethods.uploadImage("Profile Pic","",0,imgUrl,false);
         }
     }
+
+    /**
+     * Setup fragments for Section State Pager Adapter
+     */
     public void setupFragments(){
         pagerAdapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(new EditProfileFragment(),getString(R.string.edit_profile)); //fragment 0
         pagerAdapter.addFragment(new SignOutFragment(),getString(R.string.sign_out)); //fragment 1
     }
 
+    /**
+     * Sets the view pager to specified fragment
+     * @param fragmentNumber : The fragment number of the page to be set for viewpager :
+     *                       0 : Edit Profile
+     *                       1 : Sign Out
+     */
     public void setViewPager(int fragmentNumber){
         mRelativeLayout.setVisibility(View.GONE);
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setCurrentItem(fragmentNumber);
     }
+    /**
+     *  Setup the List view to be displayed on the relative layout and to sense the item that is clicked
+     */
     private void setupSettingsList(){
         ListView listView=(ListView)findViewById(R.id.lvAccountSettings);
         ArrayList<String> list=new ArrayList<>();
@@ -90,7 +110,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
         list.add(getString(R.string.sign_out));
         ArrayAdapter arrayAdapter=new ArrayAdapter(mContext,android.R.layout.simple_list_item_1,list);
         listView.setAdapter(arrayAdapter);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

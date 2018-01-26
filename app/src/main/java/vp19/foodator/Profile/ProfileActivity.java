@@ -1,3 +1,10 @@
+/**
+ *  Name : ProfileActivity
+ *  Type : Activity
+ *  ContentView : activity_profile
+ *  Authentication : Signed In users
+ *  Purpose : To display the profile of the user
+ */
 package vp19.foodator.Profile;
 
 import android.content.Context;
@@ -38,21 +45,22 @@ import vp19.foodator.utils.UniversalImageLoader;
 
 public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "ProfileActivity";
+    //constants
     private Context mContext=ProfileActivity.this;
+    private int ACTIVITY_NUM=2;
+    private int NUM_GRID_COLUMNS=3;
+    //Widgets
     private ProgressBar mProgressbar;
     private ImageView mProfilePhoto;
-    // Attributes
     private TextView mPosts,mFollowers,mFollowing,mDisplayName,mProfileName;
-    GridView gridView;
+    private GridView gridView;
     //firebase authentication
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private FirebaseUser user;
-    FirebaseMethods firebaseMethods;
-    private int ACTIVITY_NUM=2;
-    private int NUM_GRID_COLUMNS=3;
+    private FirebaseMethods firebaseMethods;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,8 +111,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         setupImageGrid(imgURLs);
     }
+
+    /**
+     * Setup the image grid with Grid image adapter
+     * @param imgURLs : List of image urls
+     */
     private void setupImageGrid(ArrayList<String> imgURLs) {
-        GridView gridView = (GridView) findViewById(R.id.gridView);
+        gridView = (GridView) findViewById(R.id.gridView);
 
         int gridWidth = getResources().getDisplayMetrics().widthPixels;
         int imageWidth = gridWidth/NUM_GRID_COLUMNS;
@@ -124,7 +137,9 @@ public class ProfileActivity extends AppCompatActivity {
         mProfilePhoto = findViewById(R.id.profileImage);
     }
 
-
+    /**
+     * Setup top profile toolbar and the widgets in it
+     */
     private void setupToolbar(){
         Toolbar toolbar=findViewById(R.id.profileToolBar);
         setSupportActionBar(toolbar);
@@ -146,6 +161,10 @@ public class ProfileActivity extends AppCompatActivity {
         menuItem.setChecked(true);
         BottomNavigationViewHelper.setIcon(menuItem,ACTIVITY_NUM);
     }
+    /**
+     * Setup profile picture url to the database user_account_settings
+     * @param dataSnapshot : Current snapshot of the database
+     */
     private void setProfileImage(DataSnapshot dataSnapshot) {
         UserAccountSettings settings = new UserAccountSettings();
         settings=dataSnapshot.child(getString(R.string.dbname_user_account_settings))
@@ -157,7 +176,6 @@ public class ProfileActivity extends AppCompatActivity {
     /**
      * Setting up Firebase Authentication
      */
-
     private void setupFirebaseAuth(){
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase=FirebaseDatabase.getInstance();
@@ -204,7 +222,10 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    //
+    /**
+     *  Setup the layout widgets for the profile from the database
+     * @param settings : The settings model containing details of the current user
+     */
     void setupLayoutWidgets(UserAccountSettings settings){
         mDisplayName=findViewById(R.id.display_name);
         mProfileName=findViewById(R.id.profileName);

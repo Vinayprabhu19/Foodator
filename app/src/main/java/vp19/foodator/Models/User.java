@@ -1,9 +1,7 @@
-package vp19.foodator.Models;
-
 /**
- * Created by Vinay Prabhu on 19-Jan-18.
+ *  Model for User table
  */
-
+package vp19.foodator.Models;
 public class User {
     private String user_id;
     private String user_name;

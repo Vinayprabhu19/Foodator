@@ -1,3 +1,10 @@
+/**
+ *  Name : NextActivity
+ *  Type : Activity
+ *  ContentView : activity_next
+ *  Authentication : Signed In users
+ *  Purpose : Final step to share the image with description
+ */
 package vp19.foodator.Share;
 
 import android.content.Context;
@@ -31,23 +38,19 @@ import vp19.foodator.Home.HomeActivity;
 import vp19.foodator.Models.UserAccountSettings;
 import vp19.foodator.R;
 import vp19.foodator.utils.FirebaseMethods;
-
-/**
- * Created by Vinay Prabhu on 24-Jan-18.
- */
-
 public class NextActivity extends AppCompatActivity{
     private static final String TAG = "NextActivity";
-    private final Context mContext=NextActivity.this;
     private String SelectedImage;
     private boolean mFitStatus;
+    //Comstants
     private static String append="file:/";
+    private final Context mContext=NextActivity.this;
     //Widgets
-    ImageView image;
-    EditText description;
-    ProgressBar progressBar;
-    ImageView btn_close;
-    TextView btn_post;
+    private ImageView image;
+    private EditText description;
+    private ProgressBar progressBar;
+    private ImageView btn_close;
+    private TextView btn_post;
     //Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;

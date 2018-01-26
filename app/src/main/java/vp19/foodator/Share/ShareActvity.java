@@ -1,6 +1,13 @@
+/**
+ *  Name : ShareActivity
+ *  Type : Activity
+ *  ContentView : activity_share
+ *  Authentication : Signed In users
+ *  Purpose : To Control various fragments : Gallery Fragment , Photo Fragment and for sharing image
+ */
 package vp19.foodator.Share;
-
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -17,7 +24,6 @@ import vp19.foodator.R;
 import vp19.foodator.utils.BottomNavigationViewHelper;
 import vp19.foodator.utils.Permissions;
 import vp19.foodator.utils.SectionPagerAdapter;
-
 public class ShareActvity extends AppCompatActivity {
     private static final String TAG = "ShareActvity";
     private int ACTIVITY_NUM=1;
@@ -29,7 +35,7 @@ public class ShareActvity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
         setupBottomNavigationView();
-        //The code
+        //Check if the permissions are available
         if(checkPermissionsArray(Permissions.PERMISSIONS)){
             setupViewPager();
         }
@@ -37,8 +43,16 @@ public class ShareActvity extends AppCompatActivity {
             verifyPermissions(Permissions.PERMISSIONS);
         }
     }
-    public int getTask(){
-        return getIntent().getFlags();
+
+    /**
+     * Check if the intent is arriving from change profile picture
+     * @return
+     */
+    public boolean getTask(){
+        Intent intent=getIntent();
+        if(intent.hasExtra(getString(R.string.edit_profile)))
+            return false;
+        return true;
     }
     public int getCurrentItemNumber(){
         return mViewPager.getCurrentItem();
@@ -51,7 +65,7 @@ public class ShareActvity extends AppCompatActivity {
         mViewPager.setAdapter(adapter);
         TabLayout tabLayout=findViewById(R.id.tabsBottom);
         tabLayout.setupWithViewPager(mViewPager);
-        tabLayout.getTabAt(0).setText((getString(R.string.galley)));
+        tabLayout.getTabAt(0).setText((getString(R.string.gallery)));
         tabLayout.getTabAt(1).setText((getString(R.string.photo)));
     }
     /**
@@ -66,6 +80,12 @@ public class ShareActvity extends AppCompatActivity {
 
         );
     }
+
+    /**
+     *  Check the permissions required
+     * @param Permissions : Array of permissions required : Read Storage , Write Storage , Camera
+     * @return true if all permissions are granted else false
+     */
     public boolean checkPermissionsArray(String[] Permissions){
         for(int i=0;i<Permissions.length;i++){
             String check=Permissions[i];

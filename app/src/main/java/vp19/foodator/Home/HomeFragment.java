@@ -1,5 +1,11 @@
+/**
+ *  Name : HomeFragment
+ *  Type : Fragment
+ *  ContentView : fragment_home
+ *  Authentication : Signed In users
+ *  Purpose : To display the posts of the users
+ */
 package vp19.foodator.Home;
-
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,11 +18,6 @@ import android.view.ViewGroup;
 import java.util.zip.Inflater;
 
 import vp19.foodator.R;
-
-/**
- * Created by Vinay Prabhu on 16-Jan-18.
- */
-
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     @Nullable

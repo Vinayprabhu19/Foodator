@@ -1,3 +1,10 @@
+/**
+ *  Name : LoginActivity
+ *  Type : Activity
+ *  ContentView : activity_login
+ *  Authentication : Signed Out users
+ *  Purpose : To help users login to their account
+ */
 package vp19.foodator.Login;
 
 import android.content.Context;
@@ -21,16 +28,15 @@ import com.google.firebase.auth.FirebaseUser;
 
 import vp19.foodator.Home.HomeActivity;
 import vp19.foodator.R;
-
-/**
- * Created by Vinay Prabhu on 18-Jan-18.
- */
+import vp19.foodator.utils.StringManipulation;
 
 public class LoginActivity extends AppCompatActivity{
+    //Constants
     private static final String TAG = "LoginActvity";
     private Context mContext=LoginActivity.this;
-    ProgressBar mProgressBar;
-    EditText mPassword,mEmail;
+    //Widgets
+    private ProgressBar mProgressBar;
+    private EditText mPassword,mEmail;
     //Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -44,15 +50,6 @@ public class LoginActivity extends AppCompatActivity{
         mPassword=findViewById(R.id.input_password);
         setupFirebaseAuth();
         init();
-
-    }
-    private boolean isStringNull(String str) {
-        Log.d(TAG, "isStringNull: checking if string is null");
-
-        if(str.equals("")) {
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -67,7 +64,7 @@ public class LoginActivity extends AppCompatActivity{
                 Log.d(TAG, "onClick: Attempting to login");
                 String email = mEmail.getText().toString();
                 String password = mPassword.getText().toString();
-                if(isStringNull(email) && isStringNull(password)) {
+                if(StringManipulation.isStringNull(email) && StringManipulation.isStringNull(password)) {
                     Toast.makeText(mContext, "Please type your email and password", Toast.LENGTH_SHORT).show();
                 }else {
                     mProgressBar.setVisibility(View.VISIBLE);
@@ -110,8 +107,6 @@ public class LoginActivity extends AppCompatActivity{
                                         startActivity(intent);
                                         finish();
                                     }
-
-                                    // ...
                                 }
                             });
                 }
@@ -128,7 +123,6 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
     }
-
     /**
      * setup firebase auth object
      */
@@ -146,11 +140,9 @@ public class LoginActivity extends AppCompatActivity{
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
     }
-
     @Override
     public void onStart() {
         super.onStart();

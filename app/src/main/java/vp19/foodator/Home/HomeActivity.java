@@ -1,3 +1,10 @@
+/**
+ *  Name : HomeActivity
+ *  Type : Activity
+ *  ContentView : activity_home
+ *  Authentication : Signed In users
+ *  Purpose : To Control various fragments : Home Fragment , Likes Fragment , Search Fragment
+ */
 package vp19.foodator.Home;
 
 import android.content.Context;
@@ -47,11 +54,11 @@ public class HomeActivity extends AppCompatActivity {
         adapter.addFragmet(new HomeFragment());
         adapter.addFragmet(new SearchFragment());
         adapter.addFragmet(new LikesFragment());
-        ViewPager viewPager=(ViewPager) findViewById(R.id.container);
+        ViewPager viewPager=findViewById(R.id.container);
         viewPager.setAdapter(adapter);
 
         //Modify the tab layout
-        TabLayout tabLayout=(TabLayout)findViewById(R.id.tabs);
+        TabLayout tabLayout=findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
@@ -73,8 +80,11 @@ public class HomeActivity extends AppCompatActivity {
 
 
     }
+    /**
+     * Sets up bottom navigation view
+     */
     private void setupBottomNavigationView(){
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx)findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewEx bottomNavigationViewEx =findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx,this.getWindow());
         BottomNavigationViewHelper.enableNavgation(mContext,bottomNavigationViewEx);
         Menu menu=bottomNavigationViewEx.getMenu();

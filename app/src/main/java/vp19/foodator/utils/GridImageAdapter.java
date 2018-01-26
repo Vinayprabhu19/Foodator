@@ -1,9 +1,5 @@
 package vp19.foodator.utils;
 
-/**
- * Created by Vinay Prabhu on 17-Jan-18.
- */
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;

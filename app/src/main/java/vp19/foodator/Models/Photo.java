@@ -1,9 +1,7 @@
-package vp19.foodator.Models;
-
 /**
- * Created by Vinay Prabhu on 24-Jan-18.
+ *  Model for Photo table
  */
-
+package vp19.foodator.Models;
 public class Photo {
     private String caption;
     private String date_created;
