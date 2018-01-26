@@ -16,11 +16,6 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import vp19.foodator.R;
-
-/**
- * Created by Vinay Prabhu on 17-Jan-18.
- */
-
 public class UniversalImageLoader {
     private static final int default_image= R.mipmap.ic_launcher;
     private Context mContext;
