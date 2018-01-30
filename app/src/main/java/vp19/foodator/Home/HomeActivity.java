@@ -42,8 +42,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        setupFirebaseAuth();
         setupBottomNavigationView();
+        setupFirebaseAuth();
         setupViewPager();
     }
     /**
@@ -84,7 +84,7 @@ public class HomeActivity extends AppCompatActivity {
      * Sets up bottom navigation view
      */
     private void setupBottomNavigationView(){
-        BottomNavigationViewEx bottomNavigationViewEx =findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx)findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx,this.getWindow());
         BottomNavigationViewHelper.enableNavgation(mContext,bottomNavigationViewEx);
         Menu menu=bottomNavigationViewEx.getMenu();

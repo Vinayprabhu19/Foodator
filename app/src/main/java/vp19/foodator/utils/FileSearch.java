@@ -61,7 +61,7 @@ public class FileSearch extends Thread implements FileFilter{
         File file=new File(directory);
         File[] listfiles=file.listFiles();
         for(int i=0;i<listfiles.length;i++){
-            if(listfiles[i].isDirectory()){
+            if(listfiles[i].isDirectory() && !listfiles[i].isHidden()){
                 if(checkDirectoryForImage(listfiles[i].getAbsolutePath()))
                     pathArray.add(listfiles[i].getName());
             }

@@ -16,7 +16,7 @@
         android:weightSum="100"
         android:layout_below="@id/relLayout1"
         android:orientation="vertical"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="45dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"

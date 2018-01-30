@@ -25,6 +25,7 @@
         <activity android:name=".Share.ShareActvity" />
         <activity android:name=".Profile.AccountSettingsActivity"/>
         <activity android:name=".Share.NextActivity"/>
+        <activity android:name=".Profile.ShowImageActivity"/>
     </application>
 
 </manifest>

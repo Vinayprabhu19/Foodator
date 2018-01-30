@@ -124,5 +124,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
         Menu menu=bottomNavigationViewEx.getMenu();
         MenuItem menuItem=menu.getItem(2);
         menuItem.setChecked(true);
+        BottomNavigationViewHelper.setIcon(menuItem,2);
     }
 }

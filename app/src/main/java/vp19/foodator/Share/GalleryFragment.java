@@ -119,8 +119,14 @@ public class GalleryFragment extends Fragment {
         ROOT_DIR= Environment.getExternalStorageDirectory().getPath();
         CAMERA_DIR="DCIM";
         searchHelper=new FileSearch(ROOT_DIR);
+        try {
+            searchHelper.join();
+        }
+        catch (InterruptedException e){
+            Log.d(TAG, "init: "+e.getMessage());
+        }
         directories=searchHelper.pathArray;
-        directories.add(0,CAMERA_DIR);
+        //directories.add(0,CAMERA_DIR);
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,directories);
         directorySpinner.setAdapter(adapter);

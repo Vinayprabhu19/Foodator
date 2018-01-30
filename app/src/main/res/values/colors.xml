@@ -4,9 +4,10 @@
     <color name="colorPrimaryDark">#7c1c5d</color>
     <color name="colorAccent">#ff2f2f</color>
     <color name="white">#fff</color>
-    <color name="red">#ff0000</color>
+    <color name="red">#990000</color>
+    <color name="green">#004c00</color>
     <color name="black">#000</color>
-    <color name="grey">#bfbfbf</color>
+    <color name="grey">#efefef</color>
     <color name="darkgrey">#4c4c4c</color>
     <color name="dyellow">#FFFBD2</color>
     <color name="violet">#675682</color>
