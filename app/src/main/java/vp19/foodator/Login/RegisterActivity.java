@@ -137,9 +137,8 @@ public class RegisterActivity extends AppCompatActivity {
                             if(firebaseMethods.checkIfUsernameExists(username,dataSnapshot)){
                                 append=myRef.push().getKey().substring(3,10);
                                 Log.d(TAG, "onDataChange: User Name already exists");
+                                username = username + append;
                             }
-                            username=username+append;
-
                             //Add user to database
                             //Add user settings to database
                             firebaseMethods.addNewUser(email,username,"",displayName);
