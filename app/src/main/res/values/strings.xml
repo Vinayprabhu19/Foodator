@@ -38,5 +38,7 @@
     <string name="number_zero">0</string>
     <string name="photo_id">Photo Id</string>
     <string name="string_photo">Photo</string>
+    <string name="posts">Posts</string>
+    <string name="string_hello">Hello,</string>
 
 </resources>
