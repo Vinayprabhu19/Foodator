@@ -19,7 +19,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,34 +53,25 @@ public class HomeActivity extends AppCompatActivity {
      */
     private void setupViewPager(){
         SectionPagerAdapter adapter=new SectionPagerAdapter(getSupportFragmentManager());
-        adapter.addFragmet(new HomeFragment());
         adapter.addFragmet(new SearchFragment());
+        adapter.addFragmet(new HomeFragment());
         adapter.addFragmet(new LikesFragment());
         ViewPager viewPager=findViewById(R.id.container);
         viewPager.setAdapter(adapter);
-
+        viewPager.setCurrentItem(1);
         //Modify the tab layout
         TabLayout tabLayout=findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.setSelectedTabIndicatorHeight(0);
 
         //Get the individual tabs
         TabLayout.Tab tab1=tabLayout.getTabAt(0); // Logo
         TabLayout.Tab tab2=tabLayout.getTabAt(1); // Search
         TabLayout.Tab tab3=tabLayout.getTabAt(2); // Likes
 
-        //Get custom view for first tab
-        LinearLayout tabOne = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.logo_text_tab, null);
-        TextView textView=(TextView)tabOne.getChildAt(1);
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/berlin_sans.ttf");
-        textView.setTypeface(typeface);
-        tab1.setCustomView(tabOne);
-        tab2.setIcon(R.drawable.ic_search);
+        //Set the icons
+        tab1.setIcon(R.drawable.ic_search);
+        tab2.setIcon(R.drawable.ic_logo);
         tab3.setIcon(R.drawable.ic_likes);
-
-
     }
     /**
      * Sets up bottom navigation view

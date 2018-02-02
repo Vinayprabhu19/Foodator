@@ -31,7 +31,8 @@ public class BottomNavigationViewHelper {
         bottomNavigationViewEx.enableShiftingMode(false);
         bottomNavigationViewEx.setTextVisibility(false);
         bottomNavigationViewEx.setIconVisibility(true);
-        bottomNavigationViewEx.setIconSize(30,30);
+        bottomNavigationViewEx.setIconSize(32,32);
+        bottomNavigationViewEx.setTextSize(0);
         hide(window);
     }
     public static void setIcon(MenuItem item,int id){

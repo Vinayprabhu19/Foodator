@@ -7,6 +7,7 @@
  */
 package vp19.foodator.utils;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.io.File;
@@ -21,17 +22,19 @@ public class FileSearch extends Thread implements FileFilter{
     //Valid File Extensions
     private final String[] okFileExtensions =  new String[] {"jpg", "png", "gif","jpeg"};
     public ArrayList<String> pathArray;
+    public ArrayList<String> absPathArray;
     private String directory;
     public FileSearch(String directory){
         super("File Search Thread");
         pathArray=new ArrayList<>();
+        absPathArray=new ArrayList<>();
         this.directory=directory;
         start();
     }
     public void run(){
         Log.d(TAG, "run: Thread Started " + this);
         try{
-            getDirectoryPaths();
+            getDirectoryPaths(this.directory);
         }
         catch (Exception e){
             Log.d(TAG, "run: Caught exception"+ e.getMessage());
@@ -57,21 +60,16 @@ public class FileSearch extends Thread implements FileFilter{
      * Search a directory and recursively obtain other directories
      * @return List of sub directories
      */
-    public void getDirectoryPaths(){
+    public void getDirectoryPaths(String directory){
         File file=new File(directory);
         File[] listfiles=file.listFiles();
         for(int i=0;i<listfiles.length;i++){
             if(listfiles[i].isDirectory() && !listfiles[i].isHidden()){
-                if(checkDirectoryForImage(listfiles[i].getAbsolutePath()))
+                //if(checkDirectoryForImage(listfiles[i].getAbsolutePath()))
                     pathArray.add(listfiles[i].getName());
+                    absPathArray.add(listfiles[i].getAbsolutePath());
             }
         }
-        Collections.sort(pathArray, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o1.compareTo(o2);
-            }
-        });
     }
     /**
      * Check if the directory has atleast one image

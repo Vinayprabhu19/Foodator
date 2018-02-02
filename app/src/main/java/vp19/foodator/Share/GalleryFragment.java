@@ -35,6 +35,8 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import vp19.foodator.Profile.AccountSettingsActivity;
 import vp19.foodator.R;
@@ -117,7 +119,6 @@ public class GalleryFragment extends Fragment {
     }
     private void init(){
         ROOT_DIR= Environment.getExternalStorageDirectory().getPath();
-        CAMERA_DIR="DCIM";
         searchHelper=new FileSearch(ROOT_DIR);
         try {
             searchHelper.join();
@@ -126,20 +127,34 @@ public class GalleryFragment extends Fragment {
             Log.d(TAG, "init: "+e.getMessage());
         }
         directories=searchHelper.pathArray;
-        //directories.add(0,CAMERA_DIR);
+        sDirectoryList=searchHelper.absPathArray;
+        //Sort the directories through name
+        Collections.sort(directories, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.compareTo(o2);
+            }
+        });
+        Collections.sort(sDirectoryList, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.compareTo(o2);
+            }
+        });
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,directories);
         directorySpinner.setAdapter(adapter);
         directorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String absolutePath=ROOT_DIR+"/"+directories.get(position);
+                String absolutePath=sDirectoryList.get(position);
                 Log.d(TAG, "onItemSelected: Item selected is  "+ absolutePath);
                 setupGridView(absolutePath);
                 ((ShareActvity)getActivity()).setupBottomNavigationView();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                ((ShareActvity)getActivity()).setupBottomNavigationView();
             }
         });
     }

@@ -3,17 +3,22 @@
     <color name="colorPrimary">#fff</color>
     <color name="colorPrimaryDark">#7c1c5d</color>
     <color name="colorAccent">#ff2f2f</color>
+    <!-- Basic -->
     <color name="white">#fff</color>
     <color name="red">#990000</color>
     <color name="green">#004c00</color>
+    <color name="blue">#00f</color>
     <color name="black">#000</color>
+    <color name="transparent">#33FFFFFF</color>
+
     <color name="grey">#efefef</color>
     <color name="darkgrey">#4c4c4c</color>
     <color name="dyellow">#FFFBD2</color>
     <color name="violet">#675682</color>
-    <color name="transparent">#33FFFFFF</color>
     <color name="light_violet">#ff89ab</color>
     <color name="dark_violet">#7c1c5d</color>
     <color name="dark_purple">#472747</color>
     <color name="light_purple">#8e4e8e</color>
+    <color name="light_orange">#e59400</color>
+    <color name="dark_orange">#cc8400</color>
 </resources>
