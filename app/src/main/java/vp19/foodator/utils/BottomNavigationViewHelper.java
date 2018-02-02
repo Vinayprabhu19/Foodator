@@ -75,13 +75,30 @@ public class BottomNavigationViewHelper {
     }
 
     public static void hide(Window window){
-        View decorView = window.getDecorView();
+       final View decorView = window.getDecorView();
 // Hide both the navigation bar and the status bar.
 // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
 // a general rule, you should design your app to hide the status bar whenever you
 // hide the navigation bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        final int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
+        decorView.setOnSystemUiVisibilityChangeListener
+                (new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        // Note that system bars will only be "visible" if none of the
+                        // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
+                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                            decorView.setSystemUiVisibility(uiOptions);
+                            // adjustments to your UI, such as showing the action bar or
+                            // other navigational controls.
+                        } else {
+                            // adjustments to your UI, such as hiding the action bar or
+                            // other navigational controls.
+                        }
+                    }
+                });
     }
+
 }

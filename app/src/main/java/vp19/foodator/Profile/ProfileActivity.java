@@ -240,4 +240,5 @@ public class ProfileActivity extends AppCompatActivity {
         super.onPostResume();
         setupBottomNavigationView();
     }
+
 }

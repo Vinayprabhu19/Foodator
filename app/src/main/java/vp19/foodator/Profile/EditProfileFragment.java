@@ -6,6 +6,7 @@
  *  Purpose : To provide interface for users to change credentials and profile photo
  */
 package vp19.foodator.Profile;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,23 +53,30 @@ public class EditProfileFragment extends Fragment {
     private FirebaseMethods mFirebaseMethods;
     private DatabaseReference myRef;
     private FirebaseUser user;
-
     private EditText mDisplayName, mUsername;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_editprofile, container, false);
+        Activity activity=getActivity();
+        initWidgets(view);
+        setupFirebaseAuth();
+        initImageLoader();
+        return view;
+    }
+
+    /**
+     * Initialise the widgets
+     * @param view
+     */
+    private void initWidgets(View view){
         mProfilePhoto = (ImageView) view.findViewById(R.id.profile_photo);
         changeProfilePic=view.findViewById(R.id.changeProfilePhoto);
         mUsername = (EditText) view.findViewById(R.id.username);
         mDisplayName = (EditText) view.findViewById(R.id.display_name);
-//        mDescription = (EditText) view.findViewById(R.id.description);
-//        mEmail = (EditText) view.findViewById(R.id.email);
-//        mPhoneNumber = (EditText) view.findViewById(R.id.phoneNumber);
         mFirebaseMethods = new FirebaseMethods(getActivity());
         saveChanges=view.findViewById(R.id.saveChanges);
-        Log.d(TAG, "onCreateView: Edit Profile");
         //backarrow to go back to "ProfileActivity"
         ImageView backArrow = (ImageView) view.findViewById(R.id.backArrow);
         backArrow.setOnClickListener(new View.OnClickListener() {
@@ -86,18 +95,6 @@ public class EditProfileFragment extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
-        //Save Changes
-        saveChanges.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getActivity(),ProfileActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        });
-        setupFirebaseAuth();
-        initImageLoader();
-        return view;
     }
     private void initImageLoader(){
         UniversalImageLoader imageLoader=new UniversalImageLoader(getActivity());
@@ -108,8 +105,8 @@ public class EditProfileFragment extends Fragment {
      * Setup profile picture url to the database user_account_settings
      * @param dataSnapshot : Current snapshot of the database
      */
-    private void setProfileImage(DataSnapshot dataSnapshot) {
-        UserAccountSettings settings = new UserAccountSettings();
+    private void setProfileImage(DataSnapshot dataSnapshot) throws IllegalStateException {
+        UserAccountSettings settings;
         settings=dataSnapshot.child(getString(R.string.dbname_user_account_settings))
                 .child(user.getUid())
                 .getValue(UserAccountSettings.class);
@@ -119,11 +116,23 @@ public class EditProfileFragment extends Fragment {
 
     /**
      * Fetch username and display name from database and display them.
-     * @param settings
+     * @param snapshot
      */
-    private void setupLayoutWidgets(UserAccountSettings settings){
+    private void setupLayoutWidgets(final DataSnapshot snapshot) throws IllegalStateException{
+        UserAccountSettings settings=mFirebaseMethods.getUserAccountSettings(snapshot);
         mUsername.setText(settings.getUsername());
         mDisplayName.setText(settings.getDisplay_name());
+        //Save Changes
+        saveChanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                writeChangestoDatabase(snapshot);
+                Intent intent=new Intent(getActivity(),ProfileActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
     }
 
     /**
@@ -141,14 +150,17 @@ public class EditProfileFragment extends Fragment {
         };
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(final DataSnapshot dataSnapshot) {
                 try {
                     user=mAuth.getCurrentUser();
                     setProfileImage(dataSnapshot);
-                    setupLayoutWidgets(mFirebaseMethods.getUserAccountSettings(dataSnapshot));
+                    setupLayoutWidgets(dataSnapshot);
                 }
                 catch (NullPointerException e){
                     Log.d(TAG, "onDataChange: Null pointer Exception "+e.getMessage());
+                }
+                catch (IllegalStateException e){
+                    Log.d(TAG, "onDataChange: Caught Illegal State Exception" + e.getMessage());
                 }
             }
             @Override
@@ -156,6 +168,50 @@ public class EditProfileFragment extends Fragment {
 
             }
         });
+    }
+
+    /**
+     * Write changed data to database
+     * @param snapshot
+     */
+    public void writeChangestoDatabase(DataSnapshot snapshot){
+        UserAccountSettings oldSettings=snapshot.child(getString(R.string.dbname_user_account_settings))
+                .child(user.getUid())
+                .getValue(UserAccountSettings.class);
+        UserAccountSettings settings=new UserAccountSettings();
+        String newUsername=mUsername.getText().toString();
+        String newDisplayName=mDisplayName.getText().toString();
+        Log.d(TAG, "writeChangestoDatabase: " + newUsername + isStringNull(newUsername));
+        if(isStringNull(newUsername) | isStringNull(newDisplayName)){
+            Log.d(TAG, "writeChangestoDatabase: Null Entry");
+            Toast.makeText(getContext(),"Blank Entry",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //Create the new model
+        settings.setUsername(newUsername);
+        settings.setDisplay_name(newDisplayName);
+        settings.setProfile_photo(oldSettings.getProfile_photo());
+        settings.setPosts(oldSettings.getPosts());
+        settings.setFollowers(oldSettings.getFollowers());
+        settings.setFollowing(oldSettings.getFollowing());
+
+        //update database
+        myRef.child(getString(R.string.dbname_user_account_settings))
+                .child(user.getUid())
+                .setValue(settings);
+        Toast.makeText(getContext(),"Changes Saved Successfully",Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Check is string is null
+     * @param s
+     * @return
+     */
+    public boolean isStringNull(String s){
+        if((s.replace(" ","")).equals("")){
+            return true;
+        }
+        return false;
     }
     @Override
     public void onStart() {
@@ -169,4 +225,5 @@ public class EditProfileFragment extends Fragment {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+
 }

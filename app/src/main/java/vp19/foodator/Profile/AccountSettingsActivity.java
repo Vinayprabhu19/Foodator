@@ -63,6 +63,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         Intent intent=getIntent();
         //If the call is from ProfileActivity
         if(intent.hasExtra(getString(R.string.calling_activity))){
+            Log.d(TAG, "transferControl: ");
             try {
                 setViewPager(0);
             }
@@ -70,13 +71,16 @@ public class AccountSettingsActivity extends AppCompatActivity {
             {
                 Log.d(TAG, "transferControl:Error Setting Viewpager "+e.getMessage());
             }
+            catch (IllegalStateException e){
+                Log.d(TAG, "transferControl: Illegal State Exception");
+            }
         }
         //If the call is from Account Settings
-       else if(
-            intent.hasExtra(getString(R.string.return_to_fragment))){
+       else if(intent.hasExtra(getString(R.string.return_to_fragment))){
             FirebaseMethods firebaseMethods=new FirebaseMethods(mContext);
             String imgUrl=intent.getStringExtra(getString(R.string.selected_image));
             firebaseMethods.uploadImage("Profile Pic","",0,imgUrl,false);
+            finish();
         }
     }
 
