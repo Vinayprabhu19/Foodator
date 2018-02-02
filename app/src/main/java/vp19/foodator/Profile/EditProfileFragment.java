@@ -48,14 +48,24 @@ public class EditProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
+    private FirebaseMethods mFirebaseMethods;
     private DatabaseReference myRef;
     private FirebaseUser user;
+
+    private EditText mDisplayName, mUsername;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_editprofile, container, false);
         mProfilePhoto = (ImageView) view.findViewById(R.id.profile_photo);
         changeProfilePic=view.findViewById(R.id.changeProfilePhoto);
+        mUsername = (EditText) view.findViewById(R.id.username);
+        mDisplayName = (EditText) view.findViewById(R.id.display_name);
+//        mDescription = (EditText) view.findViewById(R.id.description);
+//        mEmail = (EditText) view.findViewById(R.id.email);
+//        mPhoneNumber = (EditText) view.findViewById(R.id.phoneNumber);
+        mFirebaseMethods = new FirebaseMethods(getActivity());
         saveChanges=view.findViewById(R.id.saveChanges);
         Log.d(TAG, "onCreateView: Edit Profile");
         //backarrow to go back to "ProfileActivity"
@@ -106,6 +116,16 @@ public class EditProfileFragment extends Fragment {
         String imgURL=settings.getProfile_photo();
         UniversalImageLoader.setImage(imgURL, mProfilePhoto, null, "");
     }
+
+    /**
+     * Fetch username and display name from database and display them.
+     * @param settings
+     */
+    private void setupLayoutWidgets(UserAccountSettings settings){
+        mUsername.setText(settings.getUsername());
+        mDisplayName.setText(settings.getDisplay_name());
+    }
+
     /**
      * Setting up Firebase Authentication
      */
@@ -125,6 +145,7 @@ public class EditProfileFragment extends Fragment {
                 try {
                     user=mAuth.getCurrentUser();
                     setProfileImage(dataSnapshot);
+                    setupLayoutWidgets(mFirebaseMethods.getUserAccountSettings(dataSnapshot));
                 }
                 catch (NullPointerException e){
                     Log.d(TAG, "onDataChange: Null pointer Exception "+e.getMessage());
