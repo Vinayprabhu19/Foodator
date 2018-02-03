@@ -130,4 +130,10 @@ public class AccountSettingsActivity extends AppCompatActivity {
         menuItem.setChecked(true);
         BottomNavigationViewHelper.setIcon(menuItem,2);
     }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        setupBottomNavigationView();
+    }
 }
