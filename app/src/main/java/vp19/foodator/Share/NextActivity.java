@@ -42,6 +42,7 @@ public class NextActivity extends AppCompatActivity{
     private static final String TAG = "NextActivity";
     private String SelectedImage;
     private boolean mFitStatus;
+    private Bitmap bitmap;
     //Comstants
     private static String append="file:/";
     private final Context mContext=NextActivity.this;
@@ -51,6 +52,7 @@ public class NextActivity extends AppCompatActivity{
     private ProgressBar progressBar;
     private ImageView btn_close;
     private TextView btn_post;
+    Intent intent;
     //Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -64,17 +66,7 @@ public class NextActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next);
-        mFirebaseMethods=new FirebaseMethods(mContext);
-        Intent intent=getIntent();
-        Bundle extras=intent.getExtras();
-        SelectedImage=extras.getString(getString(R.string.selected_image));
-        mFitStatus=extras.getBoolean(getString(R.string.fit_status));
-        image=findViewById(R.id.image);
-        btn_close=findViewById(R.id.btn_close);
-        btn_post=findViewById(R.id.tvPost);
-        description=findViewById(R.id.description);
-        progressBar=findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.GONE);
+        setupWidgets();
         setupFirebaseAuth();
         btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,12 +78,38 @@ public class NextActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 //Upload Image
-                 mFirebaseMethods.uploadImage(getString(R.string.new_photo),description.getText().toString(),image_count,SelectedImage,mFitStatus);
+                if(intent.hasExtra(getString(R.string.selected_image))){
+                    mFirebaseMethods.uploadImage(getString(R.string.new_photo),description.getText().toString(),image_count,SelectedImage,null,mFitStatus);
+                }
+                else if(intent.hasExtra(getString(R.string.selected_bitmap))){
+                    mFirebaseMethods.uploadImage(getString(R.string.new_photo),description.getText().toString(),image_count,null,bitmap,mFitStatus);
+                }
+
                 Intent intent=new Intent(mContext, HomeActivity.class);
                 mContext.startActivity(intent);
             }
         });
-        setImage();
+    }
+    private void setupWidgets(){
+        image=findViewById(R.id.image);
+        btn_close=findViewById(R.id.btn_close);
+        btn_post=findViewById(R.id.tvPost);
+        description=findViewById(R.id.description);
+        progressBar=findViewById(R.id.progressBar);
+        mFirebaseMethods=new FirebaseMethods(mContext);
+        progressBar.setVisibility(View.GONE);
+
+        intent=getIntent();
+        if(intent.hasExtra(getString(R.string.selected_image))){
+            SelectedImage=intent.getStringExtra(getString(R.string.selected_image));
+            mFitStatus=intent.getBooleanExtra(getString(R.string.fit_status),false);
+            setImage();
+        }
+        else if(intent.hasExtra(getString(R.string.selected_bitmap))){
+            bitmap=(Bitmap)intent.getParcelableExtra(getString(R.string.selected_bitmap));
+            mFitStatus=true;
+            image.setImageBitmap(bitmap);
+        }
     }
     private void setImage(){
         if(mFitStatus)

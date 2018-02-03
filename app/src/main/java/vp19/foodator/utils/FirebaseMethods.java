@@ -255,13 +255,15 @@ public class FirebaseMethods {
      * @param mFitStatus : (Scale Type) true -> Center Inside , False -> Center Crop
      * @throws NullPointerException
      */
-    public void uploadImage(String photoType, final String description, final int image_count, final String imgURL, final boolean mFitStatus) throws NullPointerException{
+    public void uploadImage(String photoType, final String description, final int image_count, final String imgURL,Bitmap bm, final boolean mFitStatus) throws NullPointerException{
         //From share Activity
         if(photoType.equals(mContext.getString(R.string.new_photo))){
             StorageReference storageReference=mStorageRef
                     .child(FIREBASE_IMG_STORAGE +"/"+userID+"/photo"+(image_count+1));
             //convert image to bitmap
-            Bitmap bm=ImageManager.getBitmap(imgURL);
+            if(bm == null){
+                bm=ImageManager.getBitmap(imgURL);
+            }
             UploadTask uploadTask=null;
             byte[] bytes=ImageManager.getBytesFromBitmap(bm,100);
             uploadTask=storageReference.putBytes(bytes);
@@ -303,7 +305,9 @@ public class FirebaseMethods {
             StorageReference storageReference=mStorageRef
                     .child(FIREBASE_IMG_STORAGE +"/"+userID+"/profile_photo");
             //convert image to bitmap
-            Bitmap bm=ImageManager.getBitmap(imgURL);
+            if(bm == null){
+                bm=ImageManager.getBitmap(imgURL);
+            }
             UploadTask uploadTask=null;
             byte[] bytes=ImageManager.getBytesFromBitmap(bm,100);
             uploadTask=storageReference.putBytes(bytes);

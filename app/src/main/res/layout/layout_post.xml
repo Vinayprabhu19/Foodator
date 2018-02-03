@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/imagePost"
-        android:scaleType="centerInside"
+        android:scaleType="fitXY"
         android:adjustViewBounds="true"
         android:background="@color/white"/>
     <RelativeLayout

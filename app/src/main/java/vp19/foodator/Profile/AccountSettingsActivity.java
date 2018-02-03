@@ -79,7 +79,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
        else if(intent.hasExtra(getString(R.string.return_to_fragment))){
             FirebaseMethods firebaseMethods=new FirebaseMethods(mContext);
             String imgUrl=intent.getStringExtra(getString(R.string.selected_image));
-            firebaseMethods.uploadImage("Profile Pic","",0,imgUrl,false);
+            firebaseMethods.uploadImage("Profile Pic","",0,imgUrl,null,false);
             finish();
         }
     }

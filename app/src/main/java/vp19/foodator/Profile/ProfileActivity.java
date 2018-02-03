@@ -35,6 +35,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import vp19.foodator.Login.LoginActivity;
 import vp19.foodator.Models.Photo;
@@ -96,6 +97,7 @@ public class ProfileActivity extends AppCompatActivity {
             imgList.add(url);
             photo_id.add(id);
         }
+        Collections.reverse(imgList);
         Log.d(TAG, "UrlGridSetup: Finisehd loop");
         setupImageGrid(imgList);
     }

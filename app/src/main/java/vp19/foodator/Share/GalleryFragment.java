@@ -88,10 +88,8 @@ public class GalleryFragment extends Fragment {
                 boolean isShareActivity=((ShareActvity)getActivity()).getTask();
                 if(isShareActivity){
                     Intent intent=new Intent(getActivity(),NextActivity.class);
-                    Bundle extras=new Bundle();
-                    extras.putString(getString(R.string.selected_image),mSelectedImage);
-                    extras.putBoolean(getString(R.string.fit_status),mFitStatus);
-                    intent.putExtras(extras);
+                    intent.putExtra(getString(R.string.selected_image),mSelectedImage);
+                    intent.putExtra(getString(R.string.fit_status),mFitStatus);
                     startActivity(intent);
                 }
                 else{

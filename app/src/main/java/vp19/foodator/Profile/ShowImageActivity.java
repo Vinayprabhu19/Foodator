@@ -63,7 +63,7 @@ public class ShowImageActivity extends AppCompatActivity {
         if(ivheight  > ivwidth){
             imagePost.getLayoutParams().width=width;
             imagePost.getLayoutParams().height=width;
-            imagePost.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            imagePost.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
         Log.d(TAG, "init: ImageDim" + ivwidth);
         Log.d(TAG, "init: ImageDim"+ivheight);
