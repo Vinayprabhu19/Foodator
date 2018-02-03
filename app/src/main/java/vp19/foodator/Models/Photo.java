@@ -9,6 +9,8 @@ public class Photo {
     private String photo_id;
     private String user_id;
     private String tags;
+    private int likes;
+    private int dislikes;
     private boolean fit;
 
     @Override
@@ -20,6 +22,8 @@ public class Photo {
                 ", photo_id='" + photo_id + '\'' +
                 ", user_id='" + user_id + '\'' +
                 ", tags='" + tags + '\'' +
+                ", likes=" + likes +
+                ", dislikes=" + dislikes +
                 ", fit=" + fit +
                 '}';
     }
@@ -72,6 +76,22 @@ public class Photo {
         this.tags = tags;
     }
 
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public int getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(int dislikes) {
+        this.dislikes = dislikes;
+    }
+
     public boolean isFit() {
         return fit;
     }
@@ -80,14 +100,15 @@ public class Photo {
         this.fit = fit;
     }
 
-    public Photo(String caption, String date_created, String image_path, String photo_id, String user_id, String tags, boolean fit) {
-
+    public Photo(String caption, String date_created, String image_path, String photo_id, String user_id, String tags, int likes, int dislikes, boolean fit) {
         this.caption = caption;
         this.date_created = date_created;
         this.image_path = image_path;
         this.photo_id = photo_id;
         this.user_id = user_id;
         this.tags = tags;
+        this.likes = likes;
+        this.dislikes = dislikes;
         this.fit = fit;
     }
 

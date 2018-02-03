@@ -20,6 +20,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
+
 import vp19.foodator.Models.UserAccountSettings;
 import vp19.foodator.R;
 import vp19.foodator.utils.FirebaseMethods;
@@ -57,16 +63,6 @@ public class ShowImageActivity extends AppCompatActivity {
         displayName=findViewById(R.id.display_name);
         profileImage=findViewById(R.id.profileImage);
         UniversalImageLoader.setImage(imageURL, imagePost, null, "");
-        int width=getResources().getDisplayMetrics().widthPixels;
-        int ivwidth = imagePost.getDrawable().getIntrinsicWidth();
-        int ivheight = imagePost.getDrawable().getIntrinsicHeight();
-        if(ivheight  > ivwidth){
-            imagePost.getLayoutParams().width=width;
-            imagePost.getLayoutParams().height=width;
-            imagePost.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        }
-        Log.d(TAG, "init: ImageDim" + ivwidth);
-        Log.d(TAG, "init: ImageDim"+ivheight);
         initImageLoader();
         btn_back=findViewById(R.id.backArrow);
         btn_back.setOnClickListener(new View.OnClickListener() {
@@ -131,5 +127,4 @@ public class ShowImageActivity extends AppCompatActivity {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
 }

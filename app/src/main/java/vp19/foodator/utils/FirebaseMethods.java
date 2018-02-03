@@ -366,7 +366,7 @@ public class FirebaseMethods {
     private void addPhotoToDatabase(String description,String ImaUri,boolean mFitStatus){
         String newPhotoKey=myRef.child(mContext.getString(R.string.dbname_photos)).push().getKey();
         String tags=StringManipulation.getTags(description);
-        Photo photo=new Photo(description,getTime(),ImaUri,newPhotoKey,userID,tags,mFitStatus);
+        Photo photo=new Photo(description,getTime(),ImaUri,newPhotoKey,userID,tags,0,0,mFitStatus);
 
         //insert into database
         myRef.child(mContext.getString(R.string.dbname_photos)).child(newPhotoKey).setValue(photo);

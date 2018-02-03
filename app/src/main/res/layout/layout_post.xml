@@ -10,20 +10,32 @@
         android:id="@+id/postlayout1"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:background="@color/grey">
+        android:layout_marginBottom="0dp"
+        android:background="@color/post_top_color">
         <include layout="@layout/snippet_post_top_toolbar"/>
     </RelativeLayout>
-    <ImageView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/imagePost"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"
-        android:background="@color/white"/>
+        android:layout_height="wrap_content">
+        <vp19.foodator.utils.SquareImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imagePost"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:background="@color/white"/>
+        <ProgressBar
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/progressBar"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="3dp"
+        android:padding="2.5dp"
+        android:layout_marginBottom="5dp">
         <include layout="@layout/snippet_post_bottom_toolbar"/>
     </RelativeLayout>
 </LinearLayout>
