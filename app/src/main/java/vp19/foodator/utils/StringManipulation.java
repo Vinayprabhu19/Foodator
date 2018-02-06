@@ -30,6 +30,7 @@ public class StringManipulation {
      * @return true if null , false if not
      */
     public static boolean isStringNull(String str) {
+        str=str.replace(" ","");
         if(str.equals("")) {
             return true;
         }

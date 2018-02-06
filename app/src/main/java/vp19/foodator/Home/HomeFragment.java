@@ -8,6 +8,7 @@
 package vp19.foodator.Home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,10 +18,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,9 +43,12 @@ import java.util.zip.Inflater;
 
 import vp19.foodator.Models.Photo;
 import vp19.foodator.Models.UserAccountSettings;
+import vp19.foodator.Profile.ProfileActivity;
+import vp19.foodator.Profile.UserProfileActivity;
 import vp19.foodator.R;
 import vp19.foodator.utils.FirebaseMethods;
 import vp19.foodator.utils.SquareImageView;
+import vp19.foodator.utils.StringManipulation;
 import vp19.foodator.utils.UniversalImageLoader;
 
 import static vp19.foodator.R.string.photo;
@@ -56,7 +62,6 @@ public class HomeFragment extends Fragment {
     private DatabaseReference myRef;
     private FirebaseUser user;
     private FirebaseMethods firebaseMethods;
-
     //Widgets
     ViewGroup rootLayout;
     ArrayList<Photo> photoList;
@@ -65,6 +70,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
         initImageLoader();
+        setupFirebaseAuth();
         try{
            queryPhotos();
         }
@@ -103,7 +109,7 @@ public class HomeFragment extends Fragment {
         rootLayout=getView().findViewById(R.id.root);
         final LayoutInflater vi = (LayoutInflater) getContext().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         for(int i=0;i<photoList.size();i++){
-            Photo photo=photoList.get(i);
+            final Photo photo=photoList.get(i);
             String userId=photo.getUser_id();
             View view = vi.inflate(R.layout.layout_post,null);
             view.setTag(photo.getPhoto_id());
@@ -113,6 +119,11 @@ public class HomeFragment extends Fragment {
             final TextView displayName=view.findViewById(R.id.display_name);
             SquareImageView image=view.findViewById(R.id.imagePost);
             final ProgressBar progressBar=view.findViewById(R.id.progressBar);
+            final TextView description=view.findViewById(R.id.description);
+            final ToggleButton btn_like=view.findViewById(R.id.ivLike);
+            final ToggleButton btn_dislike=view.findViewById(R.id.ivDislike);
+            final TextView likes=view.findViewById(R.id.tvLike);
+            final TextView dislikes=view.findViewById(R.id.tvDislike);
 
             //Get the user details
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -124,11 +135,18 @@ public class HomeFragment extends Fragment {
                     UserAccountSettings settings=dataSnapshot.getValue(UserAccountSettings.class);
                     setImage(profileImage,settings.getProfile_photo(),progressBar);
                     displayName.setText(settings.getDisplay_name());
+                    String caption=photo.getCaption();
+                    if(!StringManipulation.isStringNull(caption))
+                        description.setText(caption);
+                    //else description.setHeight(0);
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                 }
             });
+            displayName.setTag(photo.getUser_id());
+            likes.setText(Integer.toString(photo.getLikes()));
+            dislikes.setText(Integer.toString(photo.getDislikes()));
             setImage(image,photo.getImage_path(),progressBar);
             rootLayout.addView(view);
             view.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +155,26 @@ public class HomeFragment extends Fragment {
                     Log.d(TAG, "Clicked View " + v.getTag());
                 }
             });
+            displayName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String userID=displayName.getTag().toString();
+                    String myUserID=user.getUid();
+                    if(userID.equals(myUserID)){
+                        Intent intent=new Intent(getActivity(), ProfileActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        getActivity().overridePendingTransition(0, 0);
+                        startActivity(intent);
+                    }
+                    else{
+                        Intent intent=new Intent(getActivity(), UserProfileActivity.class);
+                        intent.putExtra(getString(R.string.calling_activity),userID);
+                        startActivity(intent);
+                    }
+                }
+            });
+
+            //Handle Likes and Dislikes
         }
     }
     /**
@@ -147,21 +185,7 @@ public class HomeFragment extends Fragment {
         mFirebaseDatabase= FirebaseDatabase.getInstance();
         myRef=mFirebaseDatabase.getReference();
         firebaseMethods=new FirebaseMethods(getContext());
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-
-                }
-                catch (NullPointerException e){
-
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        user=mAuth.getCurrentUser();
     }
     @Override
     public void onStart() {

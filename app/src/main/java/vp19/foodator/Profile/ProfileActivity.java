@@ -121,6 +121,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Intent intent=new Intent(mContext,ShowImageActivity.class);
                 intent.putExtra(getString(R.string.selected_image),imgURLs.get(position));
                 intent.putExtra(getString(R.string.photo_id),photo_id.get(position));
+                intent.putExtra(getString(R.string.attr_user_id),photo.getUser_id());
                 startActivity(intent);
             }
         });

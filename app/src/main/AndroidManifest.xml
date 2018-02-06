@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashScreen">
+        <activity android:name=".Home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +34,8 @@
         <activity android:name=".Profile.AccountSettingsActivity" />
         <activity android:name=".Share.NextActivity" />
         <activity android:name=".Profile.ShowImageActivity" />
-        <activity android:name=".Home.HomeActivity"></activity>
+        <activity android:name=".SplashScreen" />
+        <activity android:name=".Profile.UserProfileActivity"></activity>
     </application>
 
 </manifest>

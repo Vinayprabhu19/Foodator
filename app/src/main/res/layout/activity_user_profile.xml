@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="vp19.foodator.Profile.UserProfileActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!-- Top toolbar -->
+        <include layout="@layout/snippet_top_userprofilebar"/>
+        <!-- middle secion -->
+        <include layout="@layout/layout_center_userprofile"/>
+        <ProgressBar
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/profileProgressBar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp" />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
