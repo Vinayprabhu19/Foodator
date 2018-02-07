@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import vp19.foodator.Login.LoginActivity;
+import vp19.foodator.Models.Notification;
 import vp19.foodator.Models.Photo;
 import vp19.foodator.Models.User;
 import vp19.foodator.Models.UserAccountSettings;
@@ -215,6 +216,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 myRef.child(getString(R.string.dbname_user_account_settings)).child(userId).setValue(userSettings);
                 myRef.child(getString(R.string.dbname_user_account_settings)).child(currentUserID).setValue(currentUserSettings);
                 setupLayoutWidgets(userSettings);
+                addNotification(currentUserSettings.getUsername());
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -248,6 +250,12 @@ public class UserProfileActivity extends AppCompatActivity {
 
             }
         });
+    }
+    private void addNotification(String username){
+        Notification notification=new Notification();
+        String message=username + " has followed you. ";
+        notification.setMessage(message);
+        myRef.child(getString(R.string.dbname_notifications)).child(userId).child(currentUserID).setValue(notification);
     }
     /**
      * Setup profile picture url to the database user_account_settings

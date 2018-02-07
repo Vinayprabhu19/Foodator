@@ -2,11 +2,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Likes Fragment"
-        android:layout_centerHorizontal="true"
-        android:textSize="20dp"
-        android:layout_marginTop="10dp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/post_top_color"
+        android:id="@+id/relLayout1">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notifications"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"
+            android:textSize="25sp"
+            android:textAllCaps="true"
+            android:id="@+id/tvNotification"/>
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/relLayout1"
+        android:background="@color/dark_violet">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/rootLayout">
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

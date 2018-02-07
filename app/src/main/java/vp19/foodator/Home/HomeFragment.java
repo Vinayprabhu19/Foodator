@@ -10,6 +10,7 @@ package vp19.foodator.Home;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -55,6 +56,7 @@ import static vp19.foodator.R.string.photo;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
+    private Typeface font;
     //firebase authentication
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -80,6 +82,7 @@ public class HomeFragment extends Fragment {
         return view;
     }
     private void initImageLoader(){
+        font = Typeface.createFromAsset(getContext().getAssets(), "fonts/straight.ttf");
         UniversalImageLoader imageLoader=new UniversalImageLoader(getContext());
         ImageLoader.getInstance().init(imageLoader.getConfig());
     }
@@ -138,7 +141,8 @@ public class HomeFragment extends Fragment {
                     String caption=photo.getCaption();
                     if(!StringManipulation.isStringNull(caption))
                         description.setText(caption);
-                    //else description.setHeight(0);
+                    displayName.setTypeface(font);
+                    displayName.setTextSize(16);
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {

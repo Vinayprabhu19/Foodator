@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Home.HomeActivity">
+        <activity android:name=".Home.HomeActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,19 +24,27 @@
         </activity>
         <activity
             android:name=".Login.LoginActivity"
-            android:noHistory="true" />
+            android:noHistory="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Login.RegisterActivity"
-            android:noHistory="true" />
+            android:noHistory="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Profile.ProfileActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Share.ShareActvity" />
-        <activity android:name=".Profile.AccountSettingsActivity" />
-        <activity android:name=".Share.NextActivity" />
-        <activity android:name=".Profile.ShowImageActivity" />
-        <activity android:name=".SplashScreen" />
-        <activity android:name=".Profile.UserProfileActivity"></activity>
+        <activity android:name=".Share.ShareActvity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Profile.AccountSettingsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Share.NextActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Profile.ShowImageActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SplashScreen"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Profile.UserProfileActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

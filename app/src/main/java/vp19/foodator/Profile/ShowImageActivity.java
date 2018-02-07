@@ -2,6 +2,7 @@ package vp19.foodator.Profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,6 +42,7 @@ public class ShowImageActivity extends AppCompatActivity {
     private String imageURL;
     private String PhotoId;
     private String userId;
+    private Typeface font;
     //Widgets
     private ImageView btn_back;
     private ImageView imagePost;
@@ -63,6 +65,7 @@ public class ShowImageActivity extends AppCompatActivity {
         setupFirebaseAuth();
     }
     private void init(){
+        font = Typeface.createFromAsset(mContext.getAssets(), "fonts/straight.ttf");
         //Get Extras from intent
         Intent intent=getIntent();
         imageURL=intent.getStringExtra(getString(R.string.selected_image));
@@ -93,6 +96,7 @@ public class ShowImageActivity extends AppCompatActivity {
     private void setParams(UserAccountSettings settings){
         UniversalImageLoader.setImage(settings.getProfile_photo(), profileImage, null, "");
         displayName.setText(settings.getDisplay_name());
+        displayName.setTypeface(font);
     }
     /**
      * Setting up Firebase Authentication

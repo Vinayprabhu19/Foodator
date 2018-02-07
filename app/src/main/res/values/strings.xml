@@ -15,6 +15,7 @@
     <string name="dbname_user_photos">user_photos</string>
     <string name="dbname_following">following</string>
     <string name="dbname_followers">followers</string>
+    <string name="dbname_notifications">notifications</string>
     <string name="attr_profile_pic">profile_photo</string>
     <string name="attr_profile_photo">profile_photo</string>
     <string name="attr_date">date_created</string>
@@ -48,5 +49,7 @@
     <string name="string_follow">Follow</string>
     <string name="string_following">Following</string>
     <string name="string_empty" />
+    <string name="string_search">Search</string>
+    <string name="string_noresults">No results found !</string>
 
 </resources>

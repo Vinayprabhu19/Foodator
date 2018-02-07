@@ -15,14 +15,14 @@
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <!-- Bottom navigation -->
         <include layout="@layout/layout_bottom_tabs"/>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <!-- Bottom navigation -->
         <include layout="@layout/layout_bottom_navigation_view"/>
     </RelativeLayout>

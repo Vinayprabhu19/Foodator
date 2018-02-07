@@ -9,6 +9,7 @@ package vp19.foodator.Profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ import vp19.foodator.utils.UniversalImageLoader;
 
 public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "ProfileActivity";
+    private Typeface font;
     //constants
     private Context mContext=ProfileActivity.this;
     private int ACTIVITY_NUM=2;
@@ -98,6 +100,7 @@ public class ProfileActivity extends AppCompatActivity {
             photo_id.add(id);
         }
         Collections.reverse(imgList);
+        Collections.reverse(photo_id);
         Log.d(TAG, "UrlGridSetup: Finisehd loop");
         setupImageGrid(imgList);
     }
@@ -131,6 +134,7 @@ public class ProfileActivity extends AppCompatActivity {
         ImageLoader.getInstance().init(imageLoader.getConfig());
     }
     private void setupActivityWidgets() {
+        font = Typeface.createFromAsset(mContext.getAssets(), "fonts/dudu.ttf");
         mProgressbar =  findViewById(R.id.profileProgressBar);
         mProgressbar.setVisibility(View.GONE);
         mProfilePhoto = findViewById(R.id.profileImage);
@@ -237,6 +241,7 @@ public class ProfileActivity extends AppCompatActivity {
         mPosts.setText(Long.toString(settings.getPosts()));
         mFollowers.setText(Long.toString(settings.getFollowers()));
         mFollowing.setText(Long.toString(settings.getFollowing()));
+        mProfileName.setTypeface(font);
     }
     @Override
     protected void onPostResume() {
