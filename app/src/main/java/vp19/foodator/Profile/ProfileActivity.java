@@ -112,7 +112,6 @@ public class ProfileActivity extends AppCompatActivity {
     private void setupImageGrid(final ArrayList<String> imgURLs) {
         Log.d(TAG, "setupImageGrid: Setting up image grid");
         gridView = findViewById(R.id.gridView);
-
         int gridWidth = getResources().getDisplayMetrics().widthPixels;
         int imageWidth = gridWidth/NUM_GRID_COLUMNS;
         gridView.setColumnWidth(imageWidth);

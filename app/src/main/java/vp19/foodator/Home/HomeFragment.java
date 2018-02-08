@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +39,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.volokh.danylo.hashtaghelper.HashTagHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -118,6 +121,7 @@ public class HomeFragment extends Fragment {
             view.setTag(photo.getPhoto_id());
 
             //Get widgets in a view
+            HashTagHelper mTextHashTagHelper;
             final ImageView profileImage=view.findViewById(R.id.profileImage);
             final TextView displayName=view.findViewById(R.id.display_name);
             SquareImageView image=view.findViewById(R.id.imagePost);
@@ -153,10 +157,20 @@ public class HomeFragment extends Fragment {
             dislikes.setText(Integer.toString(photo.getDislikes()));
             setImage(image,photo.getImage_path(),progressBar);
             rootLayout.addView(view);
+            mTextHashTagHelper = HashTagHelper.Creator.create(getResources().getColor(R.color.light_blue), new HashTagHelper.OnHashTagClickListener() {
+                @Override
+                public void onHashTagClicked(String hashTag) {
+                    hashTag="#"+hashTag;
+                    Log.d(TAG, "onHashTagClicked: "+hashTag);
+                    ((HomeActivity)getActivity()).searchString=hashTag;
+                    ((HomeActivity)getActivity()).viewPager.setCurrentItem(0);
+                }
+            });
+            mTextHashTagHelper.handle(description);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "Clicked View " + v.getTag());
+                    Log.d(TAG, "View clicked " + v.getTag());
                 }
             });
             displayName.setOnClickListener(new View.OnClickListener() {

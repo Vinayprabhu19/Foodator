@@ -37,6 +37,8 @@ public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
     private Context mContext=HomeActivity.this;
     private int ACTIVITY_NUM=0;
+    public ViewPager viewPager;
+    public String searchString="";
     //Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -56,7 +58,7 @@ public class HomeActivity extends AppCompatActivity {
         adapter.addFragmet(new SearchFragment());
         adapter.addFragmet(new HomeFragment());
         adapter.addFragmet(new LikesFragment());
-        ViewPager viewPager=findViewById(R.id.container);
+        viewPager=findViewById(R.id.container);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);
         //Modify the tab layout
@@ -72,6 +74,25 @@ public class HomeActivity extends AppCompatActivity {
         tab1.setIcon(R.drawable.ic_search);
         tab2.setIcon(R.drawable.ic_logo);
         tab3.setIcon(R.drawable.ic_likes);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 0){
+
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
     /**
      * Sets up bottom navigation view

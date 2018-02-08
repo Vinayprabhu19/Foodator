@@ -6,6 +6,7 @@
  *  Purpose : To search for users,tags,posts
  */
 package vp19.foodator.Home;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -13,15 +14,20 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,13 +42,18 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
-import vp19.foodator.Models.User;
+import vp19.foodator.Models.Photo;
 import vp19.foodator.Models.UserAccountSettings;
 import vp19.foodator.Profile.ProfileActivity;
+import vp19.foodator.Profile.ShowImageActivity;
 import vp19.foodator.Profile.UserProfileActivity;
 import vp19.foodator.R;
-import vp19.foodator.utils.FirebaseMethods;
+import vp19.foodator.utils.GridImageAdapter;
+import vp19.foodator.utils.StringManipulation;
 import vp19.foodator.utils.UniversalImageLoader;
+
+import static vp19.foodator.R.id.gridView;
+import static vp19.foodator.R.id.root;
 
 public class SearchFragment extends Fragment {
     private static final String TAG = "SearchFragment";
@@ -86,11 +97,20 @@ public class SearchFragment extends Fragment {
         errorText.setVisibility(View.GONE);
         errorText.setTypeface(dudu);
         setupFirebaseAuth();
+        HomeActivity activity=((HomeActivity)getActivity());
+        if(!StringManipulation.isStringNull(activity.searchString)){
+            textSearch=activity.searchString;
+            activity.searchString="";
+            Search.setText(textSearch);
+            Log.d(TAG, "Search "+textSearch);
+            processSearchText();
+        }
         Search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         Search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    textSearch=Search.getText().toString();
                     processSearchText();
                     return true;
                 }
@@ -112,10 +132,15 @@ public class SearchFragment extends Fragment {
     private void processSearchText(){
         rootLayout.removeAllViews();
         errorText.setVisibility(View.GONE);
-        //If the search is a hash tag
-        if(textSearch.startsWith("#")){
+        //Hotspot
+        if(StringManipulation.isStringNull(textSearch)){
 
         }
+        //If the search is a hash tag
+        else if(textSearch.startsWith("#")){
+            handleHashTagQuery();
+        }
+        //Recipe
         else if(textSearch.startsWith("$")){
 
         }
@@ -123,6 +148,53 @@ public class SearchFragment extends Fragment {
         else{
             handleProfileQuery();
         }
+    }
+    private void handleHashTagQuery() throws NullPointerException{
+        final ArrayList<Photo> photoList=new ArrayList<>();
+        Query query=myRef.child(getString(R.string.dbname_photos));
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                    Photo photo=ds.getValue(Photo.class);
+                    String tag=photo.getTags();
+                    if(tag.contains(textSearch)){
+                        photoList.add(photo);
+                    }
+                }
+                setTagViews(photoList);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void setTagViews(final ArrayList<Photo> photoList){
+        View view = vi.inflate(R.layout.view_gridview,null);
+        GridView gridView = view.findViewById(R.id.gridView);
+        ProgressBar progressBar=view.findViewById(R.id.progressBar);
+        int gridWidth = getResources().getDisplayMetrics().widthPixels;
+        int imageWidth = gridWidth/2;
+        final ArrayList<String> imgURLs=new ArrayList<>();
+        progressBar.setVisibility(View.VISIBLE);
+        for(int i=0;i<photoList.size();i++)
+            imgURLs.add(photoList.get(i).getImage_path());
+        progressBar.setVisibility(View.GONE);
+        gridView.setColumnWidth(imageWidth);
+        GridImageAdapter adapter = new GridImageAdapter(getContext(), R.layout.layout_grid_imageview, "", imgURLs);
+        gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent(getContext(),ShowImageActivity.class);
+                intent.putExtra(getString(R.string.selected_image),imgURLs.get(position));
+                intent.putExtra(getString(R.string.photo_id),photoList.get(position).getPhoto_id());
+                intent.putExtra(getString(R.string.attr_user_id),photoList.get(position).getUser_id());
+                startActivity(intent);
+            }
+        });
+        rootLayout.addView(view);
     }
     private void handleProfileQuery() throws  NullPointerException{
         final ArrayList<UserAccountSettings> users=new ArrayList<>();
@@ -159,12 +231,12 @@ public class SearchFragment extends Fragment {
             for(int i=0;i<users.size();i++){
                 final UserAccountSettings user=users.get(i);
                 final String userID=userIDs.get(i);
-                View view = vi.inflate(R.layout.view_search_profile,null);
+                View view = vi.inflate(R.layout.view_search_result,null);
                 ImageView profileImage=view.findViewById(R.id.profileImage);
                 TextView userName=view.findViewById(R.id.username);
                 UniversalImageLoader.setImage(user.getProfile_photo(),profileImage,null,"");
                 userName.setText(user.getUsername());
-                userName.setTypeface(dudu);
+                userName.setTypeface(straight);
                 rootLayout.addView(view);
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -202,5 +274,21 @@ public class SearchFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        Log.d(TAG, "setUserVisibleHint: "+isVisibleToUser);
+        if(isVisibleToUser){
+            HomeActivity activity=((HomeActivity)getActivity());
+            if(!StringManipulation.isStringNull(activity.searchString)){
+                textSearch=activity.searchString;
+                activity.searchString="";
+                Search.setText(textSearch);
+                Log.d(TAG, "Search "+textSearch);
+                processSearchText();
+            }
+        }
     }
 }
