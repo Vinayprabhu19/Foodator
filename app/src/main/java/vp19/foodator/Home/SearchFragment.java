@@ -66,10 +66,15 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search,container,false);
-        init(view);
+        try{
+            init(view);
+        }
+        catch (NullPointerException e){
+            Log.d(TAG, "NullPointerException "+e.getMessage());
+        }
         return view;
     }
-    private void init(View view){
+    private void init(View view) throws  NullPointerException{
         initImageLoader();
         dudu= Typeface.createFromAsset(getContext().getAssets(), "fonts/dudu.ttf");
         straight= Typeface.createFromAsset(getContext().getAssets(), "fonts/straight.ttf");
@@ -119,7 +124,7 @@ public class SearchFragment extends Fragment {
             handleProfileQuery();
         }
     }
-    private void handleProfileQuery(){
+    private void handleProfileQuery() throws  NullPointerException{
         final ArrayList<UserAccountSettings> users=new ArrayList<>();
         final ArrayList<String> userIDs=new ArrayList<>();
         Query query=myRef.child(getString(R.string.dbname_user_account_settings));
@@ -145,7 +150,7 @@ public class SearchFragment extends Fragment {
             }
         });
     }
-    private void setProfileViews(ArrayList<UserAccountSettings> users , final ArrayList<String> userIDs){
+    private void setProfileViews(ArrayList<UserAccountSettings> users , final ArrayList<String> userIDs) throws  NullPointerException{
         //Set the layout
         if(users.size() == 0){
             errorText.setVisibility(View.VISIBLE);
@@ -183,7 +188,7 @@ public class SearchFragment extends Fragment {
     /**
      * Setting up Firebase Authentication
      */
-    private void setupFirebaseAuth(){
+    private void setupFirebaseAuth() throws  NullPointerException{
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase= FirebaseDatabase.getInstance();
         myRef=mFirebaseDatabase.getReference();

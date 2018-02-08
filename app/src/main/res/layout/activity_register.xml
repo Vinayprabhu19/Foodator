@@ -14,6 +14,7 @@
              android:layout_height="wrap_content"
              android:text="Register"
              android:textSize="30sp"
+             android:textStyle="bold"
              android:textColor="@color/black"
              android:textAllCaps="true"
              android:layout_gravity="center"

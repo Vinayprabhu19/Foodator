@@ -11,13 +11,26 @@
          android:paddingLeft="25dp">
          <RelativeLayout
              android:layout_width="match_parent"
-             android:layout_height="wrap_content">
+             android:layout_height="wrap_content"
+             android:layout_marginBottom="15dp">
              <ImageView
                  android:layout_width="wrap_content"
                  android:layout_height="50dp"
-                 android:src="@drawable/logo_text"
+                 android:src="@drawable/logo"
+                 android:id="@+id/logo"
                  android:layout_centerHorizontal="true"
-                 android:layout_marginBottom="25dp"/>
+                 android:layout_marginBottom="10dp"/>
+             <TextView
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@id/logo"
+                 android:textColor="@color/dark_violet"
+                 android:textSize="35sp"
+                 android:text="@string/foodator"
+                 android:id="@+id/title"
+                 android:textStyle="bold"
+                 android:textAllCaps="true"
+                 android:textAlignment="center"/>
          </RelativeLayout>
          <android.support.design.widget.TextInputLayout
              android:layout_width="match_parent"

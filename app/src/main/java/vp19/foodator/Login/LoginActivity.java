@@ -9,6 +9,7 @@ package vp19.foodator.Login;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,7 @@ public class LoginActivity extends AppCompatActivity{
     //Constants
     private static final String TAG = "LoginActvity";
     private Context mContext=LoginActivity.this;
+    private Typeface font;
     //Widgets
     private ProgressBar mProgressBar;
     private EditText mPassword,mEmail;
@@ -57,6 +59,9 @@ public class LoginActivity extends AppCompatActivity{
      */
 
     private void init() {
+        TextView title=findViewById(R.id.title);
+        font = Typeface.createFromAsset(mContext.getAssets(), "fonts/neuro.ttf");
+        title.setTypeface(font);
         Button btnLogin = (Button) findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

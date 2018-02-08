@@ -22,54 +22,106 @@
             android:orientation="vertical">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp">
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="82dp"
+                    android:background="@color/post_top_color"/>
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="110dp"
                     android:layout_height="110dp"
                     android:id="@+id/profileImage"
                     android:layout_centerInParent="true"
                     app:civ_border_width="1dp"
-                    android:layout_marginBottom="3dp"
+                    android:layout_marginTop="20dp"
                     android:scaleType="centerCrop"
                     app:civ_border_color="@color/dark_violet"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2.5dp"
+                    android:layout_marginEnd="2.5dp"
+                    android:layout_marginTop="55dp">
+                    <include layout="@layout/snippet_top_profile" />
+                </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/display_name"
+                    android:textColor="@color/dark_violet"
+                    android:textStyle="bold"
+                    android:text="@string/display_name"
+                    android:layout_marginTop="138dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginStart="15dp"
+                    android:textAllCaps="true"
+                    android:textSize="16.5sp"
+                    android:textAlignment="center"
+                    android:layout_centerHorizontal="true"/>
+                <TextView
+                    android:id="@+id/textEditProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_background"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="2dp"
+                    android:layout_marginEnd="5dp"
+                    android:text="@string/edit_profile"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:layout_alignParentEnd="true"
+                    android:visibility="gone"
+                    />
             </RelativeLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/display_name"
-                android:textColor="@color/dark_violet"
-                android:textStyle="bold"
-                android:text="@string/display_name"
-                android:layout_margin="4dp"
-                android:textAllCaps="true"
-                android:textSize="16.5sp"
-                android:textAlignment="center"
-                android:layout_below="@id/profileImage" />
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2.5dp"
-                android:layout_marginEnd="2.5dp"
-                android:layout_marginBottom="10dp">
-                <include layout="@layout/snippet_top_profile" />
+                android:layout_height="wrap_content">
+
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/relLayout3"
-                android:layout_marginBottom="45dp">
-
+                android:layout_marginBottom="45dp"
+                android:layout_marginTop="5dp"
+                android:paddingTop="1dp"
+                android:background="@drawable/white_violet_border_top">
                 <GridView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/gridView"
                     android:numColumns="3"
-                    android:verticalSpacing="1.5dp"
-                    android:horizontalSpacing="1.5dp"
+                    android:verticalSpacing="1dp"
+                    android:horizontalSpacing="1dp"
                     android:stretchMode="columnWidth"
                     android:gravity="center">
                 </GridView>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+                <TextView
+                    android:id="@+id/textPosts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/posts"
+                    android:textColor="@color/grey"
+                    android:textSize="14sp"
+                    android:layout_centerHorizontal="true"/>
+                <TextView
+                    android:id="@+id/tvPosts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/textPosts"
+                    android:text="@string/number_zero"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_centerHorizontal="true"/>
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

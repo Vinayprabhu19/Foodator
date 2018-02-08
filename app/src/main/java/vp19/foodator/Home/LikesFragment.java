@@ -50,12 +50,17 @@ public class LikesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_likes,container,false);
-        setupwidgets(view);
-        setupFirebaseAuth();
-        setNotifications();
+        try{
+            setupwidgets(view);
+            setupFirebaseAuth();
+            setNotifications();
+        }
+        catch (NullPointerException e){
+
+        }
         return view;
     }
-    private void setupwidgets(View view){
+    private void setupwidgets(View view) throws NullPointerException{
         vi = (LayoutInflater) getContext().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         notificationText=view.findViewById(R.id.tvNotification);
         font1 = Typeface.createFromAsset(getContext().getAssets(), "fonts/dudu.ttf");
@@ -63,7 +68,7 @@ public class LikesFragment extends Fragment {
         notificationText.setTypeface(font1);
         rootLayout=view.findViewById(R.id.rootLayout);
     }
-    private void setNotifications(){
+    private void setNotifications()throws NullPointerException{
         rootLayout.removeAllViews();
         Query query=myRef.child(getString(R.string.dbname_notifications)).child(myUserID);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -87,7 +92,7 @@ public class LikesFragment extends Fragment {
     /**
      * Setting up Firebase Authentication
      */
-    private void setupFirebaseAuth(){
+    private void setupFirebaseAuth() throws NullPointerException{
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase= FirebaseDatabase.getInstance();
         myRef=mFirebaseDatabase.getReference();

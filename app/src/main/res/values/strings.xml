@@ -51,5 +51,7 @@
     <string name="string_empty" />
     <string name="string_search">Search</string>
     <string name="string_noresults">No results found !</string>
+    <string name="foodator">Foodator</string>
+    <string name="string_followers">Followers</string>
 
 </resources>
