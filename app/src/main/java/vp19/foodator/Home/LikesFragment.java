@@ -60,6 +60,12 @@ public class LikesFragment extends Fragment {
         }
         return view;
     }
+
+    /**
+     * Setup layout widgets
+     * @param view : view of the fragment
+     * @throws NullPointerException
+     */
     private void setupwidgets(View view) throws NullPointerException{
         vi = (LayoutInflater) getContext().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         notificationText=view.findViewById(R.id.tvNotification);
@@ -68,6 +74,11 @@ public class LikesFragment extends Fragment {
         notificationText.setTypeface(font1);
         rootLayout=view.findViewById(R.id.rootLayout);
     }
+
+    /**
+     * Set the notifications in the rootLayout
+     * @throws NullPointerException
+     */
     private void setNotifications()throws NullPointerException{
         rootLayout.removeAllViews();
         Query query=myRef.child(getString(R.string.dbname_notifications)).child(myUserID);

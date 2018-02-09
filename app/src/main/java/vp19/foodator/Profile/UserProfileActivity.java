@@ -56,7 +56,6 @@ public class UserProfileActivity extends AppCompatActivity {
     private static final String TAG = "ProfileActivity";
     //constants
     private Context mContext=UserProfileActivity.this;
-    private int ACTIVITY_NUM=0;
     private int NUM_GRID_COLUMNS=3;
     private String userId;
     private String currentUserID;
@@ -88,6 +87,10 @@ public class UserProfileActivity extends AppCompatActivity {
         initImageLoader();
         UrlGridSetup();
     }
+
+    /**
+     * Set the follow button to following if the user is on the list of current user else set it to follow
+     */
     private void setFollowStatus(){
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -110,6 +113,10 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Set the gridview of the users images
+     */
     private void UrlGridSetup() {
         photo_id=new ArrayList<>();
         Query query=myRef.child(getString(R.string.dbname_user_photos))
@@ -162,6 +169,10 @@ public class UserProfileActivity extends AppCompatActivity {
         UniversalImageLoader imageLoader=new UniversalImageLoader(mContext);
         ImageLoader.getInstance().init(imageLoader.getConfig());
     }
+
+    /**
+     * Setup the activity widgets
+     */
     private void setupActivityWidgets() {
         mProgressbar =  findViewById(R.id.profileProgressBar);
         mProgressbar.setVisibility(View.GONE);
@@ -194,6 +205,10 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Handle the follow user functionality
+     */
     private void followUser(){
         Log.d(TAG, "followUser: ");
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -224,6 +239,9 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
     }
+    /**
+     * Handle the unfollow user functionality
+     */
     private void unfollowUser(){
         Log.d(TAG, "unfollowUser: ");
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -251,6 +269,11 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Add the user following notification to the database
+     * @param username
+     */
     private void addNotification(String username){
         Notification notification=new Notification();
         String message=username + " has followed you. ";

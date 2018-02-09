@@ -87,8 +87,7 @@
                 android:id="@+id/relLayout3"
                 android:layout_marginBottom="45dp"
                 android:layout_marginTop="5dp"
-                android:paddingTop="1dp"
-                android:background="@drawable/white_violet_border_top">
+                android:paddingTop="1dp">
                 <GridView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -1,7 +1,7 @@
 package vp19.foodator.Models;
 
 /**
- * Created by Vinay Prabhu on 07-Feb-18.
+ * Model for the notification
  */
 
 public class Notification {

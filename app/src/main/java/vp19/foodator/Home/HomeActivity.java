@@ -121,7 +121,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                checkCurrentUser(user);
+                //checkCurrentUser(user);
             }
         };
     }

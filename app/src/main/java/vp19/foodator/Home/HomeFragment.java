@@ -17,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +45,7 @@ import com.volokh.danylo.hashtaghelper.HashTagHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.zip.Inflater;
 
 import vp19.foodator.Models.Photo;
@@ -60,6 +63,7 @@ import static vp19.foodator.R.string.photo;
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private Typeface font;
+    private View fragmentView;
     //firebase authentication
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -69,53 +73,107 @@ public class HomeFragment extends Fragment {
     private FirebaseMethods firebaseMethods;
     //Widgets
     ViewGroup rootLayout;
-    ArrayList<Photo> photoList;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
-        initImageLoader();
-        setupFirebaseAuth();
+        fragmentView=view;
         try{
-           queryPhotos();
+            initImageLoader();
+            setupFirebaseAuth();
+            queryPhotos();
+            refresh(view);
         }
         catch (NullPointerException e){
             Log.d(TAG, "onCreateView: Exception"+e.getMessage());
         }
         return view;
     }
+
+    /**
+     * Refresh the layout
+     * @param view fragment view
+     */
+    private void refresh(View view){
+        final SwipeRefreshLayout refresh=view.findViewById(R.id.refresh);
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryPhotos();
+                refresh.setRefreshing(false);
+            }
+        });
+    }
     private void initImageLoader(){
         font = Typeface.createFromAsset(getContext().getAssets(), "fonts/straight.ttf");
         UniversalImageLoader imageLoader=new UniversalImageLoader(getContext());
         ImageLoader.getInstance().init(imageLoader.getConfig());
     }
+
+    /**
+     * Query Photos for the users followed by the user
+     * @throws NullPointerException
+     */
     private void queryPhotos() throws NullPointerException{
-        photoList=new ArrayList<>();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        Query query=reference.child(getString(R.string.dbname_photos))
-                .orderByChild(getString(R.string.attr_date));
+        final ArrayList<String> users=new ArrayList<>();
+        Query query=reference.child(getString(R.string.dbname_following)).child(user.getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    Photo photo=ds.getValue(Photo.class);
-                    Log.d(TAG, "Photo list" + photo.getImage_path());
-                    photoList.add(photo);
+                    users.add(ds.getKey());
                 }
-                setViews();
+                users.add(user.getUid());
+                getPhotos(users);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
-    private void setViews(){
-        Collections.reverse(photoList);
-        rootLayout=getView().findViewById(R.id.root);
+
+    /**
+     * Get the photos for the users
+     * @param users : users followed by current user
+     * @throws NullPointerException
+     */
+    private void getPhotos(final ArrayList<String> users)throws NullPointerException{
+        final ArrayList<Photo> photoList = new ArrayList<>();
+        for(int i=0;i<users.size();i++){
+            Query query=myRef.child(getString(R.string.dbname_user_photos)).child(users.get(i));
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot ds:dataSnapshot.getChildren()){
+                        Photo photo=ds.getValue(Photo.class);
+                        photoList.add(photo);
+                    }
+                        Log.d(TAG, "setViews "+photoList.size());
+                        setViews(photoList);
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    /**
+     * Dynamically set the views in the rootLayout
+     * @param photoList
+     * @throws NullPointerException
+     */
+    private void setViews(final ArrayList<Photo> photoList) throws NullPointerException{
+        Collections.sort(photoList,new sortPhotoByDate());
+        Log.d(TAG, "setViews: "+photoList.size());
+        rootLayout=fragmentView.findViewById(R.id.root);
+        rootLayout.removeAllViews();
         final LayoutInflater vi = (LayoutInflater) getContext().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         for(int i=0;i<photoList.size();i++){
             final Photo photo=photoList.get(i);
+            Log.d(TAG, "setViews: "+photo.getCaption());
             String userId=photo.getUser_id();
             View view = vi.inflate(R.layout.layout_post,null);
             view.setTag(photo.getPhoto_id());
@@ -180,7 +238,6 @@ public class HomeFragment extends Fragment {
                     String myUserID=user.getUid();
                     if(userID.equals(myUserID)){
                         Intent intent=new Intent(getActivity(), ProfileActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         getActivity().overridePendingTransition(0, 0);
                         startActivity(intent);
                     }
@@ -198,7 +255,7 @@ public class HomeFragment extends Fragment {
     /**
      * Setting up Firebase Authentication
      */
-    private void setupFirebaseAuth(){
+    private void setupFirebaseAuth() throws NullPointerException{
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase= FirebaseDatabase.getInstance();
         myRef=mFirebaseDatabase.getReference();
@@ -213,7 +270,7 @@ public class HomeFragment extends Fragment {
     public void onStop() {
         super.onStop();
     }
-    private void setImage(ImageView gridImage, String URL, final ProgressBar progressBar){
+    private void setImage(ImageView gridImage, String URL, final ProgressBar progressBar)throws NullPointerException{
         ImageLoader imageLoader=ImageLoader.getInstance();
         imageLoader.displayImage(URL, gridImage, new ImageLoadingListener() {
             @Override

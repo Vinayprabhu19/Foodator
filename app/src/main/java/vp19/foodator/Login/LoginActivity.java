@@ -98,10 +98,10 @@ public class LoginActivity extends AppCompatActivity{
                                                 Toast.LENGTH_SHORT).show();
                                         mProgressBar.setVisibility(View.GONE);
                                     }
-                                    else if(!check){
+                                    /*else if(!check){
                                         Toast.makeText(mContext, "Email Not Verfied",
                                                 Toast.LENGTH_SHORT).show();
-                                    }
+                                    }*/
                                     else {
                                         Log.d(TAG, "onComplete: successful login...");
                                         Toast.makeText(mContext, R.string.auth_success,

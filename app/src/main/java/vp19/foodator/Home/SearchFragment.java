@@ -85,6 +85,12 @@ public class SearchFragment extends Fragment {
         }
         return view;
     }
+
+    /**
+     * Init various widgets and instnace variables
+     * @param view
+     * @throws NullPointerException
+     */
     private void init(View view) throws  NullPointerException{
         initImageLoader();
         dudu= Typeface.createFromAsset(getContext().getAssets(), "fonts/dudu.ttf");
@@ -97,14 +103,6 @@ public class SearchFragment extends Fragment {
         errorText.setVisibility(View.GONE);
         errorText.setTypeface(dudu);
         setupFirebaseAuth();
-        HomeActivity activity=((HomeActivity)getActivity());
-        if(!StringManipulation.isStringNull(activity.searchString)){
-            textSearch=activity.searchString;
-            activity.searchString="";
-            Search.setText(textSearch);
-            Log.d(TAG, "Search "+textSearch);
-            processSearchText();
-        }
         Search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         Search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -117,6 +115,7 @@ public class SearchFragment extends Fragment {
                 return false;
             }
         });
+        //Handle search button
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,6 +128,10 @@ public class SearchFragment extends Fragment {
         UniversalImageLoader imageLoader=new UniversalImageLoader(getContext());
         ImageLoader.getInstance().init(imageLoader.getConfig());
     }
+
+    /**
+     * Process the text entered in the search bar
+     */
     private void processSearchText(){
         rootLayout.removeAllViews();
         errorText.setVisibility(View.GONE);
@@ -149,6 +152,11 @@ public class SearchFragment extends Fragment {
             handleProfileQuery();
         }
     }
+
+    /**
+     * Handle hash tag query
+     * @throws NullPointerException
+     */
     private void handleHashTagQuery() throws NullPointerException{
         final ArrayList<Photo> photoList=new ArrayList<>();
         Query query=myRef.child(getString(R.string.dbname_photos));
@@ -170,17 +178,24 @@ public class SearchFragment extends Fragment {
             }
         });
     }
+
+    /**
+     * Set the gridview with the images
+     * @param photoList : List of the photos to be set
+     */
     private void setTagViews(final ArrayList<Photo> photoList){
-        View view = vi.inflate(R.layout.view_gridview,null);
+        View view = vi.inflate(R.layout.view_gridview,null,true);;
         GridView gridView = view.findViewById(R.id.gridView);
-        ProgressBar progressBar=view.findViewById(R.id.progressBar);
+        int height=getResources().getDisplayMetrics().heightPixels;
+        ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
+        layoutParams.height = height; //this is in pixels
+        gridView.setLayoutParams(layoutParams);
         int gridWidth = getResources().getDisplayMetrics().widthPixels;
         int imageWidth = gridWidth/2;
         final ArrayList<String> imgURLs=new ArrayList<>();
-        progressBar.setVisibility(View.VISIBLE);
         for(int i=0;i<photoList.size();i++)
             imgURLs.add(photoList.get(i).getImage_path());
-        progressBar.setVisibility(View.GONE);
+        Log.d(TAG, "setTagViews: "+imgURLs.size());
         gridView.setColumnWidth(imageWidth);
         GridImageAdapter adapter = new GridImageAdapter(getContext(), R.layout.layout_grid_imageview, "", imgURLs);
         gridView.setAdapter(adapter);
@@ -196,6 +211,11 @@ public class SearchFragment extends Fragment {
         });
         rootLayout.addView(view);
     }
+
+    /**
+     * Handle profile query
+     * @throws NullPointerException
+     */
     private void handleProfileQuery() throws  NullPointerException{
         final ArrayList<UserAccountSettings> users=new ArrayList<>();
         final ArrayList<String> userIDs=new ArrayList<>();
@@ -222,6 +242,13 @@ public class SearchFragment extends Fragment {
             }
         });
     }
+
+    /**
+     * Set the views for the profile
+     * @param users : result of the users from the query
+     * @param userIDs : userIDs of the users
+     * @throws NullPointerException
+     */
     private void setProfileViews(ArrayList<UserAccountSettings> users , final ArrayList<String> userIDs) throws  NullPointerException{
         //Set the layout
         if(users.size() == 0){
@@ -276,6 +303,10 @@ public class SearchFragment extends Fragment {
         super.onStop();
     }
 
+    /**
+     * See if the fragment is set in the viewpager
+     * @param isVisibleToUser : true if set ,else false
+     */
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
