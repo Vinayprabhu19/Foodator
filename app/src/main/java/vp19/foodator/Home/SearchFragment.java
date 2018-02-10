@@ -15,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -31,6 +32,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -75,6 +78,10 @@ public class SearchFragment extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private FirebaseUser user;
+    //maps
+    MapView mapView;
+    GoogleMap map;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -139,13 +146,7 @@ public class SearchFragment extends Fragment {
         errorText.setVisibility(View.GONE);
         //Hotspot
         if(StringManipulation.isStringNull(textSearch)){
-            View view=vi.inflate(R.layout.view_search_map,null);
-            SectionPagerAdapter adapter=new SectionPagerAdapter(getChildFragmentManager());
-            adapter.addFragmet(new SearchMapFragment());
-            ViewPager viewPager=view.findViewById(R.id.container);
-            viewPager.setAdapter(adapter);
-            viewPager.setCurrentItem(0);
-            rootLayout.addView(view);
+
         }
         //If the search is a hash tag
         else if(textSearch.startsWith("#")){
@@ -153,7 +154,9 @@ public class SearchFragment extends Fragment {
         }
         //Recipe
         else if(textSearch.startsWith("$")){
-
+            Fragment childFragment = new MapFragment();
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            transaction.replace(R.id.rootLayout, childFragment).commit();
         }
         //Profile Query
         else{
