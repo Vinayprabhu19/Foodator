@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -49,6 +50,7 @@ import vp19.foodator.Profile.ShowImageActivity;
 import vp19.foodator.Profile.UserProfileActivity;
 import vp19.foodator.R;
 import vp19.foodator.utils.GridImageAdapter;
+import vp19.foodator.utils.SectionPagerAdapter;
 import vp19.foodator.utils.StringManipulation;
 import vp19.foodator.utils.UniversalImageLoader;
 
@@ -137,7 +139,13 @@ public class SearchFragment extends Fragment {
         errorText.setVisibility(View.GONE);
         //Hotspot
         if(StringManipulation.isStringNull(textSearch)){
-
+            View view=vi.inflate(R.layout.view_search_map,null);
+            SectionPagerAdapter adapter=new SectionPagerAdapter(getChildFragmentManager());
+            adapter.addFragmet(new SearchMapFragment());
+            ViewPager viewPager=view.findViewById(R.id.container);
+            viewPager.setAdapter(adapter);
+            viewPager.setCurrentItem(0);
+            rootLayout.addView(view);
         }
         //If the search is a hash tag
         else if(textSearch.startsWith("#")){
@@ -166,6 +174,8 @@ public class SearchFragment extends Fragment {
                 for(DataSnapshot ds:dataSnapshot.getChildren()){
                     Photo photo=ds.getValue(Photo.class);
                     String tag=photo.getTags();
+                    textSearch=textSearch.toLowerCase();
+                    tag=tag.toLowerCase();
                     if(tag.contains(textSearch)){
                         photoList.add(photo);
                     }

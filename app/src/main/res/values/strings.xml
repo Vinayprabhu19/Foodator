@@ -1,6 +1,7 @@
 <resources>
     <!--App basic strings -->
     <string name="app_name">Foodator</string>
+    <string name="foodator">Foodator</string>
 
     <!-- Account Settings fragments -->
     <string name="edit_profile">Edit Profile</string>
@@ -43,15 +44,20 @@
     <string name="selected_bitmap">Selected Bitmap</string>
     <string name="number_zero">0</string>
     <string name="photo_id">Photo Id</string>
-    <string name="string_photo">Photo</string>
     <string name="posts">Posts</string>
-    <string name="string_hello">Hello,</string>
-    <string name="string_follow">Follow</string>
-    <string name="string_following">Following</string>
+
+    <!-- Strings -->
     <string name="string_empty" />
     <string name="string_search">Search</string>
     <string name="string_noresults">No results found !</string>
-    <string name="foodator">Foodator</string>
     <string name="string_followers">Followers</string>
+    <string name="string_identify">Identify</string>
+    <string name="string_recipe">Recipe</string>
+    <string name="string_report">Report</string>
+    <string name="string_hello">Hello,</string>
+    <string name="string_follow">Follow</string>
+    <string name="string_following">Following</string>
+    <string name="string_photo">Photo</string>
+    <string name="string_delete">Delete</string>
 
 </resources>

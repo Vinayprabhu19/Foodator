@@ -25,7 +25,7 @@ import vp19.foodator.utils.BottomNavigationViewHelper;
 import vp19.foodator.utils.Permissions;
 import vp19.foodator.utils.SectionPagerAdapter;
 public class ShareActvity extends AppCompatActivity {
-    private static final String TAG = "ShareActvity";
+    private static final String TAG = "ShareActivity";
     private int ACTIVITY_NUM=1;
     private Context mContext=ShareActvity.this;
     private final int VERIFY_PERMISSION_REQUEST=1;

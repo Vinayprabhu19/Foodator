@@ -4,17 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,12 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import vp19.foodator.Models.Photo;
 import vp19.foodator.Models.UserAccountSettings;
@@ -42,6 +36,7 @@ public class ShowImageActivity extends AppCompatActivity {
     private String imageURL;
     private String PhotoId;
     private String userId;
+    private String currentUserID;
     private Typeface font;
     //Widgets
     private ImageView btn_back;
@@ -50,6 +45,7 @@ public class ShowImageActivity extends AppCompatActivity {
     private TextView displayName;
     private ProgressBar progressBar;
     private TextView description;
+    private ImageView postOptions;
     //firebase authentication
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -78,6 +74,7 @@ public class ShowImageActivity extends AppCompatActivity {
         progressBar=findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         description=findViewById(R.id.description);
+        postOptions=findViewById(R.id.postOptions);
         //Set image for the post
         UniversalImageLoader.setImage(imageURL, imagePost, null, "");
         initImageLoader();
@@ -86,6 +83,60 @@ public class ShowImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        postOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(userId.equals(currentUserID))
+                    createPopupMenu(R.menu.post_user_menu);
+                else
+                    createPopupMenu(R.menu.post_menu);
+            }
+        });
+    }
+    private void createPopupMenu(int menu){
+        PopupMenu popupMenu=new PopupMenu(mContext,postOptions);
+        popupMenu.inflate(menu);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.identify :
+                        Log.d(TAG, "onMenuItemClick: identify ");
+                    break;
+                    case R.id.recipe:
+                        Log.d(TAG, "onMenuItemClick: Reciepe");
+                        break;
+                    case R.id.report:
+                        Log.d(TAG, "onMenuItemClick: Report");
+                        break;
+                    case R.id.delete:
+                        deletePhoto();
+                        Log.d(TAG, "onMenuItemClick: Delete");
+                }
+                return false;
+            }
+        });
+        popupMenu.show();
+    }
+    private void deletePhoto(){
+        myRef.child(getString(R.string.dbname_photos)).child(PhotoId).removeValue();
+        myRef.child(getString(R.string.dbname_user_photos)).child(currentUserID).child(PhotoId).removeValue();
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserAccountSettings settings=dataSnapshot.child(getString(R.string.dbname_user_account_settings)).child(currentUserID).getValue(UserAccountSettings.class);
+                settings.setPosts(settings.getPosts()-1);
+                myRef.child(getString(R.string.dbname_user_account_settings)).child(currentUserID).setValue(settings);
+                Intent intent=new Intent(mContext,ProfileActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
@@ -106,6 +157,7 @@ public class ShowImageActivity extends AppCompatActivity {
         mFirebaseDatabase= FirebaseDatabase.getInstance();
         myRef=mFirebaseDatabase.getReference();
         firebaseMethods=new FirebaseMethods(mContext);
+        currentUserID=mAuth.getCurrentUser().getUid();
         Query query1=myRef.child(getString(R.string.dbname_user_account_settings))
                 .child(userId);
         query1.addListenerForSingleValueEvent(new ValueEventListener() {

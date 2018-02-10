@@ -15,23 +15,20 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,8 +42,6 @@ import com.volokh.danylo.hashtaghelper.HashTagHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.zip.Inflater;
 
 import vp19.foodator.Models.Photo;
 import vp19.foodator.Models.UserAccountSettings;
@@ -57,8 +52,6 @@ import vp19.foodator.utils.FirebaseMethods;
 import vp19.foodator.utils.SquareImageView;
 import vp19.foodator.utils.StringManipulation;
 import vp19.foodator.utils.UniversalImageLoader;
-
-import static vp19.foodator.R.string.photo;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
@@ -94,7 +87,7 @@ public class HomeFragment extends Fragment {
      * Refresh the layout
      * @param view fragment view
      */
-    private void refresh(View view){
+    private void refresh(View view) throws NullPointerException{
         final SwipeRefreshLayout refresh=view.findViewById(R.id.refresh);
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -170,11 +163,18 @@ public class HomeFragment extends Fragment {
         Log.d(TAG, "setViews: "+photoList.size());
         rootLayout=fragmentView.findViewById(R.id.root);
         rootLayout.removeAllViews();
-        final LayoutInflater vi = (LayoutInflater) getContext().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater vi;
+        try{
+            vi = (LayoutInflater) getContext().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+        catch (NullPointerException e){
+            Log.d(TAG, "setViews: NullPointerException");
+            return;
+        }
         for(int i=0;i<photoList.size();i++){
             final Photo photo=photoList.get(i);
             Log.d(TAG, "setViews: "+photo.getCaption());
-            String userId=photo.getUser_id();
+            final String userId=photo.getUser_id();
             View view = vi.inflate(R.layout.layout_post,null);
             view.setTag(photo.getPhoto_id());
 
@@ -189,7 +189,7 @@ public class HomeFragment extends Fragment {
             final ToggleButton btn_dislike=view.findViewById(R.id.ivDislike);
             final TextView likes=view.findViewById(R.id.tvLike);
             final TextView dislikes=view.findViewById(R.id.tvDislike);
-
+            final ImageView postOptions=view.findViewById(R.id.postOptions);
             //Get the user details
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             Query query=reference.child(getString(R.string.dbname_user_account_settings))
@@ -231,6 +231,15 @@ public class HomeFragment extends Fragment {
                     Log.d(TAG, "View clicked " + v.getTag());
                 }
             });
+            postOptions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(photo.getUser_id().equals(user.getUid()))
+                        createPopupMenu(photo,postOptions,R.menu.post_user_menu);
+                    else
+                        createPopupMenu(photo,postOptions,R.menu.post_menu);
+                }
+            });
             displayName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -251,6 +260,51 @@ public class HomeFragment extends Fragment {
 
             //Handle Likes and Dislikes
         }
+    }
+    private void createPopupMenu(final Photo photo, ImageView postOptions,int menu)throws NullPointerException{
+        PopupMenu popupMenu=new PopupMenu(getContext(),postOptions);
+        popupMenu.inflate(menu);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.identify :
+                        Log.d(TAG, "onMenuItemClick: identify ");
+                        break;
+                    case R.id.recipe:
+                        Log.d(TAG, "onMenuItemClick: Recipe");
+                        break;
+                    case R.id.report:
+                        Log.d(TAG, "onMenuItemClick: Report");
+                        break;
+                    case R.id.delete:
+                        deletePhoto(photo);
+                        Log.d(TAG, "onMenuItemClick: Delete");
+                }
+                return false;
+            }
+        });
+        popupMenu.show();
+    }
+    private void deletePhoto(Photo photo) throws NullPointerException{
+        myRef.child(getString(R.string.dbname_photos)).child(photo.getPhoto_id()).removeValue();
+        myRef.child(getString(R.string.dbname_user_photos)).child(user.getUid()).child(photo.getPhoto_id()).removeValue();
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserAccountSettings settings=dataSnapshot.child(getString(R.string.dbname_user_account_settings)).child(user.getUid()).getValue(UserAccountSettings.class);
+                settings.setPosts(settings.getPosts()-1);
+                myRef.child(getString(R.string.dbname_user_account_settings)).child(user.getUid()).setValue(settings);
+                Intent intent=new Intent(getContext(),ProfileActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
     /**
      * Setting up Firebase Authentication

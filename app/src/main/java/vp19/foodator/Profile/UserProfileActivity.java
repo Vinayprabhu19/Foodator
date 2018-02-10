@@ -133,6 +133,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     photo_id.add(id);
                 }
                 Collections.reverse(imgList);
+                Collections.reverse(photo_id);
                 setupImageGrid(imgList);
             }
             @Override
