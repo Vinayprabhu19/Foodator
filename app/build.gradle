@@ -42,6 +42,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.github.danylovolokh:hashtag-helper:1.1.0'
     compile 'com.google.android.gms:play-services-maps:11.8.0'
+    compile 'com.felipecsl.asymmetricgridview:library:2.0.1'
 }
 //Firebase
 apply plugin: 'com.google.gms.google-services'
