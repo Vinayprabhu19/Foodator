@@ -146,7 +146,9 @@ public class SearchFragment extends Fragment {
         errorText.setVisibility(View.GONE);
         //Hotspot
         if(StringManipulation.isStringNull(textSearch)){
-
+            Fragment childFragment = new MapFragment();
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            transaction.replace(R.id.rootLayout, childFragment).commit();
         }
         //If the search is a hash tag
         else if(textSearch.startsWith("#")){
@@ -154,9 +156,7 @@ public class SearchFragment extends Fragment {
         }
         //Recipe
         else if(textSearch.startsWith("$")){
-            Fragment childFragment = new MapFragment();
-            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-            transaction.replace(R.id.rootLayout, childFragment).commit();
+
         }
         //Profile Query
         else{
@@ -199,10 +199,6 @@ public class SearchFragment extends Fragment {
     private void setTagViews(final ArrayList<Photo> photoList){
         View view = vi.inflate(R.layout.view_gridview,null,true);;
         GridView gridView = view.findViewById(R.id.gridView);
-        int height=getResources().getDisplayMetrics().heightPixels;
-        ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
-        layoutParams.height = height; //this is in pixels
-        gridView.setLayoutParams(layoutParams);
         int gridWidth = getResources().getDisplayMetrics().widthPixels;
         int imageWidth = gridWidth/2;
         final ArrayList<String> imgURLs=new ArrayList<>();
