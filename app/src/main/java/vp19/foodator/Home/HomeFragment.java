@@ -57,14 +57,14 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private Typeface font;
     private View fragmentView;
-    private static int no_posts=10;
+    private static int sPosts=0,ePosts=10;
     //firebase authentication
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private FirebaseUser user;
-
+    private ArrayList<Photo> photoList;
     //Widgets
     ViewGroup rootLayout;
     @Nullable
@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
         fragmentView=view;
         try{
-            initImageLoader();
+            init();
             setupFirebaseAuth();
             queryPhotos();
             refresh(view);
@@ -93,13 +93,17 @@ public class HomeFragment extends Fragment {
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                sPosts=0;
+                ePosts=10;
                 queryPhotos();
                 refresh.setRefreshing(false);
             }
         });
     }
-    private void initImageLoader(){
+    private void init(){
         font = Typeface.createFromAsset(getContext().getAssets(), "fonts/straight.ttf");
+        photoList=new ArrayList<>();
+        rootLayout=fragmentView.findViewById(R.id.root);
         UniversalImageLoader imageLoader=new UniversalImageLoader(getContext());
         ImageLoader.getInstance().init(imageLoader.getConfig());
     }
@@ -109,6 +113,7 @@ public class HomeFragment extends Fragment {
      * @throws NullPointerException
      */
     private void queryPhotos() throws NullPointerException{
+        rootLayout.removeAllViews();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         final ArrayList<String> users=new ArrayList<>();
         Query query=reference.child(getString(R.string.dbname_following)).child(user.getUid());
@@ -133,7 +138,7 @@ public class HomeFragment extends Fragment {
      * @throws NullPointerException
      */
     private void getPhotos(final ArrayList<String> users)throws NullPointerException{
-        final ArrayList<Photo> photoList = new ArrayList<>();
+        photoList.clear();
         Query query=myRef.child(getString(R.string.dbname_user_photos));
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -146,7 +151,7 @@ public class HomeFragment extends Fragment {
                 }
                 Log.d(TAG, "setViews " + photoList.size());
                 Collections.sort(photoList,new sortPhotoByDate());
-                setViews(photoList);
+                setViews();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -157,12 +162,10 @@ public class HomeFragment extends Fragment {
 
     /**
      * Dynamically set the views in the rootLayout
-     * @param photoList
      * @throws NullPointerException
      */
-    private void setViews(final ArrayList<Photo> photoList) throws NullPointerException{
-        rootLayout=fragmentView.findViewById(R.id.root);
-        rootLayout.removeAllViews();
+    private void setViews() throws NullPointerException{
+        Log.d(TAG, "setViews: sposts"+sPosts+"epost"+ePosts +"count "+rootLayout.getChildCount());
         final LayoutInflater vi;
         try{
             vi = (LayoutInflater) getContext().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -171,15 +174,16 @@ public class HomeFragment extends Fragment {
             Log.d(TAG, "setViews: NullPointerException");
             return;
         }
-        int len=(no_posts<photoList.size())?no_posts:photoList.size();
-        for(int i=0;i<len;i++){
+        int len=(ePosts<photoList.size())?ePosts:photoList.size();
+        for(int i=sPosts;i<len;i++){
             View v=vi.inflate(R.layout.layout_post,null);
             rootLayout.addView(v);
         }
         TextView loadMore=(TextView)vi.inflate(R.layout.view_loadmore,null);
-        if(len==no_posts)
+        loadMore.setTypeface(font);
+        if(len==ePosts)
             rootLayout.addView(loadMore);
-        for(int i=0;i<len;i++){
+        for(int i=sPosts;i<len;i++){
             final Photo photo=photoList.get(i);
             final String userId=photo.getUser_id();
             View view = rootLayout.getChildAt(i);
@@ -266,8 +270,10 @@ public class HomeFragment extends Fragment {
             loadMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    no_posts+=5;
-                    setViews(photoList);
+                    rootLayout.removeViewAt(rootLayout.getChildCount()-1);
+                    sPosts=ePosts;
+                    ePosts+=5;
+                    setViews();
                 }
             });
             //Handle Likes and Dislikes

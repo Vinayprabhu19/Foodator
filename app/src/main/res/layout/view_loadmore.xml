@@ -6,7 +6,7 @@
         android:textColor="@color/white"
         android:id="@+id/loadmore"
         android:background="@color/dark_orange"
-        android:textSize="20sp"
+        android:textSize="19sp"
         android:textAlignment="center"
         android:text="@string/string_load_more"
         android:layout_alignParentBottom="true" />
