@@ -57,13 +57,14 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private Typeface font;
     private View fragmentView;
+    private static int no_posts=10;
     //firebase authentication
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private FirebaseUser user;
-    private FirebaseMethods firebaseMethods;
+
     //Widgets
     ViewGroup rootLayout;
     @Nullable
@@ -133,24 +134,25 @@ public class HomeFragment extends Fragment {
      */
     private void getPhotos(final ArrayList<String> users)throws NullPointerException{
         final ArrayList<Photo> photoList = new ArrayList<>();
-        for(int i=0;i<users.size();i++){
-            Query query=myRef.child(getString(R.string.dbname_user_photos)).child(users.get(i));
-            query.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot ds:dataSnapshot.getChildren()){
-                        Photo photo=ds.getValue(Photo.class);
+        Query query=myRef.child(getString(R.string.dbname_user_photos));
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(int i=0;i<users.size();i++) {
+                    for (DataSnapshot ds : dataSnapshot.child(users.get(i)).getChildren()) {
+                        Photo photo = ds.getValue(Photo.class);
                         photoList.add(photo);
                     }
-                        Log.d(TAG, "setViews "+photoList.size());
-                        setViews(photoList);
                 }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "setViews " + photoList.size());
+                Collections.sort(photoList,new sortPhotoByDate());
+                setViews(photoList);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                }
-            });
-        }
+            }
+        });
     }
 
     /**
@@ -159,8 +161,6 @@ public class HomeFragment extends Fragment {
      * @throws NullPointerException
      */
     private void setViews(final ArrayList<Photo> photoList) throws NullPointerException{
-        Collections.sort(photoList,new sortPhotoByDate());
-        Log.d(TAG, "setViews: "+photoList.size());
         rootLayout=fragmentView.findViewById(R.id.root);
         rootLayout.removeAllViews();
         final LayoutInflater vi;
@@ -171,11 +171,18 @@ public class HomeFragment extends Fragment {
             Log.d(TAG, "setViews: NullPointerException");
             return;
         }
-        for(int i=0;i<photoList.size();i++){
+        int len=(no_posts<photoList.size())?no_posts:photoList.size();
+        for(int i=0;i<len;i++){
+            View v=vi.inflate(R.layout.layout_post,null);
+            rootLayout.addView(v);
+        }
+        TextView loadMore=(TextView)vi.inflate(R.layout.view_loadmore,null);
+        if(len==no_posts)
+            rootLayout.addView(loadMore);
+        for(int i=0;i<len;i++){
             final Photo photo=photoList.get(i);
-            Log.d(TAG, "setViews: "+photo.getCaption());
             final String userId=photo.getUser_id();
-            View view = vi.inflate(R.layout.layout_post,null);
+            View view = rootLayout.getChildAt(i);
             view.setTag(photo.getPhoto_id());
 
             //Get widgets in a view
@@ -214,7 +221,6 @@ public class HomeFragment extends Fragment {
             likes.setText(Integer.toString(photo.getLikes()));
             dislikes.setText(Integer.toString(photo.getDislikes()));
             setImage(image,photo.getImage_path(),progressBar);
-            rootLayout.addView(view);
             mTextHashTagHelper = HashTagHelper.Creator.create(getResources().getColor(R.color.light_blue), new HashTagHelper.OnHashTagClickListener() {
                 @Override
                 public void onHashTagClicked(String hashTag) {
@@ -257,7 +263,13 @@ public class HomeFragment extends Fragment {
                     }
                 }
             });
-
+            loadMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    no_posts+=5;
+                    setViews(photoList);
+                }
+            });
             //Handle Likes and Dislikes
         }
     }
@@ -313,7 +325,6 @@ public class HomeFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase= FirebaseDatabase.getInstance();
         myRef=mFirebaseDatabase.getReference();
-        firebaseMethods=new FirebaseMethods(getContext());
         user=mAuth.getCurrentUser();
     }
     @Override

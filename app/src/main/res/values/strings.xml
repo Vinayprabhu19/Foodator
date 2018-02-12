@@ -59,5 +59,6 @@
     <string name="string_following">Following</string>
     <string name="string_photo">Photo</string>
     <string name="string_delete">Delete</string>
-
+    <string name="string_load_more">Load More</string>
+    <string name="string_load_complete">You have reached the end of feed</string>
 </resources>
