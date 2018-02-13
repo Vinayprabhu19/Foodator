@@ -53,7 +53,8 @@ public class SplashScreen extends AppCompatActivity {
         setupFirebaseAuth();
         //starting location service
         Log.d(TAG, "onCreate: Starting location services");
-        startService(new Intent(getApplicationContext(), LocationServices.class));
+        Intent intent=new Intent(getApplicationContext(), LocationServices.class);
+        startService(intent);
     }
 
     private boolean runtime_permissions() {

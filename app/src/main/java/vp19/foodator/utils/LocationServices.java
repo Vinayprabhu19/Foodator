@@ -12,6 +12,24 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
+import vp19.foodator.Models.UserLocation;
+import vp19.foodator.R;
+
 /**
  * Created by Raghuveer on 13-02-2018.
  */
@@ -27,6 +45,12 @@ public class LocationServices extends Service {
     private static final long TIME_TO_UPDATE = 3000;//in millisecond
     private static final float MIN_DIST = 0;
 
+    //firebase authentication
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference myRef;
+    private FirebaseUser user;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -36,7 +60,7 @@ public class LocationServices extends Service {
     @Override
     public void onCreate() {
         Log.d(TAG, "onCreate: Location Service started");
-
+        setupFirebaseAuth();
         listener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -45,6 +69,24 @@ public class LocationServices extends Service {
 //                sendBroadcast(i);
                 mLatitude = location.getLatitude();
                 mLongitude = location.getLongitude();
+                if(user != null){
+                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            UserLocation location=new UserLocation();
+                            location.setX((float)mLatitude);
+                            location.setY((float)mLongitude);
+                            location.setTimeStamp(getTime());
+                            myRef.child(getString(R.string.dbname_user_locations))
+                                    .child(user.getUid())
+                                    .setValue(location);
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
                 Log.d(TAG, "onLocationChanged: Longitude:"+mLatitude+"  Latitude:"+mLongitude);
             }
 
@@ -69,10 +111,18 @@ public class LocationServices extends Service {
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
         //noinspection MissingPermission
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,TIME_TO_UPDATE,MIN_DIST,listener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,TIME_TO_UPDATE,0,listener);
 
     }
-
+    /**
+     * Utility function to get the current time
+     * @return Simple Date Format time
+     */
+    private String getTime(){
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-DD'T'HH-mm-ss'Z'", Locale.UK);
+        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+        return sdf.format(new Date());
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -80,5 +130,16 @@ public class LocationServices extends Service {
             //noinspection MissingPermission
             locationManager.removeUpdates(listener);
         }
+    }
+    /**
+     * Setting up Firebase Authentication
+     */
+    private void setupFirebaseAuth() throws  NullPointerException{
+        FirebaseApp.initializeApp(getApplicationContext());
+        mFirebaseDatabase= FirebaseDatabase.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        myRef=mFirebaseDatabase.getReference();
+        if(mAuth !=null)
+            user=mAuth.getCurrentUser();
     }
 }

@@ -57,7 +57,7 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private Typeface font;
     private View fragmentView;
-    private static int sPosts=0,ePosts=10;
+    private int sPosts=0,ePosts=10;
     //firebase authentication
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;

@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +32,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -88,21 +90,31 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
-    private void UrlGridSetup(DataSnapshot snapshot) {
-        ArrayList<String> imgList=new ArrayList<>();
-        photo_id=new ArrayList<>();
-        snapshot=snapshot.child(getString(R.string.dbname_user_photos)).child(user.getUid());
-        for(DataSnapshot ds:snapshot.getChildren()){
-            photo=ds.getValue(Photo.class);
-            String url=photo.getImage_path();
-            String id=photo.getPhoto_id();
-            imgList.add(url);
-            photo_id.add(id);
-        }
-        Collections.reverse(imgList);
-        Collections.reverse(photo_id);
-        Log.d(TAG, "UrlGridSetup: Finisehd loop");
-        setupImageGrid(imgList);
+    private void UrlGridSetup() {
+        Query query=myRef.child(getString(R.string.dbname_user_photos)).child(user.getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String> imgList=new ArrayList<>();
+                photo_id=new ArrayList<>();
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                    photo=ds.getValue(Photo.class);
+                    String url=photo.getImage_path();
+                    String id=photo.getPhoto_id();
+                    imgList.add(url);
+                    photo_id.add(id);
+                }
+                Collections.reverse(imgList);
+                Collections.reverse(photo_id);
+                Log.d(TAG, "UrlGridSetup: Finisehd loop");
+                setupImageGrid(imgList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /**
@@ -155,7 +167,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
     private void setupBottomNavigationView(){
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx)findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx,this.getWindow());
         BottomNavigationViewHelper.enableNavgation(mContext,bottomNavigationViewEx);
         Menu menu=bottomNavigationViewEx.getMenu();
@@ -198,7 +210,7 @@ public class ProfileActivity extends AppCompatActivity {
                     UserAccountSettings settings = firebaseMethods.getUserAccountSettings(dataSnapshot);
                     setupLayoutWidgets(settings);
                     setProfileImage(dataSnapshot);
-                    UrlGridSetup(dataSnapshot);
+                    UrlGridSetup();
                     //Retrieve images for the grid
                 }
                 catch (NullPointerException e){
