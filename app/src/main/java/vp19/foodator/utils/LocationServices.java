@@ -74,8 +74,8 @@ public class LocationServices extends Service {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             UserLocation location=new UserLocation();
-                            location.setX((float)mLatitude);
-                            location.setY((float)mLongitude);
+                            location.setLat(mLatitude);
+                            location.setLon(mLongitude);
                             location.setTimeStamp(getTime());
                             myRef.child(getString(R.string.dbname_user_locations))
                                     .child(user.getUid())

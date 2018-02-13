@@ -5,32 +5,37 @@ package vp19.foodator.Models;
  */
 
 public class UserLocation {
-    float X,Y;
+    double lat,lon;
     String timeStamp;
 
-    public UserLocation(float x, float y, String timeStamp) {
-        X = x;
-        Y = y;
-        this.timeStamp = timeStamp;
-    }
+
     public UserLocation(){
 
     }
 
-    public float getX() {
-        return X;
+    @Override
+    public String toString() {
+        return "UserLocation{" +
+                "lat=" + lat +
+                ", lon=" + lon +
+                ", timeStamp='" + timeStamp + '\'' +
+                '}';
     }
 
-    public void setX(float x) {
-        X = x;
+    public double getLat() {
+        return lat;
     }
 
-    public float getY() {
-        return Y;
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
-    public void setY(float y) {
-        Y = y;
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 
     public String getTimeStamp() {
@@ -38,6 +43,13 @@ public class UserLocation {
     }
 
     public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public UserLocation(double lat, double lon, String timeStamp) {
+
+        this.lat = lat;
+        this.lon = lon;
         this.timeStamp = timeStamp;
     }
 }
