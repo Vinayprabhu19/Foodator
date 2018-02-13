@@ -2,6 +2,7 @@ package vp19.foodator.Home;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,11 +27,24 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
+import vp19.foodator.Models.User;
+import vp19.foodator.Models.UserLocation;
 import vp19.foodator.R;
 
 /**
@@ -49,6 +63,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
+    //firebase authentication
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference myRef;
+    private FirebaseUser user;
+
+    private ArrayList<UserLocation> locations;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,10 +81,40 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void init() {
         Log.d(TAG, "init: initializing map fragment");
+        locations=new ArrayList<>();
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(this);
+        setupFirebaseAuth();
+        queryLocations();
     }
+    private void queryLocations(){
+        Query query=myRef.child(getString(R.string.dbname_user_locations));
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                locations.clear();
+                Log.d(TAG, "plotMap  Next Iteration\n");
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                    UserLocation location=ds.getValue(UserLocation.class);
+                    locations.add(location);
+                }
+                plotMap();
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void plotMap(){
+        Log.d(TAG, "plotMap: plotting locations");
+        for(int i=0;i<locations.size();i++) {
+            Log.d(TAG, "plotMap: " + locations.get(i).getLat() + " " + locations.get(i).getLon());
+            double latitude=locations.get(i).getLat(),longitude=locations.get(i).getLon();
+            mMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)).title("User"));
+        }
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "onMapReady: Map is ready");
@@ -152,5 +204,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         }
+    }
+    private void setupFirebaseAuth(){
+        mAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase= FirebaseDatabase.getInstance();
+        myRef=mFirebaseDatabase.getReference();
+        if(mAuth != null){
+            FirebaseUser user=mAuth.getCurrentUser();
+        }
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 }

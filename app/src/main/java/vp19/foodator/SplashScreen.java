@@ -106,24 +106,13 @@ public class SplashScreen extends AppCompatActivity {
             FirebaseUser user=mAuth.getCurrentUser();
             checkCurrentUser(user);
         }
-       /* mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                checkCurrentUser(user);
-            }
-        };*/
     }
     @Override
     public void onStart() {
         super.onStart();
-        //mAuth.addAuthStateListener(mAuthListener);
     }
     @Override
     public void onStop() {
         super.onStop();
-        /*if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }*/
     }
 }

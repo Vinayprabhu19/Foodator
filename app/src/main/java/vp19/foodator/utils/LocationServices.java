@@ -64,9 +64,6 @@ public class LocationServices extends Service {
         listener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-//                Intent i = new Intent("location_update");
-//                i.putExtra("coordinates",location.getLongitude()+" "+location.getLatitude());
-//                sendBroadcast(i);
                 mLatitude = location.getLatitude();
                 mLongitude = location.getLongitude();
                 if(user != null){
