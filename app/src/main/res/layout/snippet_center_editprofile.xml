@@ -59,6 +59,7 @@
                     android:layout_marginStart="40dp"
                     android:background="@null"
                     android:inputType="textNoSuggestions"
+                    android:digits="0123456789.qwertzuiopasdfghjklyxcvbnm"
                     android:hint="Username"/>
 
             </RelativeLayout>

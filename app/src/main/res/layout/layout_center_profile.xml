@@ -26,7 +26,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="82dp"
-                    android:background="@color/post_top_color"/>
+                    android:background="@color/post_top_color" />
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="110dp"
                     android:layout_height="110dp"
@@ -78,15 +78,37 @@
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
+                android:layout_height="25dp"
+                android:background="@color/post_top_color">
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true">
+                    <TextView
+                        android:id="@+id/textPosts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/posts"
+                        android:textColor="@color/grey"
+                        android:textSize="15sp"
+                        android:textAllCaps="true"/>
+                    <TextView
+                        android:id="@+id/tvPosts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/textPosts"
+                        android:text="@string/number_zero"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="10dp" />
+                </RelativeLayout>
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/relLayout3"
-                android:layout_marginTop="5dp"
-                android:paddingTop="1dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginBottom="45dp">
                 <GridView
                     android:layout_width="match_parent"
@@ -103,24 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone">
-                <TextView
-                    android:id="@+id/textPosts"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/posts"
-                    android:textColor="@color/grey"
-                    android:textSize="14sp"
-                    android:layout_centerHorizontal="true"/>
-                <TextView
-                    android:id="@+id/tvPosts"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/textPosts"
-                    android:text="@string/number_zero"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_centerHorizontal="true"/>
+
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

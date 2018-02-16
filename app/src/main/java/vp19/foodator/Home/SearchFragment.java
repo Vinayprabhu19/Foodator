@@ -45,6 +45,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import vp19.foodator.Models.Photo;
 import vp19.foodator.Models.UserAccountSettings;
@@ -198,76 +199,41 @@ public class SearchFragment extends Fragment {
      * @param photoList : List of the photos to be set
      */
     private void setTagViews(final ArrayList<Photo> photoList){
+        if(photoList.size() == 0)
+            return;
         View view = vi.inflate(R.layout.view_gridview,null,true);
-        final ArrayList<Photo> photoList1=new ArrayList<>();
         //Get widgets
-        SquareImageView image=view.findViewById(R.id.image1);
-        GridView gridView1 = view.findViewById(R.id.gridView1);
-        GridView gridView2 = view.findViewById(R.id.gridView2);
-        gridView1.setVerticalScrollBarEnabled(false);
-        gridView2.setVerticalScrollBarEnabled(false);
+        ImageView image=view.findViewById(R.id.image1);
+        GridView gridView = view.findViewById(R.id.gridView);
         int gridWidth = getResources().getDisplayMetrics().widthPixels;
-        int imageWidth1 = gridWidth/4;
-        int imageWidth2=gridWidth/3;
-        final ArrayList<String> imgURL1=new ArrayList<>();
-        final ArrayList<String> imgURL2=new ArrayList<>();
-        //set first image
-        final Photo firstPhoto=photoList.get(0);
-        UniversalImageLoader.setImage(photoList.get(0).getImage_path(),image,null,"");
-        //set first gridview
+        int imageWidth = gridWidth/3;
+        final ArrayList<String> imgURLs=new ArrayList<>();
+        if(photoList.size()>0) {
+            final Photo photo=photoList.get(0);
+            UniversalImageLoader.setImage(photo.getImage_path(), image, null, "");
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(getContext(),ShowImageActivity.class);
+                    intent.putExtra(getString(R.string.selected_image),photo.getImage_path());
+                    intent.putExtra(getString(R.string.photo_id),photo.getPhoto_id());
+                    intent.putExtra(getString(R.string.attr_user_id),photo.getUser_id());
+                    startActivity(intent);
+                }
+            });
+        }
+        photoList.add(photoList.get(0));
         photoList.remove(0);
-        int len=photoList.size();
-        if(len<=4){
-            for(int i=0;i<len;i++){
-                imgURL1.add(photoList.get(i).getImage_path());
-                photoList1.add(photoList.get(i));
-            }
-            for(int i=0;i<len;i++){
-                photoList.remove(0);
-            }
-        }
-        else{
-            for(int i=0;i<4;i++){
-                imgURL1.add(photoList.get(i).getImage_path());
-                photoList1.add(photoList.get(i));
-            }
-            for(int i=0;i<4;i++){
-                photoList.remove(0);
-            }
-        }
         for(int i=0;i<photoList.size();i++)
-            imgURL2.add(photoList.get(i).getImage_path());
-        gridView1.setColumnWidth(imageWidth1);
-        gridView2.setColumnWidth(imageWidth2);
-        GridImageAdapter adapter1 = new GridImageAdapter(getContext(), R.layout.layout_grid_imageview, "", imgURL1);
-        GridImageAdapter adapter2 = new GridImageAdapter(getContext(), R.layout.layout_grid_imageview, "", imgURL2);
-        gridView1.setAdapter(adapter1);
-        gridView2.setAdapter(adapter2);
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getContext(),ShowImageActivity.class);
-                intent.putExtra(getString(R.string.selected_image),firstPhoto.getImage_path());
-                intent.putExtra(getString(R.string.photo_id),firstPhoto.getPhoto_id());
-                intent.putExtra(getString(R.string.attr_user_id),firstPhoto.getUser_id());
-                startActivity(intent);
-            }
-        });
-        gridView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            imgURLs.add(photoList.get(i).getImage_path());
+        gridView.setColumnWidth(imageWidth);
+        GridImageAdapter adapter= new GridImageAdapter(getContext(), R.layout.layout_grid_imageview, "", imgURLs);
+        gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent=new Intent(getContext(),ShowImageActivity.class);
-                intent.putExtra(getString(R.string.selected_image),imgURL1.get(position));
-                intent.putExtra(getString(R.string.photo_id),photoList1.get(position).getPhoto_id());
-                intent.putExtra(getString(R.string.attr_user_id),photoList1.get(position).getUser_id());
-                startActivity(intent);
-            }
-        });
-        gridView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent(getContext(),ShowImageActivity.class);
-                intent.putExtra(getString(R.string.selected_image),imgURL2.get(position));
+                intent.putExtra(getString(R.string.selected_image),imgURLs.get(position));
                 intent.putExtra(getString(R.string.photo_id),photoList.get(position).getPhoto_id());
                 intent.putExtra(getString(R.string.attr_user_id),photoList.get(position).getUser_id());
                 startActivity(intent);
