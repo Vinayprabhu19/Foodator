@@ -1,4 +1,4 @@
-package vp19.foodator.Home;
+package vp19.foodator.utils;
 
 import java.util.Comparator;
 

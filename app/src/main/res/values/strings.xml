@@ -23,6 +23,8 @@
     <string name="attr_date">date_created</string>
     <string name="attr_user_id">user_id</string>
 
+    <!-- Zomato -->
+    <string name="zomato_search">https://developers.zomato.com/api/v2.1/search</string>
     <!-- Activities -->
     <string name="calling_activity">Calling Activity</string>
     <string name="profile_activity">Profile Activity</string>
@@ -62,4 +64,8 @@
     <string name="string_delete">Delete</string>
     <string name="string_load_more">Load More</string>
     <string name="string_load_complete">You have reached the end of feed</string>
+    <string name="string_restaurant">Restaurant</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

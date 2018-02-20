@@ -32,7 +32,7 @@
                     android:layout_height="110dp"
                     android:id="@+id/profileImage"
                     android:layout_centerInParent="true"
-                    app:civ_border_width="1dp"
+                    app:civ_border_width="1.5dp"
                     android:layout_marginTop="20dp"
                     android:scaleType="centerCrop"
                     app:civ_border_color="@color/dark_violet"/>
@@ -115,8 +115,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/gridView"
                     android:numColumns="3"
-                    android:verticalSpacing="1dp"
-                    android:horizontalSpacing="1dp"
+                    android:verticalSpacing="0.5dp"
+                    android:horizontalSpacing="0.5dp"
                     android:stretchMode="columnWidth"
                     android:gravity="center">
                 </GridView>

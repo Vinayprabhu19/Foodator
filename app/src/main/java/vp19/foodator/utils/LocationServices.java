@@ -41,7 +41,7 @@ public class LocationServices extends Service {
     private LocationManager locationManager;
 
     //global variables
-    private double mLongitude,mLatitude;
+    public static double mLongitude,mLatitude;
     private static final long TIME_TO_UPDATE = 3000;//in millisecond
     private static final float MIN_DIST = 0;
 

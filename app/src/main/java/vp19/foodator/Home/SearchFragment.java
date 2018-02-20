@@ -6,7 +6,6 @@
  *  Purpose : To search for users,tags,posts
  */
 package vp19.foodator.Home;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -14,9 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -24,12 +21,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -45,8 +41,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
+import vp19.foodator.Food.FoodActivity;
 import vp19.foodator.Models.Photo;
 import vp19.foodator.Models.UserAccountSettings;
 import vp19.foodator.Profile.ProfileActivity;
@@ -54,13 +50,8 @@ import vp19.foodator.Profile.ShowImageActivity;
 import vp19.foodator.Profile.UserProfileActivity;
 import vp19.foodator.R;
 import vp19.foodator.utils.GridImageAdapter;
-import vp19.foodator.utils.SectionPagerAdapter;
-import vp19.foodator.utils.SquareImageView;
 import vp19.foodator.utils.StringManipulation;
 import vp19.foodator.utils.UniversalImageLoader;
-
-import static vp19.foodator.R.id.gridView;
-import static vp19.foodator.R.id.root;
 
 public class SearchFragment extends Fragment {
     private static final String TAG = "SearchFragment";
@@ -199,10 +190,20 @@ public class SearchFragment extends Fragment {
      * @param photoList : List of the photos to be set
      */
     private void setTagViews(final ArrayList<Photo> photoList){
+        View tagView=vi.inflate(R.layout.view_tag_link,null,true);
+        Button button=tagView.findViewById(R.id.searchRestaurant);
+        button.setTypeface(straight);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),FoodActivity.class));
+            }
+        });
+        rootLayout.addView(tagView);
         if(photoList.size() == 0)
             return;
-        View view = vi.inflate(R.layout.view_gridview,null,true);
         //Get widgets
+        View view = vi.inflate(R.layout.view_gridview,null,true);
         ImageView image=view.findViewById(R.id.image1);
         GridView gridView = view.findViewById(R.id.gridView);
         int gridWidth = getResources().getDisplayMetrics().widthPixels;

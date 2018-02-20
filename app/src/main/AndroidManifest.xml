@@ -3,21 +3,23 @@
     package="vp19.foodator">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true"/>
+        android:required="true" />
 
     <permission
         android:name="vp19.foodator.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature"/>
-    <uses-permission android:name="vp19.foodator.permission.MAPS_RECEIVE"/>
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="vp19.foodator.permission.MAPS_RECEIVE" />
 
     <application
         android:allowBackup="true"
@@ -26,7 +28,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashScreen"
+        <activity
+            android:name=".SplashScreen"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,36 +40,46 @@
         <activity
             android:name=".Login.LoginActivity"
             android:noHistory="true"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Login.RegisterActivity"
             android:noHistory="true"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Profile.ProfileActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Share.ShareActvity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Profile.AccountSettingsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Share.NextActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Profile.ShowImageActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Home.HomeActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Profile.UserProfileActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Share.ShareActvity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Profile.AccountSettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Share.NextActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Profile.ShowImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Home.HomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Profile.UserProfileActivity"
+            android:screenOrientation="portrait" />
 
-        <!--Background Services-->
-        <service android:name=".utils.LocationServices" android:process=":foodator_location_service" />
+        <!-- Background Services -->
+        <service
+            android:name=".utils.LocationServices"
+            android:process=":foodator_location_service" />
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCfy_yd3f4YjKHIUVSEms99C7o17X3-2XI"/>
+            android:value="AIzaSyCfy_yd3f4YjKHIUVSEms99C7o17X3-2XI" />
+
+        <activity android:name=".Food.FoodActivity"></activity>
     </application>
 
 </manifest>

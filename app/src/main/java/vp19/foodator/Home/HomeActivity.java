@@ -28,10 +28,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import java.util.ArrayList;
+
 import vp19.foodator.Login.LoginActivity;
+import vp19.foodator.Models.Restaurant;
 import vp19.foodator.utils.SectionPagerAdapter;
 import vp19.foodator.R;
 import vp19.foodator.utils.BottomNavigationViewHelper;
+import vp19.foodator.utils.ZomatoAPI;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";

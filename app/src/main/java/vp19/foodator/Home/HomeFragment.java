@@ -48,10 +48,10 @@ import vp19.foodator.Models.UserAccountSettings;
 import vp19.foodator.Profile.ProfileActivity;
 import vp19.foodator.Profile.UserProfileActivity;
 import vp19.foodator.R;
-import vp19.foodator.utils.FirebaseMethods;
 import vp19.foodator.utils.SquareImageView;
 import vp19.foodator.utils.StringManipulation;
 import vp19.foodator.utils.UniversalImageLoader;
+import vp19.foodator.utils.sortPhotoByDate;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
@@ -225,7 +225,7 @@ public class HomeFragment extends Fragment {
             likes.setText(Integer.toString(photo.getLikes()));
             dislikes.setText(Integer.toString(photo.getDislikes()));
             setImage(image,photo.getImage_path(),progressBar);
-            mTextHashTagHelper = HashTagHelper.Creator.create(getResources().getColor(R.color.light_blue), new HashTagHelper.OnHashTagClickListener() {
+            mTextHashTagHelper = HashTagHelper.Creator.create(getResources().getColor(R.color.dyellow), new HashTagHelper.OnHashTagClickListener() {
                 @Override
                 public void onHashTagClicked(String hashTag) {
                     hashTag="#"+hashTag;
