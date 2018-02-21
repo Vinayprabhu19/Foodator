@@ -101,7 +101,7 @@ public class HomeActivity extends AppCompatActivity {
     /**
      * Sets up bottom navigation view
      */
-    private void setupBottomNavigationView(){
+    public void setupBottomNavigationView(){
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx)findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx,this.getWindow());
         BottomNavigationViewHelper.enableNavgation(mContext,bottomNavigationViewEx);

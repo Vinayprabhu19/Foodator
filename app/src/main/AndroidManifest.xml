@@ -79,7 +79,8 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCfy_yd3f4YjKHIUVSEms99C7o17X3-2XI" />
 
-        <activity android:name=".Food.FoodActivity"></activity>
+        <activity android:name=".Food.FoodActivity" />
+        <activity android:name=".Food.ViewRestaurantActivity"></activity>
     </application>
 
 </manifest>

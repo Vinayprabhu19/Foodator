@@ -1,6 +1,8 @@
 package vp19.foodator.Models;
 
-public class Restaurant {
+import java.io.Serializable;
+
+public class Restaurant implements Serializable {
     private int res_id;
     private String name;
     private double lat;

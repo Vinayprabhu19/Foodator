@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.ThreadLocalRandom;
 
 import vp19.foodator.Home.HomeActivity;
 import vp19.foodator.Models.Photo;
@@ -258,8 +259,9 @@ public class FirebaseMethods {
     public void uploadImage(String photoType, final String description, final int image_count, final String imgURL,Bitmap bm, final boolean mFitStatus) throws NullPointerException{
         //From share Activity
         if(photoType.equals(mContext.getString(R.string.new_photo))){
+            RandomString gen = new RandomString(8, ThreadLocalRandom.current());
             StorageReference storageReference=mStorageRef
-                    .child(FIREBASE_IMG_STORAGE +"/"+userID+"/photo"+(image_count+1));
+                    .child(FIREBASE_IMG_STORAGE +"/"+userID+"/photo"+gen.nextString()+(image_count+1));
             //convert image to bitmap
             if(bm == null){
                 bm=ImageManager.getBitmap(imgURL);

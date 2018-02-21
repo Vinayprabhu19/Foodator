@@ -6,10 +6,6 @@ import java.util.Comparator;
 
 import vp19.foodator.Models.Restaurant;
 
-/**
- * Created by Vinay Prabhu on 20-Feb-18.
- */
-
 public class sortByLocation implements Comparator<Restaurant> {
     private static final String TAG = "sortByLocation";
 

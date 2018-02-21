@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import vp19.foodator.Login.LoginActivity;
 import vp19.foodator.R;
+import vp19.foodator.utils.LocationServices;
+
 public class SignOutFragment extends Fragment{
     private static final String TAG = "SignOutFragment";
     private FirebaseAuth mAuth;
@@ -42,6 +44,7 @@ public class SignOutFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
+                getActivity().stopService(new Intent(getContext(), LocationServices.class));
                 Intent intent=new Intent(getActivity(),LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

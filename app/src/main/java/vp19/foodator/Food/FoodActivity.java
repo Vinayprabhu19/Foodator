@@ -41,6 +41,13 @@ public class FoodActivity extends AppCompatActivity {
     private Context mContext=FoodActivity.this;
     private ViewPager viewPager;
     public String searchText;
+    //fonts
+    private Typeface font;
+    private Typeface fUbuntuBold;
+    private Typeface fUbuntuLight;
+    private Typeface fUbuntuMedium;
+    private Typeface fUbuntuRegular;
+    private Typeface fUbuntuMono;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,19 +75,29 @@ public class FoodActivity extends AppCompatActivity {
         //Set the icons
         tab1.setText("Restaurants");
         tab2.setText("Recipe");
-        
     }
     private void init(){
         Intent intent=getIntent();
         searchText=intent.getStringExtra(getString(R.string.calling_activity));
         searchText=searchText.replace("#","");
         ImageView backArrow=findViewById(R.id.backArrow);
+        TextView title=findViewById(R.id.pageTitle);
+        TextView searchTextView=findViewById(R.id.searchText);
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+        font = Typeface.createFromAsset(mContext.getAssets(), "fonts/straight.ttf");
+        fUbuntuBold = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-B.ttf");
+        fUbuntuLight = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-L.ttf");
+        fUbuntuMedium = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-M.ttf");
+        fUbuntuRegular = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-R.ttf");
+        fUbuntuMono = Typeface.createFromAsset(mContext.getAssets(), "fonts/UbuntuMono-B.ttf");
+        title.setTypeface(fUbuntuRegular);
+        searchTextView.setText(searchText);
+        searchTextView.setTypeface(fUbuntuBold);
     }
     public static void hide(Window window){
         final View decorView = window.getDecorView();

@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -136,7 +137,13 @@ public class LocationServices extends Service {
         mFirebaseDatabase= FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
         myRef=mFirebaseDatabase.getReference();
-        if(mAuth !=null)
-            user=mAuth.getCurrentUser();
+        if(mAuth !=null){
+            mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    user=firebaseAuth.getCurrentUser();
+                }
+            });
+        }
     }
 }

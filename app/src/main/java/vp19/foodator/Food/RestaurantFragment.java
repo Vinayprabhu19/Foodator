@@ -1,6 +1,7 @@
 package vp19.foodator.Food;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -96,6 +97,15 @@ public class RestaurantFragment extends Fragment {
             address.setText(restaurants.get(i).getAddress());
             address.setTypeface(fUbuntuRegular);
             rootLayout.addView(view);
+            final int r_no=i;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(getContext(),ViewRestaurantActivity.class);
+                    intent.putExtra(getString(R.string.calling_activity),restaurants.get(r_no));
+                    startActivity(intent);
+                }
+            });
         }
         if(len==h){
             RelativeLayout layout=(RelativeLayout)vi.inflate(R.layout.view_loadmore,null);

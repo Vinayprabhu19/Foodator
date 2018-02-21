@@ -7,6 +7,7 @@
  */
 package vp19.foodator.Home;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,6 +24,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -163,7 +166,7 @@ public class HomeFragment extends Fragment {
     private void getPhotos(final ArrayList<String> users)throws NullPointerException{
         photoList.clear();
         Query query=myRef.child(getString(R.string.dbname_user_photos));
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(int i=0;i<users.size();i++) {
@@ -388,5 +391,20 @@ public class HomeFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            try {
+                getActivity().getWindow().setSoftInputMode(
+                        WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                ((HomeActivity)getActivity()).setupBottomNavigationView();
+            }
+            catch (NullPointerException e){
+                Log.d(TAG, "setUserVisibleHint: "+e.getMessage());
+            }
+        }
     }
 }
