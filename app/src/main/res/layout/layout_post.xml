@@ -33,6 +33,25 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@id/relLayout2"
+        android:background="@color/white">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
+            android:textSize="17sp"
+            android:id="@+id/description"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true"
+            android:maxLength="150"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="5dp">
         <include layout="@layout/snippet_post_bottom_toolbar"/>
     </RelativeLayout>

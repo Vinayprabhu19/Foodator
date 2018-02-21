@@ -51,7 +51,14 @@ import vp19.foodator.utils.UniversalImageLoader;
 
 public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "ProfileActivity";
-    private Typeface font;
+    private Typeface fUbuntuBold;
+    private Typeface fUbuntuLight;
+    private Typeface fUbuntuMedium;
+    private Typeface fUbuntuRegular;
+    private Typeface fUbuntuMono;
+    private Typeface fRegular;
+    private Typeface dudu;
+    
     //constants
     private Context mContext=ProfileActivity.this;
     private int ACTIVITY_NUM=2;
@@ -106,7 +113,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
                 Collections.reverse(imgList);
                 Collections.reverse(photo_id);
-                Log.d(TAG, "UrlGridSetup: Finisehd loop");
+                Log.d(TAG, "UrlGridSetup: Finished loop");
                 setupImageGrid(imgList);
             }
 
@@ -145,7 +152,13 @@ public class ProfileActivity extends AppCompatActivity {
         ImageLoader.getInstance().init(imageLoader.getConfig());
     }
     private void setupActivityWidgets() {
-        font = Typeface.createFromAsset(mContext.getAssets(), "fonts/dudu.ttf");
+        dudu = Typeface.createFromAsset(mContext.getAssets(), "fonts/dudu.ttf");
+        fUbuntuBold = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-B.ttf");
+        fUbuntuLight = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-L.ttf");
+        fUbuntuMedium = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-M.ttf");
+        fUbuntuRegular = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-R.ttf");
+        fUbuntuMono = Typeface.createFromAsset(mContext.getAssets(), "fonts/UbuntuMono-B.ttf");
+        fRegular = Typeface.createFromAsset(mContext.getAssets(), "fonts/regular.ttf");
         mProgressbar =  findViewById(R.id.profileProgressBar);
         mProgressbar.setVisibility(View.GONE);
         mProfilePhoto = findViewById(R.id.profileImage);
@@ -252,7 +265,8 @@ public class ProfileActivity extends AppCompatActivity {
         mPosts.setText(Long.toString(settings.getPosts()));
         mFollowers.setText(Long.toString(settings.getFollowers()));
         mFollowing.setText(Long.toString(settings.getFollowing()));
-        mProfileName.setTypeface(font);
+        mProfileName.setTypeface(fUbuntuBold);
+        mDisplayName.setTypeface(fUbuntuMedium);
     }
     @Override
     protected void onPostResume() {

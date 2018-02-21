@@ -100,7 +100,6 @@
                         android:text="@string/number_zero"
                         android:textColor="@color/white"
                         android:textSize="15sp"
-                        android:textStyle="bold"
                         android:layout_marginLeft="10dp" />
                 </RelativeLayout>
             </RelativeLayout>

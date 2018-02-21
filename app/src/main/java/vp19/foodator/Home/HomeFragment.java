@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
@@ -23,7 +24,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -55,9 +58,16 @@ import vp19.foodator.utils.sortPhotoByDate;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
+    //fonts
     private Typeface font;
+    private Typeface fUbuntuBold;
+    private Typeface fUbuntuLight;
+    private Typeface fUbuntuMedium;
+    private Typeface fUbuntuRegular;
+    private Typeface fUbuntuMono;
     private View fragmentView;
     private int sPosts=0,ePosts=10;
+    private LinearLayout progressLayout;
     //firebase authentication
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -101,9 +111,21 @@ public class HomeFragment extends Fragment {
         });
     }
     private void init(){
-        font = Typeface.createFromAsset(getContext().getAssets(), "fonts/straight.ttf");
+        font = Typeface.createFromAsset(getContext().getAssets(), "fonts/Ubuntu-R.ttf");
+        fUbuntuBold = Typeface.createFromAsset(getContext().getAssets(), "fonts/Ubuntu-B.ttf");
+        fUbuntuLight = Typeface.createFromAsset(getContext().getAssets(), "fonts/Ubuntu-L.ttf");
+        fUbuntuMedium = Typeface.createFromAsset(getContext().getAssets(), "fonts/Ubuntu-M.ttf");
+        fUbuntuRegular = Typeface.createFromAsset(getContext().getAssets(), "fonts/Ubuntu-R.ttf");
+        fUbuntuMono = Typeface.createFromAsset(getContext().getAssets(), "fonts/UbuntuMono-B.ttf");
         photoList=new ArrayList<>();
         rootLayout=fragmentView.findViewById(R.id.root);
+        LayoutInflater vi= (LayoutInflater) getContext().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        progressLayout=(LinearLayout)vi.inflate(R.layout.layout_progress,null);
+        ImageView progressImage=progressLayout.findViewById(R.id.progressImage);
+        TextView progressText=progressLayout.findViewById(R.id.progressText);
+        progressImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.fork,null));
+        progressText.setText(getString(R.string.string_adding_spices));
+        progressText.setTypeface(fUbuntuBold);
         UniversalImageLoader imageLoader=new UniversalImageLoader(getContext());
         ImageLoader.getInstance().init(imageLoader.getConfig());
     }
@@ -114,6 +136,7 @@ public class HomeFragment extends Fragment {
      */
     private void queryPhotos() throws NullPointerException{
         rootLayout.removeAllViews();
+        rootLayout.addView(progressLayout);
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         final ArrayList<String> users=new ArrayList<>();
         Query query=reference.child(getString(R.string.dbname_following)).child(user.getUid());
@@ -151,6 +174,7 @@ public class HomeFragment extends Fragment {
                 }
                 Log.d(TAG, "setViews " + photoList.size());
                 Collections.sort(photoList,new sortPhotoByDate());
+                rootLayout.removeViewAt(0);
                 setViews();
             }
             @Override
@@ -165,7 +189,6 @@ public class HomeFragment extends Fragment {
      * @throws NullPointerException
      */
     private void setViews() throws NullPointerException{
-        Log.d(TAG, "setViews: sposts"+sPosts+"epost"+ePosts +"count "+rootLayout.getChildCount());
         final LayoutInflater vi;
         try{
             vi = (LayoutInflater) getContext().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -179,10 +202,11 @@ public class HomeFragment extends Fragment {
             View v=vi.inflate(R.layout.layout_post,null);
             rootLayout.addView(v);
         }
-        TextView loadMore=(TextView)vi.inflate(R.layout.view_loadmore,null);
+        RelativeLayout relativeLayout=(RelativeLayout)vi.inflate(R.layout.view_loadmore,null);
+        TextView loadMore=relativeLayout.findViewById(R.id.loadmore);
         loadMore.setTypeface(font);
         if(len==ePosts)
-            rootLayout.addView(loadMore);
+            rootLayout.addView(relativeLayout);
         for(int i=sPosts;i<len;i++){
             final Photo photo=photoList.get(i);
             final String userId=photo.getUser_id();
@@ -197,9 +221,9 @@ public class HomeFragment extends Fragment {
             final ProgressBar progressBar=view.findViewById(R.id.progressBar);
             final TextView description=view.findViewById(R.id.description);
             final ToggleButton btn_like=view.findViewById(R.id.ivLike);
-            final ToggleButton btn_dislike=view.findViewById(R.id.ivDislike);
+            final ToggleButton btn_comment=view.findViewById(R.id.ivComment);
             final TextView likes=view.findViewById(R.id.tvLike);
-            final TextView dislikes=view.findViewById(R.id.tvDislike);
+            final TextView comments=view.findViewById(R.id.tvComment);
             final ImageView postOptions=view.findViewById(R.id.postOptions);
             //Get the user details
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -214,8 +238,8 @@ public class HomeFragment extends Fragment {
                     String caption=photo.getCaption();
                     if(!StringManipulation.isStringNull(caption))
                         description.setText(caption);
+                    description.setTypeface(font);
                     displayName.setTypeface(font);
-                    displayName.setTextSize(16);
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -223,9 +247,9 @@ public class HomeFragment extends Fragment {
             });
             displayName.setTag(photo.getUser_id());
             likes.setText(Integer.toString(photo.getLikes()));
-            dislikes.setText(Integer.toString(photo.getDislikes()));
+            comments.setText(Integer.toString(photo.getComments()));
             setImage(image,photo.getImage_path(),progressBar);
-            mTextHashTagHelper = HashTagHelper.Creator.create(getResources().getColor(R.color.dyellow), new HashTagHelper.OnHashTagClickListener() {
+            mTextHashTagHelper = HashTagHelper.Creator.create(getResources().getColor(R.color.dark_violet), new HashTagHelper.OnHashTagClickListener() {
                 @Override
                 public void onHashTagClicked(String hashTag) {
                     hashTag="#"+hashTag;
@@ -267,7 +291,7 @@ public class HomeFragment extends Fragment {
                     }
                 }
             });
-            loadMore.setOnClickListener(new View.OnClickListener() {
+            relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     rootLayout.removeViewAt(rootLayout.getChildCount()-1);

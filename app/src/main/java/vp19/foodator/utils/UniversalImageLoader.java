@@ -17,14 +17,13 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import vp19.foodator.R;
 public class UniversalImageLoader {
-    private static final int default_image= R.mipmap.ic_launcher;
+    private int default_image= R.drawable.logo;
     private Context mContext;
 
     public UniversalImageLoader(Context context) {
         super();
         mContext=context;
     }
-
     public ImageLoaderConfiguration getConfig(){
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .showImageOnLoading(default_image)

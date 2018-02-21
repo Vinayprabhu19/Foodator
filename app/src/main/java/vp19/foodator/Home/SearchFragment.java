@@ -55,8 +55,14 @@ import vp19.foodator.utils.UniversalImageLoader;
 
 public class SearchFragment extends Fragment {
     private static final String TAG = "SearchFragment";
+    //fonts
     private Typeface dudu;
     private Typeface straight;
+    private Typeface fUbuntuBold;
+    private Typeface fUbuntuLight;
+    private Typeface fUbuntuMedium;
+    private Typeface fUbuntuRegular;
+    private Typeface fUbuntuMono;
     private String myUserID;
     //Widgets
     private EditText Search;
@@ -97,6 +103,11 @@ public class SearchFragment extends Fragment {
         initImageLoader();
         dudu= Typeface.createFromAsset(getContext().getAssets(), "fonts/dudu.ttf");
         straight= Typeface.createFromAsset(getContext().getAssets(), "fonts/straight.ttf");
+        fUbuntuBold = Typeface.createFromAsset(getContext().getAssets(), "fonts/Ubuntu-B.ttf");
+        fUbuntuLight = Typeface.createFromAsset(getContext().getAssets(), "fonts/Ubuntu-L.ttf");
+        fUbuntuMedium = Typeface.createFromAsset(getContext().getAssets(), "fonts/Ubuntu-M.ttf");
+        fUbuntuRegular = Typeface.createFromAsset(getContext().getAssets(), "fonts/Ubuntu-R.ttf");
+        fUbuntuMono = Typeface.createFromAsset(getContext().getAssets(), "fonts/UbuntuMono-B.ttf");
         vi = (LayoutInflater) getContext().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Search=view.findViewById(R.id.textSearch);
         btn_search=view.findViewById(R.id.btn_search);
@@ -104,6 +115,7 @@ public class SearchFragment extends Fragment {
         errorText=view.findViewById(R.id.textError);
         errorText.setVisibility(View.GONE);
         errorText.setTypeface(dudu);
+        Search.setTypeface(fUbuntuRegular);
         setupFirebaseAuth();
         Search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         Search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -192,11 +204,13 @@ public class SearchFragment extends Fragment {
     private void setTagViews(final ArrayList<Photo> photoList){
         View tagView=vi.inflate(R.layout.view_tag_link,null,true);
         Button button=tagView.findViewById(R.id.searchRestaurant);
-        button.setTypeface(straight);
+        button.setTypeface(fUbuntuBold);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),FoodActivity.class));
+                Intent intent=new Intent(getActivity(),FoodActivity.class);
+                intent.putExtra(getString(R.string.calling_activity),textSearch);
+                startActivity(intent);
             }
         });
         rootLayout.addView(tagView);
@@ -294,7 +308,7 @@ public class SearchFragment extends Fragment {
                 TextView userName=view.findViewById(R.id.username);
                 UniversalImageLoader.setImage(user.getProfile_photo(),profileImage,null,"");
                 userName.setText(user.getUsername());
-                userName.setTypeface(straight);
+                userName.setTypeface(fUbuntuRegular);
                 rootLayout.addView(view);
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -9,6 +9,7 @@ package vp19.foodator.Profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -73,6 +74,13 @@ public class UserProfileActivity extends AppCompatActivity {
     private DatabaseReference myRef;
     private FirebaseUser user;
     private FirebaseMethods firebaseMethods;
+    //fonts
+    private Typeface fUbuntuBold;
+    private Typeface fUbuntuLight;
+    private Typeface fUbuntuMedium;
+    private Typeface fUbuntuRegular;
+    private Typeface fUbuntuMono;
+    private Typeface dudu;
     ArrayList<String> photo_id;
     //Model
     Photo photo;
@@ -205,6 +213,12 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
             }
         });
+        dudu = Typeface.createFromAsset(mContext.getAssets(), "fonts/dudu.ttf");
+        fUbuntuBold = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-B.ttf");
+        fUbuntuLight = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-L.ttf");
+        fUbuntuMedium = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-M.ttf");
+        fUbuntuRegular = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-R.ttf");
+        fUbuntuMono = Typeface.createFromAsset(mContext.getAssets(), "fonts/UbuntuMono-B.ttf");
     }
 
     /**
@@ -340,6 +354,7 @@ public class UserProfileActivity extends AppCompatActivity {
         mPosts.setText(Long.toString(settings.getPosts()));
         mFollowers.setText(Long.toString(settings.getFollowers()));
         mFollowing.setText(Long.toString(settings.getFollowing()));
+        mDisplayName.setTypeface(fUbuntuBold);
     }
     @Override
     protected void onPostResume() {

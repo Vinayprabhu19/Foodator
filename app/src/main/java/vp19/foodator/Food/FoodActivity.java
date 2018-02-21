@@ -1,6 +1,7 @@
 package vp19.foodator.Food;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -39,6 +40,7 @@ import vp19.foodator.utils.ZomatoAPI;
 public class FoodActivity extends AppCompatActivity {
     private Context mContext=FoodActivity.this;
     private ViewPager viewPager;
+    public String searchText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +71,9 @@ public class FoodActivity extends AppCompatActivity {
         
     }
     private void init(){
+        Intent intent=getIntent();
+        searchText=intent.getStringExtra(getString(R.string.calling_activity));
+        searchText=searchText.replace("#","");
         ImageView backArrow=findViewById(R.id.backArrow);
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override

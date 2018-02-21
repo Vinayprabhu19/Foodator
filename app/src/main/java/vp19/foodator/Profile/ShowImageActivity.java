@@ -61,7 +61,7 @@ public class ShowImageActivity extends AppCompatActivity {
         setupFirebaseAuth();
     }
     private void init(){
-        font = Typeface.createFromAsset(mContext.getAssets(), "fonts/straight.ttf");
+        font = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-R.ttf");
         //Get Extras from intent
         Intent intent=getIntent();
         imageURL=intent.getStringExtra(getString(R.string.selected_image));

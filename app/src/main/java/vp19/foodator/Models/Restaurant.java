@@ -9,7 +9,7 @@ public class Restaurant {
     private String rating_text;
     private String featured_image;
     private String address;
-
+    private double distance;
     public Restaurant(int res_id, String name, double lat, double lon, float rating, String rating_text, String featured_image, String address) {
         this.res_id = res_id;
         this.name = name;
@@ -19,6 +19,14 @@ public class Restaurant {
         this.rating_text = rating_text;
         this.featured_image = featured_image;
         this.address = address;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 
     public String getAddress() {
