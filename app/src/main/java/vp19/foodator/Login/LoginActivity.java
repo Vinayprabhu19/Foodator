@@ -13,6 +13,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -28,6 +30,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import vp19.foodator.Home.HomeActivity;
 import vp19.foodator.R;
 import vp19.foodator.utils.LocationServices;
@@ -56,12 +59,12 @@ public class LoginActivity extends AppCompatActivity{
         setupFirebaseAuth();
         init();
     }
-
     /**
      * ---------------------------------------firebase stuff------------------------------------------
      */
 
     private void init() {
+        handleImages();
         TextView title=findViewById(R.id.title);
         font = Typeface.createFromAsset(mContext.getAssets(), "fonts/neuro.ttf");
         title.setTypeface(font);
@@ -100,6 +103,8 @@ public class LoginActivity extends AppCompatActivity{
                                         Toast.makeText(mContext, R.string.auth_failed,
                                                 Toast.LENGTH_SHORT).show();
                                         mProgressBar.setVisibility(View.GONE);
+                                        CircleImageView logo=findViewById(R.id.logo);
+                                        logo.setImageDrawable(getDrawable(R.drawable.teddy_spill));
                                     }
                                     /*else if(!check){
                                         Toast.makeText(mContext, "Email Not Verfied",
@@ -195,5 +200,52 @@ public class LoginActivity extends AppCompatActivity{
                         }
                     }
                 });
+    }
+    private void handleImages(){
+        Log.d(TAG, "handleImages: ");
+        final CircleImageView logo=findViewById(R.id.logo);
+        EditText email=findViewById(R.id.input_email);
+        EditText password=findViewById(R.id.input_password);
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                logo.setImageDrawable(getDrawable(R.drawable.teddy_looking_down));
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                logo.setImageDrawable(getDrawable(R.drawable.teddy_looking_straight));
+                Log.d(TAG, "handleImages: focused");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                logo.setImageDrawable(getDrawable(R.drawable.teddy_looking_straight));
+            }
+        });
+        password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                logo.setImageDrawable(getDrawable(R.drawable.teddy_looking_down));
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                logo.setImageDrawable(getDrawable(R.drawable.teddy_hide_face));
+                Log.d(TAG, "handleImages: focused");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                logo.setImageDrawable(getDrawable(R.drawable.teddy_hide_face));
+            }
+        });
+        password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus)
+                    logo.setImageDrawable(getDrawable(R.drawable.teddy_looking_down));
+            }
+        });
     }
 }
