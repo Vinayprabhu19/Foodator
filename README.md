@@ -1,2 +1,1 @@
-# Foodator
-Android app for food classification
+No data
