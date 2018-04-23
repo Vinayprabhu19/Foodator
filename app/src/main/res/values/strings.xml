@@ -18,6 +18,7 @@
     <string name="dbname_followers">followers</string>
     <string name="dbname_notifications">notifications</string>
     <string name="dbname_user_locations">user_locations</string>
+    <string name="dbname_liked_photos">liked_photos</string>
     <string name="attr_profile_pic">profile_photo</string>
     <string name="attr_profile_photo">profile_photo</string>
     <string name="attr_date">date_created</string>

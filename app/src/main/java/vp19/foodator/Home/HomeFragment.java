@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -46,11 +47,20 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.volokh.danylo.hashtaghelper.HashTagHelper;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import vp19.foodator.Models.Photo;
 import vp19.foodator.Models.UserAccountSettings;
+import vp19.foodator.Models.liked_photo;
 import vp19.foodator.Profile.ProfileActivity;
 import vp19.foodator.Profile.UserProfileActivity;
 import vp19.foodator.R;
@@ -87,6 +97,12 @@ public class HomeFragment extends Fragment {
         fragmentView=view;
         try{
             init();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    socketConnect();
+                }
+            }).start();
             setupFirebaseAuth();
             queryPhotos();
             refresh(view);
@@ -96,7 +112,24 @@ public class HomeFragment extends Fragment {
         }
         return view;
     }
-
+    private void socketConnect(){
+        try{
+            Socket soc=new Socket("192.168.43.17",2004);
+            DataOutputStream dout=new DataOutputStream(soc.getOutputStream());
+            BufferedReader  din  = new BufferedReader(new InputStreamReader(soc.getInputStream()));
+            String url="https://i.ndtvimg.com/i/2017-11/oats-idli_620x330_71510224674.jpg";
+            dout.writeUTF(url);
+            String s=din.readLine();
+            Log.d(TAG, "socketConnect: Item :" + s);
+            dout.write(20);
+            dout.flush();
+            dout.close();
+            soc.close();
+        }
+        catch (IOException e){
+            Log.d(TAG, "socketConnect: "+e.getMessage());
+        }
+    }
     /**
      * Refresh the layout
      * @param view fragment view
@@ -248,6 +281,7 @@ public class HomeFragment extends Fragment {
                 public void onCancelled(DatabaseError databaseError) {
                 }
             });
+            checkForPhotoLike(btn_like,photo.getPhoto_id());
             displayName.setTag(photo.getUser_id());
             likes.setText(Integer.toString(photo.getLikes()));
             comments.setText(Integer.toString(photo.getComments()));
@@ -294,6 +328,21 @@ public class HomeFragment extends Fragment {
                     }
                 }
             });
+            btn_like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(btn_like.isChecked()) {
+                        btn_like.setBackgroundDrawable(getContext().getDrawable(R.drawable.ic_star_color));
+                        increaseLikes(photo.getPhoto_id(),photo.getUser_id(),likes);
+                        Log.d(TAG, "onClick: checked");
+                    }
+                    else{
+                        btn_like.setBackgroundDrawable(getContext().getDrawable(R.drawable.ic_star_nocolor));
+                        decreaseLikes(photo.getPhoto_id(),photo.getUser_id(),likes);
+                        Log.d(TAG, "onClick: nochecked");
+                    }
+                }
+            });
             relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -305,6 +354,88 @@ public class HomeFragment extends Fragment {
             });
             //Handle Likes and Dislikes
         }
+    }
+    // checkForPhotoLike(btn_like,photo.getPhoto_id());
+    private void checkForPhotoLike(final ToggleButton btn_like, final String photo_id){
+        Query query=myRef.child(getString(R.string.dbname_liked_photos)).child(user.getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(photo_id)){
+                    btn_like.setBackgroundDrawable(getContext().getDrawable(R.drawable.ic_star_color));
+                    btn_like.setChecked(true);
+                }
+                else {
+                    btn_like.setBackgroundDrawable(getContext().getDrawable(R.drawable.ic_star_nocolor));
+                    btn_like.setChecked(false);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void decreaseLikes(final String photo_id,final String user_id,final TextView likes){
+        Query query;
+        query=myRef.child(getString(R.string.dbname_photos));
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Photo photo=dataSnapshot.child(photo_id).getValue(Photo.class);
+                photo.setLikes(photo.getLikes()-1);
+                likes.setText(Integer.toString(photo.getLikes()));
+                myRef.child(getString(R.string.dbname_photos)).child(photo_id).setValue(photo);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        query=myRef.child(getString(R.string.dbname_user_photos)).child(user_id);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Photo photo=dataSnapshot.child(photo_id).getValue(Photo.class);
+                photo.setLikes(photo.getLikes()-1);
+                myRef.child(getString(R.string.dbname_user_photos)).child(user_id).child(photo_id).setValue(photo);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        myRef.child(getString(R.string.dbname_liked_photos)).child(user.getUid()).child(photo_id).removeValue();
+    }
+    private void increaseLikes(final String photo_id,final String user_id,final TextView likes){
+        Query query;
+        query=myRef.child(getString(R.string.dbname_photos));
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Photo photo=dataSnapshot.child(photo_id).getValue(Photo.class);
+                photo.setLikes(photo.getLikes()+1);
+                likes.setText(Integer.toString(photo.getLikes()));
+                myRef.child(getString(R.string.dbname_photos)).child(photo_id).setValue(photo);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        query=myRef.child(getString(R.string.dbname_user_photos)).child(user_id);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Photo photo=dataSnapshot.child(photo_id).getValue(Photo.class);
+                photo.setLikes(photo.getLikes()+1);
+                myRef.child(getString(R.string.dbname_user_photos)).child(user_id).child(photo_id).setValue(photo);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+        myRef.child(getString(R.string.dbname_liked_photos)).child(user.getUid()).child(photo_id).setValue(new liked_photo(photo_id));
     }
     private void createPopupMenu(final Photo photo, ImageView postOptions,int menu)throws NullPointerException{
         PopupMenu popupMenu=new PopupMenu(getContext(),postOptions);

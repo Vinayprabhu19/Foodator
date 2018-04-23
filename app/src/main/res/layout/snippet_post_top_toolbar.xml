@@ -7,8 +7,8 @@
         android:layout_height="40dp">
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profileImage"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_centerVertical="true"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="0dp"
@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/string_empty"
-            android:textSize="17dp"
+            android:textSize="17sp"
             android:textStyle="bold"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -32,14 +32,15 @@
             android:layout_marginRight="8dp"
             app:layout_constraintLeft_toRightOf="@+id/profileImage"
             android:layout_marginLeft="8dp"
-            app:layout_constraintHorizontal_bias="0.035"
-            android:id="@id/display_name" />
+            app:layout_constraintHorizontal_bias="0.5"
+            android:id="@id/display_name"
+            app:layout_constraintVertical_bias="0.666" />
 
 
         <ImageView
             android:id="@+id/postOptions"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="177dp"
             android:foregroundGravity="center_vertical"
