@@ -42,6 +42,7 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:11.8.0'
     compile 'com.github.danylovolokh:hashtag-helper:1.1.0'
     compile 'com.google.android.gms:play-services-maps:11.8.0'
+    compile 'org.tensorflow:tensorflow-android:1.5.0'
     compile 'com.google.android.gms:play-services-location:11.8.0'
     testCompile 'junit:junit:4.12'
 }

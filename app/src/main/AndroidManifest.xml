@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -66,6 +67,9 @@
         <activity
             android:name=".Profile.UserProfileActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".camera_eye.ClassifierActivity"
+            android:screenOrientation="portrait" />
 
         <!-- Background Services -->
         <service
@@ -80,7 +84,7 @@
             android:value="AIzaSyCfy_yd3f4YjKHIUVSEms99C7o17X3-2XI" />
 
         <activity android:name=".Food.FoodActivity" />
-        <activity android:name=".Food.ViewRestaurantActivity"></activity>
+        <activity android:name=".Food.ViewRestaurantActivity" />
     </application>
 
 </manifest>

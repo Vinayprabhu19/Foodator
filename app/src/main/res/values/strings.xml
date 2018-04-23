@@ -73,4 +73,10 @@
     <string name="string_searching_nearby">Searching nearby</string>
     <string name="string_adding_spices">Adding Spices</string>
     <string name="string_food_details">Food Details</string>
+    <string name="swipe_for_camera">Swipe For Camera</string>
+
+    <!-- tensorflow -->
+    <string name="description_info">Info</string>
+    <string name="request_permission">This sample needs camera permission.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
 </resources>

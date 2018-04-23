@@ -50,12 +50,18 @@
                     android:id="@+id/swtich_fit"
                     />
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_marginStart="30dp"
-                    android:text="Swipe For Camera"
+                    android:text="@string/swipe_for_camera"
                     android:textColor="@color/white"
                     />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_eye"
+                    android:id="@+id/camera_eye"
+                    android:layout_marginStart="50dp"/>
             </LinearLayout>
         </RelativeLayout>
         <GridView

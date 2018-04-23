@@ -8,7 +8,6 @@
 package vp19.foodator.Share;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -40,6 +39,8 @@ import java.util.Comparator;
 
 import vp19.foodator.Profile.AccountSettingsActivity;
 import vp19.foodator.R;
+import vp19.foodator.camera_eye.CameraEyeActivity;
+import vp19.foodator.camera_eye.ClassifierActivity;
 import vp19.foodator.utils.FileSearch;
 import vp19.foodator.utils.GridImageAdapter;
 public class GalleryFragment extends Fragment {
@@ -52,6 +53,7 @@ public class GalleryFragment extends Fragment {
     private ProgressBar progressBar;
     private Spinner directorySpinner;
     private Switch mFit;
+    private ImageView camera_eye;
     //vars
     private ArrayList<String> directories;
     private ArrayList<String> sDirectoryList;
@@ -72,6 +74,7 @@ public class GalleryFragment extends Fragment {
         progressBar.setVisibility(View.GONE);
         directorySpinner=view.findViewById(R.id.spinnerDirectory);
         directories=new ArrayList<>();
+        camera_eye=view.findViewById(R.id.camera_eye);
         ImageView close=view.findViewById(R.id.btn_close);
         init();
         initMfit();
@@ -99,6 +102,13 @@ public class GalleryFragment extends Fragment {
                     getActivity().startActivity(intent);
                     getActivity().finish();
                 }
+            }
+        });
+        camera_eye.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(), ClassifierActivity.class);
+                getActivity().startActivity(intent);
             }
         });
         return view;
