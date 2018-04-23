@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,6 +50,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.volokh.danylo.hashtaghelper.HashTagHelper;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -55,9 +58,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import vp19.foodator.Food.ImageIdentifyActivity;
 import vp19.foodator.Models.Photo;
 import vp19.foodator.Models.UserAccountSettings;
 import vp19.foodator.Models.liked_photo;
@@ -446,6 +451,7 @@ public class HomeFragment extends Fragment {
                 switch (item.getItemId()){
                     case R.id.identify :
                         Log.d(TAG, "onMenuItemClick: identify ");
+                        identify(photo.getImage_path());
                         break;
                     case R.id.recipe:
                         Log.d(TAG, "onMenuItemClick: Recipe");
@@ -461,6 +467,13 @@ public class HomeFragment extends Fragment {
             }
         });
         popupMenu.show();
+    }
+    private void identify(final String imageURL){
+        Log.d(TAG, "identify: "+imageURL);
+            //Toast.makeText(getContext(),"Setting up image for identification",Toast.LENGTH_SHORT);
+            Intent intent=new Intent(getContext(), ImageIdentifyActivity.class);
+            intent.putExtra(getString(R.string.selected_bitmap), imageURL);
+            startActivity(intent);
     }
     private void deletePhoto(Photo photo) throws NullPointerException{
         myRef.child(getString(R.string.dbname_photos)).child(photo.getPhoto_id()).removeValue();
