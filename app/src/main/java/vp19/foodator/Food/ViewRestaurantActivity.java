@@ -3,18 +3,23 @@ package vp19.foodator.Food;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import vp19.foodator.Home.MapFragment;
 import vp19.foodator.Models.Restaurant;
 import vp19.foodator.R;
 
 import static java.security.AccessController.getContext;
 
 public class ViewRestaurantActivity extends AppCompatActivity {
+    private static final String TAG = "ViewRestaurantActivity";
     private Restaurant restaurant;
     private Context mContext=ViewRestaurantActivity.this;
     //fonts
@@ -27,7 +32,9 @@ public class ViewRestaurantActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_restaurant);
+        Log.d(TAG, "onCreate: ViewRestaurantActivity created.......");
         initWidgets();
+        initMap();
     }
     private void initWidgets(){
         fUbuntuBold = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-B.ttf");
@@ -56,5 +63,16 @@ public class ViewRestaurantActivity extends AppCompatActivity {
         ratingText.setTypeface(fUbuntuRegular);
         pageTitle.setText("Restaurant");
         pageTitle.setTypeface(fUbuntuMedium);
+
+    }
+
+    private void initMap(){
+        Fragment fragment = new MapFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.replace, fragment).commit();
+    }
+
+    public Restaurant getRestaurant(){
+        return restaurant;
     }
 }

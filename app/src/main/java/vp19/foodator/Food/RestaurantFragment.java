@@ -75,6 +75,7 @@ public class RestaurantFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_restaurant,container,false);
+        Log.d(TAG, "onCreateView: Restaurant Search activity initiated");
         initWidgets(view);
         queryViews();
         return view;
