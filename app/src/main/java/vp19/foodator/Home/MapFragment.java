@@ -43,6 +43,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import vp19.foodator.Food.ViewRestaurantActivity;
+import vp19.foodator.Models.Restaurant;
 import vp19.foodator.Models.User;
 import vp19.foodator.Models.UserLocation;
 import vp19.foodator.R;
@@ -69,6 +71,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private FirebaseUser user;
+
+
 
     private ArrayList<UserLocation> locations;
     @Nullable
@@ -109,6 +113,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
     private void plotMap(){
         Log.d(TAG, "plotMap: plotting locations");
+        ViewRestaurantActivity viewRestaurantActivity = (ViewRestaurantActivity) getActivity();
+        Restaurant restaurant = viewRestaurantActivity.getRestaurant();
+
+        //  .icon function 
+        mMap.addMarker(new MarkerOptions().position(new LatLng(restaurant.getLat(),restaurant.getLon()))
+                .title(restaurant.getName()));
+
+
         for(int i=0;i<locations.size();i++) {
             Log.d(TAG, "plotMap: " + locations.get(i).getLat() + " " + locations.get(i).getLon());
             double latitude=locations.get(i).getLat(),longitude=locations.get(i).getLon();

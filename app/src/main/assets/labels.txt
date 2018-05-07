@@ -1,12 +1,12 @@
-Burger
-Chapati
-Chocolate Cake
-Dosa
-French Fries
-Fried Rice
-Garlic Bread
-Gobi
-Ice Cream
-Idli
-Jalebi
-Jamoon
+burger
+chapati
+chocolate cake
+dosa
+french fries
+fried rice
+garlic bread
+gobi
+ice cream
+idli
+jalebi
+jamoon
