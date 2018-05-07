@@ -19,6 +19,7 @@
     <string name="dbname_notifications">notifications</string>
     <string name="dbname_user_locations">user_locations</string>
     <string name="dbname_liked_photos">liked_photos</string>
+    <string name="dbname_comments">comments</string>
     <string name="attr_profile_pic">profile_photo</string>
     <string name="attr_profile_photo">profile_photo</string>
     <string name="attr_date">date_created</string>
@@ -73,6 +74,8 @@
     <string name="string_searching_nearby">Searching nearby</string>
     <string name="string_adding_spices">Adding Spices</string>
     <string name="string_food_details">Food Details</string>
+    <string name="string_comments">Comments</string>
+    <string name="string_post">Post</string>
     <string name="swipe_for_camera">Swipe For Camera</string>
 
     <!-- tensorflow -->

@@ -46,6 +46,7 @@ public class ImageIdentifyActivity extends AppCompatActivity {
     private void init(){
         Intent intent=getIntent();
         final String imageURL=intent.getStringExtra(getString(R.string.selected_bitmap));
+        Log.d(TAG, "init: "+imageURL);
         //Download the image into bitmap
         NetworkThread netThread=new NetworkThread(imageURL);
         netThread.start();

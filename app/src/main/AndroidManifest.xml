@@ -85,7 +85,8 @@
 
         <activity android:name=".Food.FoodActivity" />
         <activity android:name=".Food.ViewRestaurantActivity" />
-        <activity android:name=".Food.ImageIdentifyActivity"></activity>
+        <activity android:name=".Food.ImageIdentifyActivity" />
+        <activity android:name=".Home.CommentActivity"></activity>
     </application>
 
 </manifest>

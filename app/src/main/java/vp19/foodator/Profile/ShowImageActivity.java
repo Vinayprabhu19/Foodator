@@ -13,8 +13,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,8 +25,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import vp19.foodator.Food.ImageIdentifyActivity;
+import vp19.foodator.Home.CommentActivity;
 import vp19.foodator.Models.Photo;
 import vp19.foodator.Models.UserAccountSettings;
+import vp19.foodator.Models.liked_photo;
 import vp19.foodator.R;
 import vp19.foodator.utils.FirebaseMethods;
 import vp19.foodator.utils.StringManipulation;
@@ -46,12 +51,17 @@ public class ShowImageActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TextView description;
     private ImageView postOptions;
+    private ToggleButton btn_like;
+    private ToggleButton btn_comment;
+    private TextView likes;
+    private TextView comments;
     //firebase authentication
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private FirebaseMethods firebaseMethods;
+    private FirebaseUser user;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +114,9 @@ public class ShowImageActivity extends AppCompatActivity {
                 switch (item.getItemId()){
                     case R.id.identify :
                         Log.d(TAG, "onMenuItemClick: identify ");
+                        Intent intent=new Intent(mContext, ImageIdentifyActivity.class);
+                        intent.putExtra(getString(R.string.selected_bitmap),imageURL);
+                        startActivity(intent);
                     break;
                     case R.id.recipe:
                         Log.d(TAG, "onMenuItemClick: Reciepe");
@@ -157,37 +170,73 @@ public class ShowImageActivity extends AppCompatActivity {
         mFirebaseDatabase= FirebaseDatabase.getInstance();
         myRef=mFirebaseDatabase.getReference();
         firebaseMethods=new FirebaseMethods(mContext);
+        user=mAuth.getCurrentUser();
         currentUserID=mAuth.getCurrentUser().getUid();
         Query query1=myRef.child(getString(R.string.dbname_user_account_settings))
                 .child(userId);
-        query1.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                UserAccountSettings settings=dataSnapshot.getValue(UserAccountSettings.class);
-                setParams(settings);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        try {
+            query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    UserAccountSettings settings = dataSnapshot.getValue(UserAccountSettings.class);
+                    setParams(settings);
+                }
 
-            }
-        });
-        Query query2=myRef.child(getString(R.string.dbname_photos))
-                .child(PhotoId);
-        query2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Photo photo=dataSnapshot.getValue(Photo.class);
-                String caption=photo.getCaption();
-                if(!StringManipulation.isStringNull(caption))
-                    description.setText(caption);
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+            Query query2 = myRef.child(getString(R.string.dbname_photos))
+                    .child(PhotoId);
+            query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    final Photo photo = dataSnapshot.getValue(Photo.class);
+                    String caption = photo.getCaption();
+                    if (!StringManipulation.isStringNull(caption))
+                        description.setText(caption);
+                    btn_like=findViewById(R.id.ivLike);
+                    btn_comment=findViewById(R.id.ivComment);
+                    checkForPhotoLike(btn_like,photo.getPhoto_id());
+                    likes=findViewById(R.id.tvLike);
+                    comments=findViewById(R.id.tvComment);
+                    likes.setText(Integer.toString(photo.getLikes()));
+                    comments.setText(Integer.toString(photo.getComments()));
+                    btn_comment.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent=new Intent(ShowImageActivity.this, CommentActivity.class);
+                            intent.putExtra(getString(R.string.photo_id),photo.getPhoto_id());
+                            startActivity(intent);
+                        }
+                    });
+                    btn_like.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(btn_like.isChecked()) {
+                                btn_like.setBackgroundDrawable(mContext.getDrawable(R.drawable.ic_star_color));
+                                increaseLikes(photo.getPhoto_id(),photo.getUser_id(),likes);
+                                Log.d(TAG, "onClick: checked");
+                            }
+                            else{
+                                btn_like.setBackgroundDrawable(mContext.getDrawable(R.drawable.ic_star_nocolor));
+                                decreaseLikes(photo.getPhoto_id(),photo.getUser_id(),likes);
+                                Log.d(TAG, "onClick: nochecked");
+                            }
+                        }
+                    });
+                }
 
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
+                }
+            });
+        }
+        catch (NullPointerException e){
+            Log.d(TAG, "setupFirebaseAuth: "+e.getMessage());
+        }
     }
     @Override
     public void onStart() {
@@ -196,5 +245,86 @@ public class ShowImageActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
+    }
+    private void checkForPhotoLike(final ToggleButton btn_like, final String photo_id){
+        Query query=myRef.child(getString(R.string.dbname_liked_photos)).child(user.getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(photo_id)){
+                    btn_like.setBackgroundDrawable(mContext.getDrawable(R.drawable.ic_star_color));
+                    btn_like.setChecked(true);
+                }
+                else {
+                    btn_like.setBackgroundDrawable(mContext.getDrawable(R.drawable.ic_star_nocolor));
+                    btn_like.setChecked(false);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void decreaseLikes(final String photo_id,final String user_id,final TextView likes){
+        Query query;
+        query=myRef.child(getString(R.string.dbname_photos));
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Photo photo=dataSnapshot.child(photo_id).getValue(Photo.class);
+                photo.setLikes(photo.getLikes()-1);
+                likes.setText(Integer.toString(photo.getLikes()));
+                myRef.child(getString(R.string.dbname_photos)).child(photo_id).setValue(photo);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        query=myRef.child(getString(R.string.dbname_user_photos)).child(user_id);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Photo photo=dataSnapshot.child(photo_id).getValue(Photo.class);
+                photo.setLikes(photo.getLikes()-1);
+                myRef.child(getString(R.string.dbname_user_photos)).child(user_id).child(photo_id).setValue(photo);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        myRef.child(getString(R.string.dbname_liked_photos)).child(user.getUid()).child(photo_id).removeValue();
+    }
+    private void increaseLikes(final String photo_id,final String user_id,final TextView likes){
+        Query query;
+        query=myRef.child(getString(R.string.dbname_photos));
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Photo photo=dataSnapshot.child(photo_id).getValue(Photo.class);
+                photo.setLikes(photo.getLikes()+1);
+                likes.setText(Integer.toString(photo.getLikes()));
+                myRef.child(getString(R.string.dbname_photos)).child(photo_id).setValue(photo);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        query=myRef.child(getString(R.string.dbname_user_photos)).child(user_id);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Photo photo=dataSnapshot.child(photo_id).getValue(Photo.class);
+                photo.setLikes(photo.getLikes()+1);
+                myRef.child(getString(R.string.dbname_user_photos)).child(user_id).child(photo_id).setValue(photo);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+        myRef.child(getString(R.string.dbname_liked_photos)).child(user.getUid()).child(photo_id).setValue(new liked_photo(photo_id));
     }
 }

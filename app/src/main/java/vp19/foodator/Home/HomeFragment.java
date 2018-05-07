@@ -86,6 +86,7 @@ public class HomeFragment extends Fragment {
     private View fragmentView;
     private int sPosts=0,ePosts=10;
     private LinearLayout progressLayout;
+    private long commentCount;
     //firebase authentication
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -347,6 +348,14 @@ public class HomeFragment extends Fragment {
                         Log.d(TAG, "onClick: nochecked");
                     }
                 }
+            });
+            btn_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        Intent intent=new Intent(getContext(),CommentActivity.class);
+                        intent.putExtra(getString(R.string.photo_id),photo.getPhoto_id());
+                        startActivity(intent);
+                    }
             });
             relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

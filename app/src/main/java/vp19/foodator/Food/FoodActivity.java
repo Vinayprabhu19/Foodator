@@ -56,6 +56,10 @@ public class FoodActivity extends AppCompatActivity {
         init();
         setupViewPager();
     }
+
+    /**
+     *  Setup the viewpager for the fragments
+     */
     private void setupViewPager(){
         SectionPagerAdapter adapter=new SectionPagerAdapter(getSupportFragmentManager());
         adapter.addFragmet(new RestaurantFragment());
