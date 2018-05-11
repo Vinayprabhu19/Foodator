@@ -62,6 +62,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import vp19.foodator.Food.FoodActivity;
 import vp19.foodator.Food.ImageIdentifyActivity;
 import vp19.foodator.Models.Photo;
 import vp19.foodator.Models.UserAccountSettings;

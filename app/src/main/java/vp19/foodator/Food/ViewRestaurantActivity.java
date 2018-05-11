@@ -36,7 +36,7 @@ public class ViewRestaurantActivity extends AppCompatActivity {
         initWidgets();
         initMap();
     }
-    private void initWidgets(){
+    public void initWidgets(){
         fUbuntuBold = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-B.ttf");
         fUbuntuLight = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-L.ttf");
         fUbuntuMedium = Typeface.createFromAsset(mContext.getAssets(), "fonts/Ubuntu-M.ttf");

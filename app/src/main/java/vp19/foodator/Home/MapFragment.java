@@ -2,7 +2,9 @@ package vp19.foodator.Home;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +28,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -44,6 +47,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import vp19.foodator.Food.ViewRestaurantActivity;
+import vp19.foodator.Models.Photo;
 import vp19.foodator.Models.Restaurant;
 import vp19.foodator.Models.User;
 import vp19.foodator.Models.UserLocation;
@@ -72,7 +76,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private DatabaseReference myRef;
     private FirebaseUser user;
 
-
+    private double curLat,curLon;
+    private Bitmap hotelMarker;
+    private Bitmap currentMarker;
+    private Bitmap otherMarker;
 
     private ArrayList<UserLocation> locations;
     @Nullable
@@ -84,14 +91,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void init() {
+        int height = 100;
+        int width = 100;
+        BitmapDrawable hotelDrawable=(BitmapDrawable)getResources().getDrawable(R.drawable.hotel);
+        BitmapDrawable currentDrawable=(BitmapDrawable)getResources().getDrawable(R.drawable.current_marker);
+        BitmapDrawable otherDrawable=(BitmapDrawable)getResources().getDrawable(R.drawable.other_marker);
+        Bitmap h=hotelDrawable.getBitmap();
+        Bitmap c=currentDrawable.getBitmap();
+        Bitmap o=otherDrawable.getBitmap();
+        hotelMarker = Bitmap.createScaledBitmap(h, width, height, false);
+        currentMarker=Bitmap.createScaledBitmap(c,width,height,false);
+        otherMarker=Bitmap.createScaledBitmap(o,width,height,false);
         Log.d(TAG, "init: initializing map fragment");
         locations=new ArrayList<>();
-        SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        supportMapFragment.getMapAsync(this);
-        setupFirebaseAuth();
-        queryLocations();
+        try {
+            SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+            supportMapFragment.getMapAsync(this);
+            setupFirebaseAuth();
+            queryLocations();
+        }
+        catch (NullPointerException e){
+            Log.d(TAG, "init: "+e.getMessage());
+        }
     }
-    private void queryLocations(){
+    private void queryLocations() throws NullPointerException{
         Query query=myRef.child(getString(R.string.dbname_user_locations));
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -110,25 +133,55 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+        Query query2=myRef.child(getString(R.string.dbname_user_locations)).child(user.getUid());
+        query2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserLocation location=dataSnapshot.getValue(UserLocation.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
-    private void plotMap(){
+    private void plotMap() throws NullPointerException{
         Log.d(TAG, "plotMap: plotting locations");
-        ViewRestaurantActivity viewRestaurantActivity = (ViewRestaurantActivity) getActivity();
-        Restaurant restaurant = viewRestaurantActivity.getRestaurant();
+        String activityName;
+        try {
+            activityName=getActivity().getClass().getSimpleName();
+        }
+        catch (NullPointerException e){
+            Log.d(TAG, "plotMap: "+e.getMessage());
+            return;
+        }
+        Log.d(TAG, "plotMap: "+activityName);
+        activityName=activityName.replaceAll(" ","");
+        if(activityName.equals(getString(R.string.viewRestaurant_activity))){
+            Log.d(TAG, "plotMap: true");
+            ViewRestaurantActivity viewRestaurantActivity = (ViewRestaurantActivity) getActivity();
+            viewRestaurantActivity.initWidgets();
+            Restaurant restaurant = viewRestaurantActivity.getRestaurant();
+            //  .icon function
+            mMap.addMarker(new MarkerOptions().position(new LatLng(restaurant.getLat(),restaurant.getLon()))
+                    .title(restaurant.getName()).icon(BitmapDescriptorFactory.fromBitmap(hotelMarker))).showInfoWindow();
 
-        //  .icon function 
-        mMap.addMarker(new MarkerOptions().position(new LatLng(restaurant.getLat(),restaurant.getLon()))
-                .title(restaurant.getName()));
-
-
-        for(int i=0;i<locations.size();i++) {
-            Log.d(TAG, "plotMap: " + locations.get(i).getLat() + " " + locations.get(i).getLon());
-            double latitude=locations.get(i).getLat(),longitude=locations.get(i).getLon();
-            mMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)).title("User"));
+            mMap.addMarker(new MarkerOptions().position(new LatLng(curLat,curLon)).title("User").icon(BitmapDescriptorFactory.fromBitmap(currentMarker)));
+        }
+        else if(activityName.equals(getString(R.string.home_activity))) {
+            Log.d(TAG, "plotMap: homeactivity");
+            for(int i=0;i<locations.size();i++) {
+                if(locations.get(i).getLat()==curLat && locations.get(i).getLon()==curLon)
+                    continue;
+                double latitude=locations.get(i).getLat(),longitude=locations.get(i).getLon();
+                mMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)).title("User").icon(BitmapDescriptorFactory.fromBitmap(otherMarker)));
+            }
+            mMap.addMarker(new MarkerOptions().position(new LatLng(curLat,curLon)).title("User").icon(BitmapDescriptorFactory.fromBitmap(currentMarker)));
         }
     }
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap) throws NullPointerException {
         Log.d(TAG, "onMapReady: Map is ready");
         mMap = googleMap;
         Log.d(TAG, "onMapReady: getting device location");
@@ -141,7 +194,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void getLocationPermission() {
+    private void getLocationPermission() throws NullPointerException {
         Log.d(TAG, "getLocationPermission: getting location permission");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
@@ -163,7 +216,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void getDeviceLocation(){
+    private void getDeviceLocation() throws NullPointerException{
         Log.d(TAG, "getDeviceLocation: getting current device location");
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
@@ -177,7 +230,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         if(task.isSuccessful()){
                             Log.d(TAG, "onComplete: found location");
                             Location currentLocation = (Location) task.getResult();
-
+                            curLat=currentLocation.getLatitude();
+                            curLon=currentLocation.getLongitude();
                             moveCamera(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()), DEFAULT_ZOOM);
                         }else {
                             Log.d(TAG, "onComplete: current location is null");

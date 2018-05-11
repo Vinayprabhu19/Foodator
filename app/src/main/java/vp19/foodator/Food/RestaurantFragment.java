@@ -200,5 +200,4 @@ public class RestaurantFragment extends Fragment {
         myRef=mFirebaseDatabase.getReference();
         user=mAuth.getCurrentUser();
     }
-
 }

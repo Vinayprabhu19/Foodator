@@ -20,18 +20,21 @@
     <string name="dbname_user_locations">user_locations</string>
     <string name="dbname_liked_photos">liked_photos</string>
     <string name="dbname_comments">comments</string>
+    <string name="dbname_recipe">recipe</string>
     <string name="attr_profile_pic">profile_photo</string>
     <string name="attr_profile_photo">profile_photo</string>
     <string name="attr_date">date_created</string>
     <string name="attr_user_id">user_id</string>
-
+    <string name="attr_ingredients">Ingredients</string>
+    <string name="attr_steps">Steps</string>
     <!-- Zomato -->
     <string name="zomato_search">https://developers.zomato.com/api/v2.1/search</string>
     <!-- Activities -->
     <string name="calling_activity">Calling Activity</string>
     <string name="profile_activity">Profile Activity</string>
     <string name="return_to_fragment">return_to_fragment</string>
-
+    <string name="home_activity">HomeActivity</string>
+    <string name="viewRestaurant_activity">ViewRestaurantActivity</string>
 
     <!-- Share Activity strings -->
     <string name="photo">PHOTO</string>
@@ -82,4 +85,6 @@
     <string name="description_info">Info</string>
     <string name="request_permission">This sample needs camera permission.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+    <string name="string_ingredients">Ingredients</string>
+    <string name="string_steps">Steps</string>
 </resources>
