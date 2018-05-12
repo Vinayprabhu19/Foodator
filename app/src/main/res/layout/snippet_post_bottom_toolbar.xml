@@ -7,7 +7,7 @@
         android:paddingBottom="5dp">
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true">
         <ToggleButton
