@@ -3,51 +3,52 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="5dp">
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:orientation="horizontal"
-        android:layout_centerHorizontal="true">
-        <ToggleButton
-            android:id="@+id/ivLike"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:background="@drawable/ic_star_nocolor"
-            android:checked="false"
-            android:text="@string/string_empty"
-            android:textOff="@string/string_empty"
-            android:textOn="@string/string_empty"
-            android:layout_marginEnd="5dp"/>
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tvLike"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/number_zero"
-            android:textColor="@color/black"
-            android:textSize="22sp"
-            android:layout_marginEnd="20dp"/>
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
 
-        <ToggleButton
-            android:id="@+id/ivComment"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:background="@drawable/ic_comment"
-            android:checked="false"
-            android:text="@string/string_empty"
-            android:textOff="@string/string_empty"
-            android:textOn="@string/string_empty"
-            android:layout_marginEnd="5dp"/>
+            <ToggleButton
+                android:id="@+id/ivLike"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/ic_star_nocolor"
+                android:checked="false"
+                android:text="@string/string_empty"
+                android:textOff="@string/string_empty"
+                android:textOn="@string/string_empty" />
 
-        <TextView
-            android:id="@+id/tvComment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/number_zero"
-            android:textColor="@color/black"
-            android:textSize="22sp" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:text="@string/number_zero"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
+
+            <ToggleButton
+                android:id="@+id/ivComment"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/ic_comment"
+                android:checked="false"
+                android:text="@string/string_empty"
+                android:textOff="@string/string_empty"
+                android:textOn="@string/string_empty" />
+
+            <TextView
+                android:id="@+id/tvComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/number_zero"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
+        </LinearLayout>
     </RelativeLayout>
 </merge>
