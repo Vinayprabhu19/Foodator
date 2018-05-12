@@ -64,6 +64,7 @@ public class FoodActivity extends AppCompatActivity {
         SectionPagerAdapter adapter=new SectionPagerAdapter(getSupportFragmentManager());
         adapter.addFragmet(new RestaurantFragment());
         adapter.addFragmet(new RecipeFragment());
+        adapter.addFragmet(new NutritionFragment());
 
         viewPager=findViewById(R.id.container);
         viewPager.setAdapter(adapter);
@@ -75,10 +76,11 @@ public class FoodActivity extends AppCompatActivity {
         //Get the individual tabs
         TabLayout.Tab tab1=tabLayout.getTabAt(0); // Restaurant
         TabLayout.Tab tab2=tabLayout.getTabAt(1); // Recipe
-
+        TabLayout.Tab tab3=tabLayout.getTabAt(2);
         //Set the icons
         tab1.setText("Restaurants");
         tab2.setText("Recipe");
+        tab3.setText("Nutrition");
     }
     private void init(){
         Intent intent=getIntent();

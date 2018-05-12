@@ -21,6 +21,7 @@
     <string name="dbname_liked_photos">liked_photos</string>
     <string name="dbname_comments">comments</string>
     <string name="dbname_recipe">recipe</string>
+    <string name="dbname_nutrition">nutrition</string>
     <string name="attr_profile_pic">profile_photo</string>
     <string name="attr_profile_photo">profile_photo</string>
     <string name="attr_date">date_created</string>
@@ -87,4 +88,9 @@
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
     <string name="string_ingredients">Ingredients</string>
     <string name="string_steps">Steps</string>
+    <string name="string_calories">Calories</string>
+    <string name="string_carbs">Carbs</string>
+    <string name="string_fat">Fat</string>
+    <string name="string_protein">Protein</string>
+    <string name="string_quantity">per 100g</string>
 </resources>
