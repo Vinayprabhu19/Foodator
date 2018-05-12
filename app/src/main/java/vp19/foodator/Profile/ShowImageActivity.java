@@ -118,9 +118,6 @@ public class ShowImageActivity extends AppCompatActivity {
                         intent.putExtra(getString(R.string.selected_bitmap),imageURL);
                         startActivity(intent);
                     break;
-                    case R.id.recipe:
-                        Log.d(TAG, "onMenuItemClick: Reciepe");
-                        break;
                     case R.id.report:
                         Log.d(TAG, "onMenuItemClick: Report");
                         break;

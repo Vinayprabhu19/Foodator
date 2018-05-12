@@ -4,9 +4,6 @@
         android:title="@string/string_identify"
         android:icon="@drawable/ic_search">
     </item>
-    <item android:id="@+id/recipe"
-        android:title="@string/string_recipe">
-    </item>
     <item android:id="@+id/report"
         android:title="@string/string_report">
     </item>

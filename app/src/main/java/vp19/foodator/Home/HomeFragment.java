@@ -463,9 +463,6 @@ public class HomeFragment extends Fragment {
                         Log.d(TAG, "onMenuItemClick: identify ");
                         identify(photo.getImage_path());
                         break;
-                    case R.id.recipe:
-                        Log.d(TAG, "onMenuItemClick: Recipe");
-                        break;
                     case R.id.report:
                         Log.d(TAG, "onMenuItemClick: Report");
                         break;
